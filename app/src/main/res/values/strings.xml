@@ -5,4 +5,8 @@
     <string name="user_name">User Name</string>
     <string name="user_password">Password</string>
     <string name="login">Log In</string>
+    <string name="sale_product_count">Sale Product Count</string>
+    <string name="totoal_price">Total Price</string>
+    <string name="dept">Dept</string>
+    <string name="sale">Sale</string>
 </resources>

@@ -1,14 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SaleFragment">
+    tools:context=".presentation.SaleFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <Spinner
+        android:id="@+id/choseProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="112dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.054"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/productName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Balya"
+        app:layout_constraintTop_toBottomOf="@+id/choseProduct"
+        tools:layout_editor_absoluteX="26dp" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/productPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10"
+        app:layout_constraintBottom_toBottomOf="@+id/productName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/productName"
+        app:layout_constraintTop_toTopOf="@+id/productName" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/numberText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:hint="@string/sale_product_count"
+        app:layout_constraintTop_toBottomOf="@+id/totalPrice"
+        tools:layout_editor_absoluteX="-119dp">
 
-</FrameLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/moneyType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tl"
+        app:layout_constraintBottom_toBottomOf="@+id/productPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.019"
+        app:layout_constraintStart_toEndOf="@+id/productPrice"
+        app:layout_constraintTop_toTopOf="@+id/productPrice"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/totalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="@string/totoal_price"
+        app:layout_constraintTop_toBottomOf="@+id/productName"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/materialCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dept"
+        app:layout_constraintBottom_toTopOf="@+id/saleButton"
+        app:layout_constraintTop_toBottomOf="@+id/numberText"
+        tools:layout_editor_absoluteX="34dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sale"
+        tools:layout_editor_absoluteX="159dp"
+        tools:layout_editor_absoluteY="484dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

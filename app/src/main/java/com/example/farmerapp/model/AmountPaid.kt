@@ -2,18 +2,17 @@ package com.example.farmerapp.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.farmerapp.until.FarmerStatus
+import java.sql.Date
 import javax.inject.Inject
 
 @Entity
-data class Farmer
+data class AmountPaid
 @Inject constructor(
-    val company: Company,
-    val name: String,
-    val sourName: String,
-    val years: String,
-    val farmerStatus: FarmerStatus
-){
+    val salesProduct: SalesProduct,
+    val price: Int,
+    val date: Date,
+    val customer: Customer,
+) {
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0
 }

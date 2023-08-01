@@ -1,4 +1,4 @@
-package com.example.farmerapp
+package com.example.farmerapp.until
 
 enum class UnitType {
     KG,

@@ -1,9 +1,11 @@
 package com.example.farmerapp.data.dto
 
+import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Date
 import javax.inject.Inject
 
+@Entity(tableName = "SalesProduct")
 data class SalesProductDto
 @Inject constructor(
     val companyId: Int,
@@ -13,7 +15,8 @@ data class SalesProductDto
     val price: Int,
     val isDept: Boolean,
     val productNumber: Int,
-    val location: String,
+    val location: Float,
+    val locationDescription: String,
     val date: Date,
 ) {
     @PrimaryKey(autoGenerate = true)

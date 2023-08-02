@@ -1,4 +1,4 @@
-package com.example.farmerapp.model
+package com.example.farmerapp.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

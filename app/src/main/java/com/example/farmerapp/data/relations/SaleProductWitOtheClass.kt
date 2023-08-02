@@ -1,9 +1,14 @@
-package com.example.farmerapp.model
+package com.example.farmerapp.data.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.example.farmerapp.domain.model.Company
+import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
+import com.example.farmerapp.domain.model.Product
+import com.example.farmerapp.domain.model.SalesProduct
 
-data class SaleProductWith(
+data class SaleProductWitOtheClass(
     @Embedded
     val company: Company,
     @Relation(

@@ -1,4 +1,4 @@
-package com.example.farmerapp.model
+package com.example.farmerapp.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -9,9 +9,10 @@ import javax.inject.Inject
 data class AmountPaid
 @Inject constructor(
     val salesProduct: SalesProduct,
+    val customer: Customer,
     val price: Int,
     val date: Date,
-    val customer: Customer,
+
 ) {
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0

@@ -1,4 +1,4 @@
-package com.example.farmerapp.data.relations
+package com.example.farmerapp.data.local.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
@@ -8,7 +8,7 @@ import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.model.SalesProduct
 
-data class SaleProductWitOtheClass(
+data class SaleProductWitOtherClass(
     @Embedded
     val company: Company,
     @Relation(

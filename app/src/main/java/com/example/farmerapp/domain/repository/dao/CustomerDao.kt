@@ -9,10 +9,10 @@ import com.example.farmerapp.domain.model.Customer
 @Dao
 interface CustomerDao {
     @Insert
-    suspend  fun insertCustomer(customer: Customer)
+    suspend  fun insertCustomer(customer: Customer):Long
 
     @Update
-    suspend  fun updateCustomer(customer: Customer)
+    suspend  fun updateCustomer(customer: Customer):Int
 
     @Query("Select * from Customer where id=:customerId")
     suspend  fun selectCustomerWithCustomerID(customerId: Int): Customer

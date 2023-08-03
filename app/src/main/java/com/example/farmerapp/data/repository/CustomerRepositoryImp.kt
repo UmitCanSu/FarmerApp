@@ -9,11 +9,11 @@ class CustomerRepositoryImp
 @Inject constructor(
     private val customerDao: CustomerDao
 ) : CustomerRepository {
-    override suspend fun insertCustomer(customer: Customer) {
+    override suspend fun insertCustomer(customer: Customer):Long {
         return customerDao.insertCustomer(customer)
     }
 
-    override suspend fun updateCustomer(customer: Customer) {
+    override suspend fun updateCustomer(customer: Customer):Int {
         return customerDao.updateCustomer(customer)
     }
 

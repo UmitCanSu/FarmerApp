@@ -1,4 +1,4 @@
-package com.example.farmerapp.until
+package com.example.farmerapp.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

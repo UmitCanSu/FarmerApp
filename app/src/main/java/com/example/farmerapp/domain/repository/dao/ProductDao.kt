@@ -11,16 +11,16 @@ import com.example.farmerapp.domain.model.Product
 @Dao
 interface ProductDao {
     @Insert
-    suspend   fun insertProduct(product: Product)
+    suspend   fun insertProduct(product: Product):Long
 
     @Update
-    suspend fun updateProduct(product: Product)
+    suspend fun updateProduct(product: Product):Int
 
     @Delete
-    suspend fun deleteProduct(product: Product)
+    suspend fun deleteProduct(product: Product):Int
 
     @Query("Select * from Product where id=:productId")
-    suspend fun selectProductWithId(productId: Int)
+    suspend fun selectProductWithId(productId: Int):Product
 
     @Query("Select * from  Product where id=:companyId ")
     suspend fun selectFarmersWithCompanyId(companyId: Int): List<Farmer>

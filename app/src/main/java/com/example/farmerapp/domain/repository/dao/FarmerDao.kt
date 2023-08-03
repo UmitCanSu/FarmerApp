@@ -5,23 +5,24 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.example.farmerapp.data.dto.FarmerDto
+import com.example.farmerapp.data.local.dto.FarmerDto
+import com.example.farmerapp.data.local.relations.FarmerRelations
 import com.example.farmerapp.domain.model.Farmer
 
 @Dao
 interface FarmerDao {
     @Insert
-    suspend fun insertFarmer(farmer: Farmer)
+    suspend fun insertFarmer(farmer: Farmer):Long
 
     @Update
-    suspend fun updateFarmer(farmer: Farmer)
+    suspend fun updateFarmer(farmer: Farmer):Int
 
     @Delete
-    suspend fun deleteFarmer(farmer: Farmer)
+    suspend fun deleteFarmer(farmer: Farmer):Int
 
     @Query("Select * from Farmer where id=:farmerId")
-    suspend fun selectFarmerWithId(farmerId: Int): FarmerDto
+    suspend fun selectFarmerWithId(farmerId: Int): FarmerRelations
 
     @Query("Select * from  Farmer where id=:companyID ")
-    suspend fun selectFarmersWithCompanyId(companyID: Int): List<FarmerDto>
+    suspend fun selectFarmersWithCompanyId(companyID: Int): List<FarmerRelations>
 }

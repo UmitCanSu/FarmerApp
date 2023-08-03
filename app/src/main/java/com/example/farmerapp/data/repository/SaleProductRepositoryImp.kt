@@ -1,6 +1,7 @@
 package com.example.farmerapp.data.repository
 
-import com.example.farmerapp.data.dto.SalesProductDto
+import com.example.farmerapp.data.local.dto.SalesProductDto
+import com.example.farmerapp.data.local.relations.SaleProductWitOtherClass
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.domain.repository.SaleProductRepository
 import com.example.farmerapp.domain.repository.dao.SaleProductDao
@@ -23,11 +24,11 @@ class SaleProductRepositoryImp
         return salesProductDao.deleteSaleProduct(salesProduct)
     }
 
-    override suspend fun selectSaleProductWithId(saleProductId: Int): SalesProductDto {
+    override suspend fun selectSaleProductWithId(saleProductId: Int): SaleProductWitOtherClass {
         return salesProductDao.selectSaleProductWithId(saleProductId)
     }
 
-    override suspend fun selectSaleProductWithSaleDate(saleDate: Date): List<SalesProductDto> {
+    override suspend fun selectSaleProductWithSaleDate(saleDate: Date): List<SaleProductWitOtherClass> {
         return salesProductDao.selectSaleProductWithSaleDate(saleDate)
     }
 }

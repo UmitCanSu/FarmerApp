@@ -1,4 +1,4 @@
-package com.example.farmerapp.data.dto
+package com.example.farmerapp.data.local.dto
 
 import androidx.room.Entity
 import javax.inject.Inject

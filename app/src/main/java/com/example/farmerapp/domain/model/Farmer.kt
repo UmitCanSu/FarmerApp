@@ -11,7 +11,7 @@ data class Farmer
     val company: Company,
     val name: String,
     val sourName: String,
-    val years: String,
+    val years: Int,
     val farmerStatus: FarmerStatus
 ){
     @PrimaryKey(autoGenerate = true)

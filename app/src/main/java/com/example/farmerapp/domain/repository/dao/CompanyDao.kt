@@ -9,10 +9,10 @@ import com.example.farmerapp.domain.model.Company
 @Dao
 interface CompanyDao {
     @Insert
-    fun insertCompany(company: Company)
+    fun insertCompany(company: Company):Long
 
     @Update
-    fun updateCompany(company: Company)
+    fun updateCompany(company: Company):Long
 
     @Query("Select * from Company where id=:companyId")
     fun selectCompanyWithCompanyId(companyId: Int): Company

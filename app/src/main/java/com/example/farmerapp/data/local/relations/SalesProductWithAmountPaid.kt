@@ -1,4 +1,4 @@
-package com.example.farmerapp.data.relations
+package com.example.farmerapp.data.local.relations
 
 import androidx.room.Embedded
 import androidx.room.Entity

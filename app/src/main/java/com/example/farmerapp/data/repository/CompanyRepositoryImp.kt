@@ -9,11 +9,11 @@ class CompanyRepositoryImp
 @Inject constructor(
     private val companyDao: CompanyDao
 ) : CompanyRepository {
-    override suspend fun insertCompany(company: Company) {
+    override suspend fun insertCompany(company: Company):Long {
         return companyDao.insertCompany(company)
     }
 
-    override suspend fun updateCompany(company: Company) {
+    override suspend fun updateCompany(company: Company):Long {
         return companyDao.updateCompany(company)
     }
 

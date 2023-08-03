@@ -10,19 +10,19 @@ class ProductRepositoryImp
 @Inject constructor(
     private val productDao: ProductDao
 ) : ProductRepository {
-    override suspend fun insertProduct(product: Product) {
+    override suspend fun insertProduct(product: Product):Long {
         return productDao.insertProduct(product)
     }
 
-    override suspend fun updateProduct(product: Product) {
+    override suspend fun updateProduct(product: Product):Int {
         return productDao.updateProduct(product)
     }
 
-    override suspend fun deleteProduct(product: Product) {
+    override suspend fun deleteProduct(product: Product):Int {
         return productDao.deleteProduct(product)
     }
 
-    override suspend fun selectProductWithId(productId: Int) {
+    override suspend fun selectProductWithId(productId: Int):Product {
         return productDao.selectProductWithId(productId)
     }
 

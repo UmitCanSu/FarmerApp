@@ -11,16 +11,16 @@ class AmountPaidRepositoryImp
 @Inject constructor(
     private val amountPaidDao: AmountPaidDao
     ) : AmountPaidRepository {
-    override suspend fun insertAmountPaid(amountPaid: AmountPaid):Long {
-        return amountPaidDao.insertAmountPaid(amountPaid)
+    override suspend fun insertAmountPaid(amountPaidDto: AmountPaidDto):Long {
+        return amountPaidDao.insertAmountPaid(amountPaidDto)
     }
 
-    override suspend fun updateAmountPaid(amountPaid: AmountPaid):Int {
-        return amountPaidDao.updateAmountPaid(amountPaid)
+    override suspend fun updateAmountPaid(amountPaidDto: AmountPaidDto):Int {
+        return amountPaidDao.updateAmountPaid(amountPaidDto)
     }
 
-    override suspend fun deleteAmountPaid(amountPaid: AmountPaid):Int {
-        return amountPaidDao.deleteAmountPaid(amountPaid)
+    override suspend fun deleteAmountPaid(amountPaidDto: AmountPaidDto):Int {
+        return amountPaidDao.deleteAmountPaid(amountPaidDto)
     }
 
     override suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations> {

@@ -15,13 +15,13 @@ import java.sql.Date
 @Dao
 interface SaleProductDao {
     @Insert
-    suspend fun insertSaleProduct(salesProduct: SalesProduct)
+    suspend fun insertSaleProduct(salesProduct: SalesProductDto): Long
 
     @Update
-    suspend fun updateSaleProduct(salesProduct: SalesProduct)
+    suspend fun updateSaleProduct(salesProduct: SalesProductDto): Int
 
     @Delete
-    suspend fun deleteSaleProduct(salesProduct: SalesProduct)
+    suspend fun deleteSaleProduct(salesProduct: SalesProductDto): Int
 
     @Transaction
     @Query("SELECT * FROM SALESPRODUCT WHERE id=:saleProductId")

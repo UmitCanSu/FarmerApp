@@ -6,9 +6,9 @@ import com.example.farmerapp.domain.model.SalesProduct
 import java.sql.Date
 
 interface SaleProductRepository {
-    suspend fun insertSaleProduct(salesProduct: SalesProduct)
-    suspend fun updateSaleProduct(salesProduct: SalesProduct)
-    suspend fun deleteSaleProduct(salesProduct: SalesProduct)
+    suspend fun insertSaleProduct(salesProductDto: SalesProductDto):Long
+    suspend fun updateSaleProduct(salesProductDto: SalesProductDto):Int
+    suspend fun deleteSaleProduct(salesProductDto: SalesProductDto):Int
     suspend fun selectSaleProductWithId(saleProductId: Int): SaleProductWitOtherClass
     suspend fun selectSaleProductWithSaleDate(saleDate: Date): List<SaleProductWitOtherClass>
 }

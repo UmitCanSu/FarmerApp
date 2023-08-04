@@ -12,13 +12,13 @@ import com.example.farmerapp.domain.model.Farmer
 @Dao
 interface FarmerDao {
     @Insert
-    suspend fun insertFarmer(farmer: Farmer):Long
+    suspend fun insertFarmer(farmer: FarmerDto):Long
 
     @Update
-    suspend fun updateFarmer(farmer: Farmer):Int
+    suspend fun updateFarmer(farmer: FarmerDto):Int
 
     @Delete
-    suspend fun deleteFarmer(farmer: Farmer):Int
+    suspend fun deleteFarmer(farmer: FarmerDto):Int
 
     @Query("Select * from Farmer where id=:farmerId")
     suspend fun selectFarmerWithId(farmerId: Int): FarmerRelations

@@ -10,6 +10,7 @@ data class Product
     val name:String,
     val unitType:String,
     val price:Int,
+    val company: Company
 ){
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0

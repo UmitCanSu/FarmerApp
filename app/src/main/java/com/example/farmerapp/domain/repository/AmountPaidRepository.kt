@@ -5,8 +5,8 @@ import com.example.farmerapp.data.local.relations.AmountPaidRelations
 import com.example.farmerapp.domain.model.AmountPaid
 
 interface AmountPaidRepository {
-    suspend fun insertAmountPaid(amountPaid: AmountPaid):Long
-    suspend fun updateAmountPaid(amountPaid: AmountPaid):Int
-    suspend fun deleteAmountPaid(amountPaid: AmountPaid):Int
+    suspend fun insertAmountPaid(amountPaidDto: AmountPaidDto):Long
+    suspend fun updateAmountPaid(amountPaidDto: AmountPaidDto):Int
+    suspend fun deleteAmountPaid(amountPaidDto: AmountPaidDto):Int
     suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations>
 }

@@ -12,13 +12,13 @@ import com.example.farmerapp.domain.model.AmountPaid
 @Dao
 interface AmountPaidDao {
     @Insert
-   suspend fun insertAmountPaid(amountPaid: AmountPaid):Long
+   suspend fun insertAmountPaid(amountPaid: AmountPaidDto):Long
 
     @Update
-    suspend  fun updateAmountPaid(amountPaid: AmountPaid):Int
+    suspend  fun updateAmountPaid(amountPaid: AmountPaidDto):Int
 
     @Delete
-    suspend fun deleteAmountPaid(amountPaid: AmountPaid):Int
+    suspend fun deleteAmountPaid(amountPaid: AmountPaidDto):Int
 
     @Query("Select * from AmountPaid where salesProduct=id")
     suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int):List<AmountPaidRelations>

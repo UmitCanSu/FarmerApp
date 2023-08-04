@@ -12,6 +12,7 @@ data class AmountPaid
     val customer: Customer,
     val price: Int,
     val date: Date,
+    val location:Float
 
 ) {
     @PrimaryKey(autoGenerate = true)

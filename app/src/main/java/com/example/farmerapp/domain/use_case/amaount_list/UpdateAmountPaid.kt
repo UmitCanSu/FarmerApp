@@ -2,6 +2,7 @@ package com.example.farmerapp.domain.use_case.amaount_list
 
 import com.example.farmerapp.domain.model.AmountPaid
 import com.example.farmerapp.domain.repository.AmountPaidRepository
+import com.example.farmerapp.until.Extetensions.AmountPaidExtensions.toAmountPaidDto
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -13,7 +14,7 @@ class UpdateAmountPaid
 ) {
     fun updateAmountPaid(amountPaid: AmountPaid) = flow<Resource<Boolean>> {
         emit(Resource.Loading())
-        val index = amountPaidRepository.updateAmountPaid(amountPaid)
+        val index = amountPaidRepository.updateAmountPaid(amountPaid.toAmountPaidDto())
         emit(Resource.Success(index > 0))
     }.catch {
         emit(Resource.Error(it.message))

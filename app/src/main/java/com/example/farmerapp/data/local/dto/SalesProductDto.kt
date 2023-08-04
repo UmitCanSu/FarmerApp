@@ -17,7 +17,7 @@ data class SalesProductDto
     val productNumber: Int,
     val location: Float,
     val locationDescription: String,
-    val date: Date,
+    val salesDate: Date,
 ) {
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0

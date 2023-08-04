@@ -15,7 +15,8 @@ data class SalesProduct
     val price: Int,
     val isDept: Boolean,
     val productNumber: Int,
-    val location: String,
+    val location: Float,
+    val locationDescription:String,
     val salesDate: Date,
     val amountPaint: List<AmountPaid>
 ) {

@@ -11,16 +11,16 @@ class FarmerRepositoryImp
 @Inject constructor(
     private val farmerDao: FarmerDao
 ) : FarmerRepository {
-    override suspend fun insertFarmer(farmer: Farmer):Long {
-        return farmerDao.insertFarmer(farmer)
+    override suspend fun insertFarmer(farmerDto: FarmerDto):Long {
+        return farmerDao.insertFarmer(farmerDto)
     }
 
-    override suspend fun updateFarmer(farmer: Farmer):Int {
-        return farmerDao.updateFarmer(farmer)
+    override suspend fun updateFarmer(farmerDto: FarmerDto):Int {
+        return farmerDao.updateFarmer(farmerDto)
     }
 
-    override suspend fun deleteFarmer(farmer: Farmer):Int {
-        return farmerDao.deleteFarmer(farmer)
+    override suspend fun deleteFarmer(farmerDto: FarmerDto):Int {
+        return farmerDao.deleteFarmer(farmerDto)
     }
 
     override suspend fun selectFarmerWithId(farmerId: Int): FarmerRelations {

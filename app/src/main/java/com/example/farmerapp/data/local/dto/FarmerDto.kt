@@ -8,7 +8,7 @@ data class FarmerDto
     val companyId: Int,
     val name: String,
     val sourName: String,
-    val years: String,
+    val years: Int,
     val farmerStatus: Int
 )
 

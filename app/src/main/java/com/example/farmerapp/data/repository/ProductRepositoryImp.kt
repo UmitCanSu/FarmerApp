@@ -1,5 +1,6 @@
 package com.example.farmerapp.data.repository
 
+import com.example.farmerapp.data.local.dto.ProductDto
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.repository.ProductRepository
@@ -10,16 +11,16 @@ class ProductRepositoryImp
 @Inject constructor(
     private val productDao: ProductDao
 ) : ProductRepository {
-    override suspend fun insertProduct(product: Product):Long {
-        return productDao.insertProduct(product)
+    override suspend fun insertProduct(productDto: ProductDto):Long {
+        return productDao.insertProduct(productDto)
     }
 
-    override suspend fun updateProduct(product: Product):Int {
-        return productDao.updateProduct(product)
+    override suspend fun updateProduct(productDto: ProductDto):Int {
+        return productDao.updateProduct(productDto)
     }
 
-    override suspend fun deleteProduct(product: Product):Int {
-        return productDao.deleteProduct(product)
+    override suspend fun deleteProduct(productDto: ProductDto):Int {
+        return productDao.deleteProduct(productDto)
     }
 
     override suspend fun selectProductWithId(productId: Int):Product {

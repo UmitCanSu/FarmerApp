@@ -12,16 +12,16 @@ class SaleProductRepositoryImp
 @Inject constructor(
     private val salesProductDao: SaleProductDao
 ) : SaleProductRepository {
-    override suspend fun insertSaleProduct(salesProduct: SalesProduct) {
-        return salesProductDao.insertSaleProduct(salesProduct)
+    override suspend fun insertSaleProduct(salesProductDto: SalesProductDto):Long {
+        return salesProductDao.insertSaleProduct(salesProductDto)
     }
 
-    override suspend fun updateSaleProduct(salesProduct: SalesProduct) {
-        return salesProductDao.updateSaleProduct(salesProduct)
+    override suspend fun updateSaleProduct(salesProductDto: SalesProductDto):Int {
+        return salesProductDao.updateSaleProduct(salesProductDto)
     }
 
-    override suspend fun deleteSaleProduct(salesProduct: SalesProduct) {
-        return salesProductDao.deleteSaleProduct(salesProduct)
+    override suspend fun deleteSaleProduct(salesProductDto: SalesProductDto):Int {
+        return salesProductDao.deleteSaleProduct(salesProductDto)
     }
 
     override suspend fun selectSaleProductWithId(saleProductId: Int): SaleProductWitOtherClass {

@@ -5,19 +5,20 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.example.farmerapp.data.local.dto.ProductDto
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 
 @Dao
 interface ProductDao {
     @Insert
-    suspend   fun insertProduct(product: Product):Long
+    suspend   fun insertProduct(product: ProductDto):Long
 
     @Update
-    suspend fun updateProduct(product: Product):Int
+    suspend fun updateProduct(product: ProductDto):Int
 
     @Delete
-    suspend fun deleteProduct(product: Product):Int
+    suspend fun deleteProduct(product: ProductDto):Int
 
     @Query("Select * from Product where id=:productId")
     suspend fun selectProductWithId(productId: Int):Product

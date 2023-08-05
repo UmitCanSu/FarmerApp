@@ -2,19 +2,21 @@ package com.example.farmerapp.domain.use_case.product
 
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.repository.ProductRepository
-import com.example.farmerapp.until.Extetensions.ProductExtensions.toProductDto
+import com.example.farmerapp.until.Extetensions.ProductExtensions.toProduct
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class InsertProduct
+class GetAllProductUseCase
 @Inject constructor(
     private val productRepository: ProductRepository
 ) {
-    fun insertProdcut(product: Product) = flow<Resource<Boolean>> {
+    fun getAllProduct() = flow<Resource<List<Product>>> {
         emit(Resource.Loading())
-        val insertedSize = productRepository.insertProduct(product.toProductDto())
-        emit(Resource.Success(insertedSize > 0))
+        val allProduct = productRepository.getAllProductList().map { productRelations ->
+            productRelations.toProduct()
+        }
+        emit(Resource.Success(allProduct))
     }.catch { emit(Resource.Error(it.message)) }
 }

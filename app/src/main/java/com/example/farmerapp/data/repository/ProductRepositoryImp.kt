@@ -1,6 +1,7 @@
 package com.example.farmerapp.data.repository
 
 import com.example.farmerapp.data.local.dto.ProductDto
+import com.example.farmerapp.data.local.relations.ProductRelations
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.repository.ProductRepository
@@ -11,23 +12,27 @@ class ProductRepositoryImp
 @Inject constructor(
     private val productDao: ProductDao
 ) : ProductRepository {
-    override suspend fun insertProduct(productDto: ProductDto):Long {
+    override suspend fun insertProduct(productDto: ProductDto): Long {
         return productDao.insertProduct(productDto)
     }
 
-    override suspend fun updateProduct(productDto: ProductDto):Int {
+    override suspend fun updateProduct(productDto: ProductDto): Int {
         return productDao.updateProduct(productDto)
     }
 
-    override suspend fun deleteProduct(productDto: ProductDto):Int {
+    override suspend fun deleteProduct(productDto: ProductDto): Int {
         return productDao.deleteProduct(productDto)
     }
 
-    override suspend fun selectProductWithId(productId: Int):Product {
+    override suspend fun selectProductWithId(productId: Int): ProductRelations {
         return productDao.selectProductWithId(productId)
     }
 
-    override suspend fun selectFarmersWithCompanyId(companyId: Int): List<Farmer> {
+    override suspend fun selectFarmersWithCompanyId(companyId: Int): List<ProductRelations> {
         return productDao.selectFarmersWithCompanyId(companyId)
+    }
+
+    override suspend fun getAllProductList(): List<ProductRelations> {
+        return productDao.getAllProductList()
     }
 }

@@ -23,6 +23,6 @@ interface FarmerDao {
     @Query("Select * from Farmer where id=:farmerId")
     suspend fun selectFarmerWithId(farmerId: Int): FarmerRelations
 
-    @Query("Select * from  Farmer where id=:companyID ")
+    @Query("Select * from  Farmer where id=:companyId ")
     suspend fun selectFarmersWithCompanyId(companyID: Int): List<FarmerRelations>
 }

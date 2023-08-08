@@ -5,15 +5,13 @@ import androidx.room.PrimaryKey
 import com.example.farmerapp.until.FarmerStatus
 import javax.inject.Inject
 
-@Entity
 data class Farmer
 @Inject constructor(
-    val company: Company,
-    val name: String,
-    val sourName: String,
-    val years: Int,
-    val farmerStatus: FarmerStatus
+    var company: Company?,
+    var name: String,
+    var sourName: String,
+    var years: Int,
+    var farmerStatus: FarmerStatus
 ){
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
+    var id: Int = 0
 }

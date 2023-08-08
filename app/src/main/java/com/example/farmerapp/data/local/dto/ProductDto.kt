@@ -11,7 +11,7 @@ data class ProductDto
     val unitType: String,
     val price: Int,
     val companyId: Int
-) {
+)  {
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0
+    var id = 0
 }

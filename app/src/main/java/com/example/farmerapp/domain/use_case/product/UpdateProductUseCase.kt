@@ -16,5 +16,5 @@ class UpdateProductUseCase
         emit(Resource.Loading())
         val updatedProduct = productRepository.updateProduct(product.toProductDto())
         emit(Resource.Success(updatedProduct > 0))
-    }.catch { emit(Resource.Error(it.message)) }
+    }.catch { emit(Resource.Error(it.message!!)) }
 }

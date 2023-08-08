@@ -28,6 +28,6 @@ interface SaleProductDao {
     suspend fun selectSaleProductWithId(saleProductId: Int): SaleProductWitOtherClass
 
     @Transaction
-    @Query("SELECT * FROM SALESPRODUCT WHERE salesDate like salesDate")
-    suspend fun selectSaleProductWithSaleDate(saleDate: Date): List<SaleProductWitOtherClass>
+    @Query("SELECT * FROM SALESPRODUCT WHERE salesDate like :saleDate")
+    suspend fun selectSaleProductWithSaleDate(saleDate: String): List<SaleProductWitOtherClass>
 }

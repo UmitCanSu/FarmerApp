@@ -2,23 +2,25 @@ package com.example.farmerapp.data.local.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.model.Customer
-import com.example.farmerapp.domain.model.SalesProduct
+import com.example.farmerapp.data.local.dto.AmountPaidDto
+import com.example.farmerapp.data.local.dto.CustomerDto
+import com.example.farmerapp.data.local.dto.SalesProductDto
+import com.example.farmerapp.domain.model.Product
 
 data class AmountPaidRelations(
     @Embedded
-    val salesProduct: SalesProduct,
+    val amountPaidDto: AmountPaidDto,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "salesProductId"
+        parentColumn = "customerId",
+        entityColumn = "id"
     )
-    @Embedded
-    val customer: Customer,
+    val customerDto: CustomerDto,
+    /*
     @Relation(
-        parentColumn = "id",
-        entityColumn = "customerId"
+        parentColumn = "salesProductId",
+        entityColumn = "id"
     )
-    val amountPaid: AmountPaid
+    val salesProductDto: SalesProductDto,
 
+     */
 )

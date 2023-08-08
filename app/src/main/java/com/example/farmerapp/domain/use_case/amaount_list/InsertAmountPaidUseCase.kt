@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class UpdateAmountPaid
+class InsertAmountPaidUseCase
 @Inject constructor(
     private val amountPaidRepository: AmountPaidRepository
 ) {
-    fun updateAmountPaid(amountPaid: AmountPaid) = flow<Resource<Boolean>> {
+    fun insertAmountPaid(amountPaid: AmountPaid) = flow<Resource<Boolean>> {
         emit(Resource.Loading())
-        val index = amountPaidRepository.updateAmountPaid(amountPaid.toAmountPaidDto())
-        emit(Resource.Success(index > 0))
+        val index = amountPaidRepository.insertAmountPaid(amountPaid.toAmountPaidDto())
+        Resource.Success(index > 0)
     }.catch {
-        emit(Resource.Error(it.message))
+        emit(Resource.Error(it.message!!))
     }
 }

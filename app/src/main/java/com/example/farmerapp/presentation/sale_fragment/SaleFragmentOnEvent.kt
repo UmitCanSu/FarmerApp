@@ -5,5 +5,5 @@ import com.example.farmerapp.domain.model.SalesProduct
 
 sealed class SaleFragmentOnEvent {
     data class CalculatePrice(val productCount: Int) : SaleFragmentOnEvent()
-    data class SelectProduct(val product: Product) : SaleFragmentOnEvent()
+    data class SelectProduct(val productIndex: Int) : SaleFragmentOnEvent()
 }

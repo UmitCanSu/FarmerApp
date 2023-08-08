@@ -3,12 +3,13 @@ package com.example.farmerapp.domain.use_case.amaount_list
 import com.example.farmerapp.domain.model.AmountPaid
 import com.example.farmerapp.domain.repository.AmountPaidRepository
 import com.example.farmerapp.until.Extetensions.AmountPaidExtensions.toAmountPaid
+
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SelectAmountPaidWithSalesProductId
+class SelectAmountPaidWithSalesProductIdUseCase
 @Inject constructor(
     private val amountPaidRepository: AmountPaidRepository
 ) {
@@ -19,6 +20,6 @@ class SelectAmountPaidWithSalesProductId
         }
         emit(Resource.Success(amountPaidList))
     }.catch {
-        emit(Resource.Error(it.message))
+        emit(Resource.Error(it.message!!))
     }
 }

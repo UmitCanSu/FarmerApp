@@ -2,21 +2,27 @@ package com.example.farmerapp.domain.use_case.sales_product
 
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.domain.repository.SaleProductRepository
-import com.example.farmerapp.until.Extetensions.SalesProductExtensions.toSalesProductDto
+import com.example.farmerapp.until.Extetensions.SalesProductExtensions.toSaleProduct
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class UpdateSalesProduct
-@Inject constructor(
+class SelectProductWithIdUseCase @Inject constructor(
     private val saleProductRepository: SaleProductRepository
 ) {
-    fun updateSalesProduct(salesProduct: SalesProduct) = flow<Resource<Boolean>> {
+    fun selectProductWithId(salesProductId: Int) = flow<Resource<SalesProduct>> {
         emit(Resource.Loading())
-        saleProductRepository.updateSaleProduct(salesProduct.toSalesProductDto())
-        emit(Resource.Success(true))
+        emit(
+            Resource.Success(
+                saleProductRepository.selectSaleProductWithId(salesProductId).toSaleProduct()
+            )
+        )
     }.catch {
-        emit(Resource.Error(it.message))
+        emit(Resource.Error(it.message!!))
     }
+
+
 }
+
+

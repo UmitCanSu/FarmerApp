@@ -36,7 +36,7 @@
         app:layout_constraintTop_toTopOf="@+id/productName" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/numberText"
+        android:id="@+id/numberTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
@@ -45,6 +45,7 @@
         tools:layout_editor_absoluteX="-119dp">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/numberText"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -65,26 +66,35 @@
         android:id="@+id/totalPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="64dp"
         android:text="@string/totoal_price"
-        app:layout_constraintTop_toBottomOf="@+id/productName"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.046"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productName" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/materialCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
         android:text="@string/dept"
-        app:layout_constraintBottom_toTopOf="@+id/saleButton"
-        app:layout_constraintTop_toBottomOf="@+id/numberText"
-        tools:layout_editor_absoluteX="34dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/numberTextLayout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/saleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="156dp"
         android:text="@string/sale"
-        tools:layout_editor_absoluteX="159dp"
-        tools:layout_editor_absoluteY="484dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialCheckBox"
+        app:layout_constraintVertical_bias="0.714" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

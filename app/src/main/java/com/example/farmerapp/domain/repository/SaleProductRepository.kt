@@ -10,5 +10,5 @@ interface SaleProductRepository {
     suspend fun updateSaleProduct(salesProductDto: SalesProductDto):Int
     suspend fun deleteSaleProduct(salesProductDto: SalesProductDto):Int
     suspend fun selectSaleProductWithId(saleProductId: Int): SaleProductWitOtherClass
-    suspend fun selectSaleProductWithSaleDate(saleDate: Date): List<SaleProductWitOtherClass>
+    suspend fun selectSaleProductWithSaleDate(saleDate: String): List<SaleProductWitOtherClass>
 }

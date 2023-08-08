@@ -1,5 +1,6 @@
 package com.example.farmerapp.data.repository
 
+import com.example.farmerapp.data.local.dto.CustomerDto
 import com.example.farmerapp.domain.model.Customer
 import com.example.farmerapp.domain.repository.CustomerRepository
 import com.example.farmerapp.domain.repository.dao.CustomerDao
@@ -9,15 +10,15 @@ class CustomerRepositoryImp
 @Inject constructor(
     private val customerDao: CustomerDao
 ) : CustomerRepository {
-    override suspend fun insertCustomer(customer: Customer):Long {
+    override suspend fun insertCustomer(customer: CustomerDto):Long {
         return customerDao.insertCustomer(customer)
     }
 
-    override suspend fun updateCustomer(customer: Customer):Int {
+    override suspend fun updateCustomer(customer: CustomerDto):Int {
         return customerDao.updateCustomer(customer)
     }
 
-    override suspend fun selectCustomerWithCustomerID(customerId: Int): Customer {
+    override suspend fun selectCustomerWithCustomerID(customerId: Int): CustomerDto {
         return customerDao.selectCustomerWithCustomerID(customerId)
     }
 }

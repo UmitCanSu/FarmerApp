@@ -2,36 +2,33 @@ package com.example.farmerapp.data.local.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.model.Customer
-import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.domain.model.Product
-import com.example.farmerapp.domain.model.SalesProduct
+import com.example.farmerapp.data.local.dto.CompanyDto
+import com.example.farmerapp.data.local.dto.CustomerDto
+import com.example.farmerapp.data.local.dto.FarmerDto
+import com.example.farmerapp.data.local.dto.ProductDto
+import com.example.farmerapp.data.local.dto.SalesProductDto
 
 data class SaleProductWitOtherClass(
     @Embedded
-    val company: Company,
+    val salesProductDto: SalesProductDto,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "companyId"
+        parentColumn = "companyId",
+        entityColumn = "id"
     )
-    @Embedded
-    val product: Product,
+    val companyDto: CompanyDto,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "productId"
+        parentColumn = "productId",
+        entityColumn = "id"
     )
-    @Embedded
-    val customer: Customer,
+    val productDto: ProductDto,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "customerId"
+        parentColumn = "customerId",
+        entityColumn = "id"
     )
-    @Embedded
-    val farmer: Farmer,
+    val customerDto: CustomerDto,
     @Relation(
-        parentColumn = "id",
-        entityColumn = "farmerId"
+        parentColumn = "farmerId",
+        entityColumn = "id"
     )
-    val salesProduct: SalesProduct
-)
+    val farmerDto: FarmerDto,
+    )

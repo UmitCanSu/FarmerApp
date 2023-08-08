@@ -2,17 +2,18 @@ package com.example.farmerapp.data.local.relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.example.farmerapp.data.local.dto.CompanyDto
+import com.example.farmerapp.data.local.dto.FarmerDto
 import com.example.farmerapp.domain.model.Company
 
 data class FarmerRelations(
     @Embedded
-    val company: Company,
+    val farmerDto: FarmerDto,
     @Relation(
-        entityColumn = "id",
-        parentColumn = "companyId"
+        parentColumn = "companyId",
+        entityColumn = "id"
+
     )
-    val name: String,
-    val sourName: String,
-    val years: Int,
-    val farmerStatus: Int
+    val company: CompanyDto,
+
 )

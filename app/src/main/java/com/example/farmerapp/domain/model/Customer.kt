@@ -8,7 +8,6 @@ Karar verilmesi gereken konular;
     Kullanıcılar şirkete ait mi olamlı yani bir kullanıcı iki farklı şirkete çalıştığı zaman oraya nasıl giriş yapılmalı
     bir kullanıcı iki çifçi için tekrar kayıt olmak zorunda mı
  */
-@Entity
 data class Customer
 @Inject constructor(
     val name: String,
@@ -16,7 +15,6 @@ data class Customer
     val phone: String,
     val address: String,
     val phoneNumber: String
-) {
-    @PrimaryKey(autoGenerate = true)
+){
     val id: Int = 0
 }

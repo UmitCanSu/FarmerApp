@@ -1,9 +1,8 @@
 package com.example.farmerapp.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import com.example.farmerapp.data.local.Database
+import com.example.farmerapp.data.local.AppDatabase
 import com.example.farmerapp.data.repository.AmountPaidRepositoryImp
 import com.example.farmerapp.data.repository.CompanyRepositoryImp
 import com.example.farmerapp.data.repository.CustomerRepositoryImp
@@ -28,44 +27,41 @@ import javax.inject.Singleton
 object AppModule {
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext applicationContext: Context): Database {
-        return Room.databaseBuilder(
-            applicationContext,
-            Database::class.java,
-            "farmer_db"
-        ).build()
+    fun provideAppDatabase(@ApplicationContext applicationContext: Context): AppDatabase {
+        return AppDatabase.getInstance(applicationContext)
     }
 
     @Provides
     @Singleton
-    fun provideAmountPaidRepository(dataBase: Database): AmountPaidRepository {
+    fun provideAmountPaidRepository(dataBase: AppDatabase): AmountPaidRepository {
         return AmountPaidRepositoryImp(dataBase.amountPaid())
     }
 
     @Provides
     @Singleton
-    fun provideCompanyRepository(dataBase: Database): CompanyRepository {
+    fun provideCompanyRepository(dataBase: AppDatabase): CompanyRepository {
         return CompanyRepositoryImp(dataBase.companyDao())
     }
 
     @Provides
     @Singleton
-    fun provideCustomerRepository(dataBase: Database): CustomerRepository {
+    fun provideCustomerRepository(dataBase: AppDatabase): CustomerRepository {
         return CustomerRepositoryImp(dataBase.customerDao())
     }
     @Provides
     @Singleton
-    fun provideFarmerRepository(dataBase:Database): FarmerRepository {
+    fun provideFarmerRepository(dataBase:AppDatabase): FarmerRepository {
         return FarmerRepositoryImp(dataBase.farmerDao())
     }
     @Provides
     @Singleton
-    fun provideProductRepository(dataBase:Database): ProductRepository {
+    fun provideProductRepository(dataBase:AppDatabase): ProductRepository {
         return ProductRepositoryImp(dataBase.productDao())
     }
+
     @Provides
     @Singleton
-    fun provideSalesProductRepository(dataBase:Database): SaleProductRepository {
+    fun provideSalesProductRepository(dataBase:AppDatabase): SaleProductRepository {
         return SaleProductRepositoryImp(dataBase.salesProductDao())
     }
 }

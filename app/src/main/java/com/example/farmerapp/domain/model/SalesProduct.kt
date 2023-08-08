@@ -3,9 +3,10 @@ package com.example.farmerapp.domain.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Date
+import java.time.LocalDateTime
 import javax.inject.Inject
 
-@Entity
+
 data class SalesProduct
 @Inject constructor(
     val company: Company,
@@ -17,9 +18,8 @@ data class SalesProduct
     val productNumber: Int,
     val location: Float,
     val locationDescription:String,
-    val salesDate: Date,
+    val salesDate: LocalDateTime,
     val amountPaint: List<AmountPaid>
-) {
-    @PrimaryKey(autoGenerate = true)
+){
     val id: Int = 0
 }

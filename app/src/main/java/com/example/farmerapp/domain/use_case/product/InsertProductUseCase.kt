@@ -16,5 +16,5 @@ class InsertProductUseCase
         emit(Resource.Loading())
         val insertedSize = productRepository.insertProduct(product.toProductDto())
         emit(Resource.Success(insertedSize > 0))
-    }.catch { emit(Resource.Error(it.message)) }
+    }.catch { emit(Resource.Error(it.message!!)) }
 }

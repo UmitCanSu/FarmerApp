@@ -3,6 +3,7 @@ package com.example.farmerapp.data.local.dto
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Date
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 @Entity(tableName = "AmountPaid")
@@ -11,9 +12,9 @@ data class AmountPaidDto
     val salesProductId: Int,
     val customerId: Int,
     val price: Int,
-    val date: Date,
+    val date: LocalDateTime,
     val location: Float,
 ) {
     @PrimaryKey(autoGenerate = true)
-    val id = 0
+    var id = 0
 }

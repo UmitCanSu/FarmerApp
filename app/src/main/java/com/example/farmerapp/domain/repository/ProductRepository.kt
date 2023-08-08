@@ -10,7 +10,10 @@ interface ProductRepository {
     suspend fun insertProduct(productDto: ProductDto):Long
     suspend fun updateProduct(productDto: ProductDto):Int
     suspend fun deleteProduct(productDto: ProductDto):Int
+
     suspend fun selectProductWithId(productId: Int):ProductRelations
     suspend fun selectFarmersWithCompanyId(companyId: Int): List<ProductRelations>
     suspend fun getAllProductList(): List<ProductRelations>
+
+
 }

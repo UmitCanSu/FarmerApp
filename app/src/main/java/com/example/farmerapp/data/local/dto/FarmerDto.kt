@@ -1,6 +1,7 @@
 package com.example.farmerapp.data.local.dto
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import javax.inject.Inject
 @Entity(tableName = "Farmer")
 data class FarmerDto
@@ -10,5 +11,8 @@ data class FarmerDto
     val sourName: String,
     val years: Int,
     val farmerStatus: Int
-)
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id = 0
+}
 

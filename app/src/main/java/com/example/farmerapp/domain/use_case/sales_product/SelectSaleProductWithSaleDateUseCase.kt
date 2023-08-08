@@ -9,16 +9,16 @@ import kotlinx.coroutines.flow.flow
 import java.sql.Date
 import javax.inject.Inject
 
-class SelectSaleProductWithSaleDate @Inject constructor(
+class SelectSaleProductWithSaleDateUseCase @Inject constructor(
     private val salesProductRepository: SaleProductRepository
 )
 {
     fun selectSaleProductWithSaleDate(date:Date)= flow<Resource<List<SalesProduct>>> {
         emit(Resource.Loading())
-        val listSaleProductWitOtherClass  = salesProductRepository.selectSaleProductWithSaleDate(date)
+        val listSaleProductWitOtherClass  = salesProductRepository.selectSaleProductWithSaleDate(date.toString())
         val listSalesProduct = Mappers.salesProductOtherClassListToSaleProductList(listSaleProductWitOtherClass)
         emit(Resource.Success(listSalesProduct))
     }.catch {
-        emit(Resource.Error(it.message))
+        emit(Resource.Error(it.message!!))
     }
 }

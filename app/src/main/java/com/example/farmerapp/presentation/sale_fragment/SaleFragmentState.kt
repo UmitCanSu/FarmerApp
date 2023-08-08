@@ -17,6 +17,7 @@ sealed class SaleFragmentState {
     object Idle : SaleFragmentState()
     object Loading : SaleFragmentState()
     data class ProdcutList(val productList: List<Product>):SaleFragmentState()
+    data class SelectedProduct(val selectedProduct: Product):SaleFragmentState()
     data class Calculate(val amountPrice: String) : SaleFragmentState()
     data class Error(val errorMessage: String) : SaleFragmentState()
 }

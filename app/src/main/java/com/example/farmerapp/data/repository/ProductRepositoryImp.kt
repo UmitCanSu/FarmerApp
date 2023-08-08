@@ -35,4 +35,5 @@ class ProductRepositoryImp
     override suspend fun getAllProductList(): List<ProductRelations> {
         return productDao.getAllProductList()
     }
+
 }

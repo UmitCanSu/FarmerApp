@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class DeleteAmountPaid
+class DeleteAmountPaidUseCase
 @Inject constructor(
     private val amountPaidRepository: AmountPaidRepository
 ) {
@@ -17,6 +17,6 @@ class DeleteAmountPaid
         val deletedSize = amountPaidRepository.deleteAmountPaid(amountPaid.toAmountPaidDto())
         emit(Resource.Success(deletedSize > 0))
     }.catch {
-        emit(Resource.Error(it.message))
+        emit(Resource.Error(it.message!!))
     }
 }

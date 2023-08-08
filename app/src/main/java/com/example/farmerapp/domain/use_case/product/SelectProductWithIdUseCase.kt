@@ -16,5 +16,5 @@ class SelectProductWithIdUseCase
         emit(Resource.Loading())
         val productRelations = productRepository.selectProductWithId(productId)
         emit(Resource.Success(productRelations.toProduct()))
-    }.catch { emit(Resource.Error(it.message)) }
+    }.catch { emit(Resource.Error(it.message!!)) }
 }

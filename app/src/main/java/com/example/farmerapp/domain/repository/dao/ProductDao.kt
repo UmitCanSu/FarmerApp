@@ -29,7 +29,7 @@ interface ProductDao {
     suspend fun selectProductWithId(productId: Int): ProductRelations
 
 
-    @Query("Select * from  Product where id=:companyId ")
+    @Query("Select * from  Product where companyId=:companyId ")
     suspend fun selectFarmersWithCompanyId(companyId: Int): List<ProductRelations>
 
 

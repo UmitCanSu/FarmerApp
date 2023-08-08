@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class InsertSalesProduct
+class InsertSalesProductUseCase
 @Inject constructor(
     private val saleProductRepository: SaleProductRepository
 ) {
@@ -16,7 +16,7 @@ class InsertSalesProduct
         emit(Resource.Loading())
         emit(Resource.Success(saleProductRepository.insertSaleProduct(salesProduct.toSalesProductDto())))
     }.catch {
-        emit(Resource.Error(it.message))
+        emit(Resource.Error(it.message!!))
     }
 
 }

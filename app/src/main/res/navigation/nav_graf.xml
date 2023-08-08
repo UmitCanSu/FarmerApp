@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graf"
+    app:startDestination="@id/saveCompanyFragment">
+
+    <fragment
+        android:id="@+id/saveCompanyFragment"
+        android:name="com.example.farmerapp.presentation.save_company_fragment.SaveCompanyFragment"
+        android:label="fragment_save_company"
+        tools:layout="@layout/fragment_save_company" >
+        <action
+            android:id="@+id/action_saveCompanyFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_saveCompanyFragment_to_saleFragment"
+            app:destination="@id/saleFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/saleFragment"
+        android:name="com.example.farmerapp.presentation.sale_fragment.SaleFragment"
+        android:label="SaleFragment" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.farmerapp.presentation.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+</navigation>

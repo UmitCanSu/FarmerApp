@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graf"
+    app:startDestination="@id/saveCompanyFragment">
+
+    <fragment
+        android:id="@+id/saveCompanyFragment"
+        android:name="com.example.farmerapp.presentation.save_company_fragment.SaveCompanyFragment"
+        android:label="fragment_save_company"
+        tools:layout="@layout/fragment_save_company"/>
+    <fragment
+        android:id="@+id/saleFragment"
+        android:name="com.example.farmerapp.presentation.sale_fragment.SaleFragment"
+        android:label="SaleFragment">
+        <action
+            android:id="@+id/action_saleFragment_to_addAmountPaidFragment"
+            app:destination="@id/addAmountPaidFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/customerFragment"
+        android:name="com.example.farmerapp.presentation.customer_fragment.CustomerFragment"
+        android:label="fragment_customer"
+        tools:layout="@layout/fragment_customer"/>
+    <fragment
+        android:id="@+id/saleListFragment"
+        android:name="com.example.farmerapp.presentation.sale_list_fragment.SaleListFragment"
+        android:label="fragment_sale_list"
+        tools:layout="@layout/fragment_sale_list">
+        <action
+            android:id="@+id/action_saleListFragment_to_saleDetailFragment"
+            app:destination="@id/saleDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/productListFragment"
+        android:name="com.example.farmerapp.presentation.product_list.ProductListFragment"
+        android:label="fragment_product_list"
+        tools:layout="@layout/fragment_product_list" />
+    <fragment
+        android:id="@+id/productInsertAndUpdateFragment"
+        android:name="com.example.farmerapp.presentation.productInsertAndUpdate.ProductInsertAndUpdateFragment"
+        android:label="fragment_product_insert_and_update"
+        tools:layout="@layout/fragment_product_insert_and_update">
+        <action
+            android:id="@+id/action_productInsertAndUpdateFragment_to_productListFragment"
+            app:destination="@id/productListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/farmerInsertAndUpdateFragment"
+        android:name="com.example.farmerapp.presentation.farmer_insert_and_update.FarmerInsertAndUpdateFragment"
+        android:label="fragment_farmer_insert_and_update"
+        tools:layout="@layout/fragment_farmer_insert_and_update" />
+    <fragment
+        android:id="@+id/saleDetailFragment"
+        android:name="com.example.farmerapp.presentation.sales_detail_fragment.SaleDetailFragment"
+        android:label="fragment_sale_detail"
+        tools:layout="@layout/fragment_sale_detail">
+        <argument
+            android:name="salesProductId"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_saleDetailFragment_to_addAmountPaidFragment"
+            app:destination="@id/addAmountPaidFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAmountPaidFragment"
+        android:name="com.example.farmerapp.presentation.add_amount_paid.AddAmountPaidFragment"
+        android:label="fragment_add_amount_paid"
+        tools:layout="@layout/fragment_add_amount_paid">
+        <argument
+            android:name="salesProductID"
+            android:defaultValue="1"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.farmerapp.presentation.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_saveCompanyFragment"
+            app:destination="@id/saveCompanyFragment" />
+    </fragment>
+</navigation>

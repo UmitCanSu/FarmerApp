@@ -3,22 +3,17 @@ package com.example.farmerapp.presentation.save_company_fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.model.Product
-import com.example.farmerapp.domain.repository.CompanyRepository
-import com.example.farmerapp.domain.repository.ProductRepository
+import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.use_case.company.InsertCompanyUseCase
 import com.example.farmerapp.domain.use_case.company.SelectCompanyWithCompanyIdUseCase
 import com.example.farmerapp.domain.use_case.default_data.DefaultSaveProductUseCase
+import com.example.farmerapp.until.FarmerStatus
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.UserSingleton
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,7 +27,7 @@ class SaveCompanyViewModel
     private val _state = MutableStateFlow<SaveCompanyState>(SaveCompanyState.Idle)
     val state: StateFlow<SaveCompanyState> = _state.asStateFlow()
 
-    private  fun insertCompany(company: Company) {
+    private fun insertCompany(company: Company) {
         viewModelScope.launch {
             insertCopanyUseCase.insertCompany(company).collect {
                 when (it) {
@@ -41,6 +36,8 @@ class SaveCompanyViewModel
                     }
 
                     is Resource.Success -> {
+                        company.id = 1
+                        UserSingleton.getInstance().company = company
                         saveDefaultProduct(company)
                     }
 
@@ -80,6 +77,12 @@ class SaveCompanyViewModel
 
                     is Resource.Success -> {
                         if (it.data != null) {
+                            UserSingleton.getInstance().company = it.data
+                            val farmer = Farmer(it.data, "Farmer ", "- 1", 18, FarmerStatus.Farmer)
+                            farmer.id = 1
+                            UserSingleton.getInstance().farmer = farmer
+
+
                             _state.value = SaveCompanyState.SavedCompany
                         } else {
                             val company =
@@ -99,7 +102,7 @@ class SaveCompanyViewModel
     fun onEvent(onEvent: SaveCompanyOnEvent) {
         when (onEvent) {
             is SaveCompanyOnEvent.SaveCompany -> {
-                viewModelScope.launch{
+                viewModelScope.launch {
                     checkSavedCompany(1)
                 }
             }

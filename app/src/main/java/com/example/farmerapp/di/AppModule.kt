@@ -1,7 +1,6 @@
 package com.example.farmerapp.di
 
 import android.content.Context
-import androidx.room.Room
 import com.example.farmerapp.data.local.AppDatabase
 import com.example.farmerapp.data.repository.AmountPaidRepositoryImp
 import com.example.farmerapp.data.repository.CompanyRepositoryImp
@@ -15,6 +14,7 @@ import com.example.farmerapp.domain.repository.CustomerRepository
 import com.example.farmerapp.domain.repository.FarmerRepository
 import com.example.farmerapp.domain.repository.ProductRepository
 import com.example.farmerapp.domain.repository.SaleProductRepository
+import com.example.farmerapp.presentation.dialog.CustomDialog
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,20 +48,30 @@ object AppModule {
     fun provideCustomerRepository(dataBase: AppDatabase): CustomerRepository {
         return CustomerRepositoryImp(dataBase.customerDao())
     }
+
     @Provides
     @Singleton
-    fun provideFarmerRepository(dataBase:AppDatabase): FarmerRepository {
+    fun provideFarmerRepository(dataBase: AppDatabase): FarmerRepository {
         return FarmerRepositoryImp(dataBase.farmerDao())
     }
+
     @Provides
     @Singleton
-    fun provideProductRepository(dataBase:AppDatabase): ProductRepository {
+    fun provideProductRepository(dataBase: AppDatabase): ProductRepository {
         return ProductRepositoryImp(dataBase.productDao())
     }
 
     @Provides
     @Singleton
-    fun provideSalesProductRepository(dataBase:AppDatabase): SaleProductRepository {
+    fun provideSalesProductRepository(dataBase: AppDatabase): SaleProductRepository {
         return SaleProductRepositoryImp(dataBase.salesProductDao())
     }
+
+    @Provides
+    @Singleton
+    fun provideCustomDialog(@ApplicationContext applicationContext: Context): CustomDialog {
+        return CustomDialog(applicationContext)
+    }
+
+
 }

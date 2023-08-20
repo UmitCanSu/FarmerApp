@@ -11,7 +11,6 @@ data class CustomerDto
     val sourName: String,
     val phone: String,
     val address: String,
-    val phoneNumber: String
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

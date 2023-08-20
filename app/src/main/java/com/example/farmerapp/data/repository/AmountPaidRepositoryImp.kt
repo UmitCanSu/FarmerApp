@@ -26,4 +26,8 @@ class AmountPaidRepositoryImp
     override suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations> {
         return amountPaidDao.selectAmountPaidWithSalesProductId(salesProductId)
     }
+
+    override suspend fun getRemainingDept(salesProductId: Int): Int {
+        return amountPaidDao.getRemainingDept(salesProductId)
+    }
 }

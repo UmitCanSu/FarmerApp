@@ -9,4 +9,5 @@ interface AmountPaidRepository {
     suspend fun updateAmountPaid(amountPaidDto: AmountPaidDto):Int
     suspend fun deleteAmountPaid(amountPaidDto: AmountPaidDto):Int
     suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations>
+    suspend fun getRemainingDept(salesProductId: Int):Int
 }

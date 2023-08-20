@@ -7,10 +7,21 @@ import javax.inject.Inject
 
 data class Product
 @Inject constructor(
-    val name:String,
-    val unitType:String,
-    val price:Int,
+    var id: Int = 0,
+    val name: String,
+    val unitType: String,
+    val price: Int,
     val company: Company
-){
-    var id: Int = 0
+) {
+
+    constructor(
+        name: String,
+        unitType: String,
+        price: Int,
+        company: Company
+    ) : this(
+        0,
+        name, unitType, price, company
+    )
+
 }

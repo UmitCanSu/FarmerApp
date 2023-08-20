@@ -2,24 +2,17 @@ package com.example.farmerapp.presentation.save_company_fragment
 
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentSaveCompanyBinding
 import com.example.farmerapp.domain.model.Company
+import com.example.farmerapp.presentation.dialog.CustomDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.observeOn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -42,7 +35,6 @@ class SaveCompanyFragment : Fragment() {
         val company = Company("Deneme", "Artvin/Savsat/Armutlu mah.", "05340000000")
         viewModel.onEvent(SaveCompanyOnEvent.SaveCompany(company))
         lifecycleScope.launch { observableState() }
-
     }
 
 
@@ -59,12 +51,18 @@ class SaveCompanyFragment : Fragment() {
 
                 is SaveCompanyState.Error -> {
                     binding.informationText.text = state.errorMessage
+                    CustomDialog(requireActivity()).errorDialogShow(
+                        getString(R.string.can_not_data),
+                        onConfirmClick = {
+
+                        }, onCancelClick = {
+
+                        }
+                    )
                 }
 
                 is SaveCompanyState.SavedCompany -> {
-                   binding.informationText.text="Can save data"
-                    val action = SaveCompanyFragmentDirections.actionSaveCompanyFragmentToSaleFragment()
-                    Navigation.findNavController(requireView()).navigate(action)
+                    binding.informationText.text = "Can save data"
                 }
             }
         }

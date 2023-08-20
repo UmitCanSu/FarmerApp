@@ -2,7 +2,6 @@ package com.example.farmerapp.data.local.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.sql.Date
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -19,7 +18,8 @@ data class SalesProductDto
     val location: Float,
     val locationDescription: String,
     val salesDate: LocalDateTime,
-)  {
+    val isPaid: Boolean = false
+) {
     @PrimaryKey(autoGenerate = true)
     var id = 0
 }

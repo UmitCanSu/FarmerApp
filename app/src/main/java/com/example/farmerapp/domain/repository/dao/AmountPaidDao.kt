@@ -8,7 +8,6 @@ import androidx.room.Transaction
 import androidx.room.Update
 import com.example.farmerapp.data.local.dto.AmountPaidDto
 import com.example.farmerapp.data.local.relations.AmountPaidRelations
-import com.example.farmerapp.domain.model.AmountPaid
 
 @Dao
 interface AmountPaidDao {
@@ -25,6 +24,9 @@ interface AmountPaidDao {
     @Query("Select * from AmountPaid where salesProductId=:salesProductId")
     @Transaction
     suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations>
+
+    @Query("select (Select price from SalesProduct where id = :salesProductId) -(Select sum(price) from AmountPaid where salesProductId = :salesProductId) as enterPrice")
+    suspend fun getRemainingDept(salesProductId: Int): Int
 
 
 }

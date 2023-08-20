@@ -2,7 +2,7 @@ package com.example.farmerapp.domain.use_case.customer
 
 import com.example.farmerapp.domain.model.Customer
 import com.example.farmerapp.domain.repository.CustomerRepository
-import com.example.farmerapp.until.Extetensions.CustomerExtensions.toCustomerDto
+import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomerDto
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

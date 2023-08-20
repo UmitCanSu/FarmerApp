@@ -2,7 +2,7 @@ package com.example.farmerapp.domain.use_case.product
 
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.repository.ProductRepository
-import com.example.farmerapp.until.Extetensions.ProductExtensions.toProduct
+import com.example.farmerapp.until.extetensions.ProductExtensions.toProduct
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -20,7 +20,7 @@ class GetProductListWithCompanyIdUseCase
         val productList = productRepository.selectFarmersWithCompanyId(companyId)
             .map { productRepository ->
                 productRepository.toProduct()
-            }
+            }.ifEmpty { emptyList() }
         emit(Resource.Success(productList))
 
     }

@@ -2,7 +2,6 @@ package com.example.farmerapp.data.repository
 
 import com.example.farmerapp.data.local.dto.FarmerDto
 import com.example.farmerapp.data.local.relations.FarmerRelations
-import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.repository.FarmerRepository
 import com.example.farmerapp.domain.repository.dao.FarmerDao
 import javax.inject.Inject

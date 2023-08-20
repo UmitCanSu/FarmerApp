@@ -1,12 +1,36 @@
 <resources>
     <string name="app_name">FarmerApp</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="user_name">User Name</string>
     <string name="user_password">Password</string>
     <string name="login">Log In</string>
     <string name="sale_product_count">Sale Product Count</string>
-    <string name="totoal_price">Total Price</string>
+    <string name="total_price">Total Price </string>
+    <string name="price">Price</string>
     <string name="dept">Dept</string>
     <string name="sale">Sale</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="customer_surname">Customer Surname</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="year">Year</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="address">Address</string>
+    <string name="find_customer">Find Customer</string>
+    <string name="save_customer">Save Customer</string>
+    <string name="add_amount_paid">Add Amount Paid</string>
+    <string name="remaining_dept">Remaining Dept </string>
+    <string name="pay">Pay</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="save">Save</string>
+    <string name="save_data">Save Data</string>
+    <string name="can_not_data">Can not save</string>
+    <string name="empty_text">Have to fill in the blanks</string>
+    <string name="required">Required*</string>
+    <string name="max_enter_amount_paid_error_message">The entered price cannot exceed the product quantity.</string>
+    <string name="location_permission_request">Permission needed for location</string>
+    <string name="give_permission">Give Permission</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="permission_needed">Permission Need!</string>
 </resources>

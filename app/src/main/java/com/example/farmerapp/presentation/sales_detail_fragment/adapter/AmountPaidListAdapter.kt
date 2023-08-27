@@ -3,9 +3,10 @@ package com.example.farmerapp.presentation.sales_detail_fragment.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.farmerapp.R
 import com.example.farmerapp.databinding.AdapterAmountPaidListBinding
 import com.example.farmerapp.domain.model.AmountPaid
-import com.google.gson.Gson
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class AmountPaidListAdapter
@@ -24,12 +25,14 @@ class AmountPaidListAdapter
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AmountPaidListAdapter.ViewHolder, position: Int) {
-        with(holder.binding) {
-            with(amountPaidList[position]) {
-                amountPaidInfo.text = Gson().toJson(this)
-            }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val binding = holder.binding
+        with(amountPaidList[position]) {
+            binding.customerText.text = customer.name + " " + customer.surName
+            binding.priceText.text = "${binding.root.context.getString(R.string.price)}:  $price"
+            binding.dateText.text = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
         }
+
     }
 
     override fun getItemCount(): Int = amountPaidList.size

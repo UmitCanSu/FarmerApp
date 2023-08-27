@@ -15,7 +15,8 @@ data class SalesProductDto
     val price: Int,
     val isDept: Boolean,
     val productNumber: Int,
-    val location: Float,
+    val latitude: Double,
+    val longitude: Double,
     val locationDescription: String,
     val salesDate: LocalDateTime,
     val isPaid: Boolean = false

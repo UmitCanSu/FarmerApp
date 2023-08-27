@@ -8,28 +8,33 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.R.layout.support_simple_spinner_dropdown_item
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentAddAmountPaidBinding
 import com.example.farmerapp.presentation.dialog.CustomDialog
+import com.example.farmerapp.until.extetensions.Extensions
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddAmountPaidFragment : Fragment() {
-    private lateinit var viewModel: AddAmountPaidViewModel
+    private val viewModel: AddAmountPaidViewModel by viewModels()
     private lateinit var binding: FragmentAddAmountPaidBinding
+    private val editTextLayout = ArrayList<TextInputLayout>()
     private val args: AddAmountPaidFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var customDialog: CustomDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddAmountPaidBinding.inflate(layoutInflater)
-        viewModel = ViewModelProvider(this)[AddAmountPaidViewModel::class.java]
         viewModel.onEvent(AddAmountPaidFragmentOnEvent.GetSalesProduct(args.salesProductID))
         return binding.root
     }
@@ -37,11 +42,9 @@ class AddAmountPaidFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch { observableState() }
-
+        fillEditTextLayout()
         binding.pay.setOnClickListener {
-            if (binding.priceInputText.text.isNullOrBlank()) {
-                binding.priceInputLayout.error = getString(R.string.required)
-            } else {
+            if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
                 val selectedCustomerIndex = binding.customerSpinner.selectedItemPosition
                 val price = binding.priceInputText.text.toString().toInt()
                 viewModel.onEvent(
@@ -50,9 +53,12 @@ class AddAmountPaidFragment : Fragment() {
                         price
                     )
                 )
-
             }
         }
+    }
+
+    private fun fillEditTextLayout() {
+        editTextLayout.add(binding.priceInputLayout)
     }
 
     private suspend fun observableState() {
@@ -78,17 +84,16 @@ class AddAmountPaidFragment : Fragment() {
                 is AddAmountPaidFragmentState.IsSavedAmountPaid -> {
 
                     if (state.isSave) {
-                        CustomDialog(requireContext()).successDialogShow(
+                        customDialog.successDialogShow(
                             getString(R.string.save_data),
                             5
                         ) {
                             Navigation.findNavController(requireView()).popBackStack()
                         }
                     } else {
-                        CustomDialog(requireContext()).errorDialogShow(getString(R.string.can_not_data),
-                            {},
+                        customDialog.errorDialogShow(getString(R.string.can_not_data),
                             {}
-                        )
+                        ) {}
                     }
                 }
 
@@ -97,16 +102,15 @@ class AddAmountPaidFragment : Fragment() {
                 }
 
                 is AddAmountPaidFragmentState.Error -> {
-                    CustomDialog(requireActivity()).errorDialogShow(
+                    customDialog.errorDialogShow(
                         state.errorMessage,
                         onConfirmClick = {
 
-                        }, onCancelClick = {
-
                         }
-                    )
-                }
+                    ) {
 
+                    }
+                }
             }
         }
     }

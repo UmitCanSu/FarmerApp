@@ -5,25 +5,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.farmerapp.databinding.FragmentSaleListBinding
+import com.example.farmerapp.presentation.dialog.CustomDialog
 import com.example.farmerapp.presentation.sale_list_fragment.adapter.SaleListAdapter
 import com.example.farmerapp.until.UserSingleton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SaleListFragment : Fragment() {
-    private lateinit var viewModel: SaleListViewModel
+    private val viewModel: SaleListViewModel by viewModels()
     private lateinit var binding: FragmentSaleListBinding
+
+    @Inject
+    lateinit var customDialog: CustomDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(this)[SaleListViewModel::class.java]
         binding = FragmentSaleListBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -50,7 +54,7 @@ class SaleListFragment : Fragment() {
                 }
 
                 is SaleListState.Error -> {
-
+                    customDialog.errorDialogShow(it.errorMessage, {}) {}
                 }
 
                 is SaleListState.SaleList -> {

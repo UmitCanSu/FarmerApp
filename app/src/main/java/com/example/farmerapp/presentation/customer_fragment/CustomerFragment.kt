@@ -1,35 +1,38 @@
 package com.example.farmerapp.presentation.customer_fragment
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentCustomerBinding
 import com.example.farmerapp.domain.model.Customer
 import com.example.farmerapp.presentation.dialog.CustomDialog
+import com.example.farmerapp.until.Constant
 import com.example.farmerapp.until.extetensions.Extensions
-import com.google.gson.Gson
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.lang.Exception
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CustomerFragment : Fragment() {
 
     private lateinit var binding: FragmentCustomerBinding
-    private lateinit var viewModel: CustomerViewModel
-    private val editTextList = ArrayList<com.google.android.material.textfield.TextInputLayout>()
+    private val viewModel: CustomerViewModel by viewModels()
+    private val editTextList = ArrayList<TextInputLayout>()
+
+    @Inject
+    lateinit var customDialog: CustomDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(requireActivity())[CustomerViewModel::class.java]
         binding = FragmentCustomerBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -43,7 +46,7 @@ class CustomerFragment : Fragment() {
         }
         fillEditTextList()
         binding.saveCustomer.setOnClickListener {
-            if(Extensions.checkEditTextNullAndSetErrorStatus(editTextList)){
+            if (Extensions.checkEditTextNullAndSetErrorStatus(editTextList)) {
                 val customer = Customer(
                     binding.nameText.text.toString(),
                     binding.surnameText.text.toString(),
@@ -55,7 +58,8 @@ class CustomerFragment : Fragment() {
         }
 
     }
-    private fun fillEditTextList(){
+
+    private fun fillEditTextList() {
         editTextList.add(binding.nameTextLayout)
         editTextList.add(binding.surnameTextLayout)
         editTextList.add(binding.addressTextLayout)
@@ -81,14 +85,14 @@ class CustomerFragment : Fragment() {
                 }
 
                 is CustomerFragmentState.Error -> {
-                    CustomDialog(requireActivity()).errorDialogShow(
+                    customDialog.errorDialogShow(
                         getString(R.string.can_not_data),
                         onConfirmClick = {
 
-                        }, onCancelClick = {
-
                         }
-                    )
+                    ) {
+
+                    }
                 }
 
                 is CustomerFragmentState.FindCustomer -> {
@@ -97,7 +101,12 @@ class CustomerFragment : Fragment() {
                 }
 
                 is CustomerFragmentState.SaveCustomer -> {
-                    Log.e("S->", "Saved Customer: " + it.isSaved)
+                    customDialog.successDialogShow(
+                        getString(R.string.save_data),
+                        Constant.SUCCESS_TIMER
+                    ) {
+                        Navigation.findNavController(requireView()).popBackStack()
+                    }
                 }
             }
         }

@@ -9,13 +9,15 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentSaleBinding
 import com.example.farmerapp.presentation.dialog.CustomDialog
-import com.google.android.gms.maps.model.LatLng
+import com.example.farmerapp.until.Constant
+import com.example.farmerapp.until.extetensions.Extensions
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,20 +25,15 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SaleFragment : Fragment() {
     private lateinit var binding: FragmentSaleBinding
-    private lateinit var viewModel: SaleViewModel
+    private val viewModel: SaleViewModel by viewModels()
+    private val editTextLayout = ArrayList<TextInputLayout>()
 
     @Inject
-     lateinit var customDialog: CustomDialog
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+    lateinit var customDialog: CustomDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        viewModel = ViewModelProvider(this)[SaleViewModel::class.java]
+    ): View {
         binding = FragmentSaleBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -44,8 +41,28 @@ class SaleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch { observeSaleFragmentState() }
-        binding.choseProduct.selectedItemPosition
-        val spinnerListener = object : OnItemSelectedListener {
+        fillEditTextLayout()
+        binding.choseProduct.onItemSelectedListener = listener()
+
+        binding.numberText.addTextChangedListener {
+            it?.ifEmpty { 0 }.let { number ->
+                val salesProductCount: Int = number.toString().toInt()
+                viewModel.onEvent(SaleFragmentOnEvent.CalculatePrice(salesProductCount))
+                binding.numberTextLayout.error = null
+            }
+        }
+
+        binding.saleButton.setOnClickListener {
+            if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
+                viewModel.onEvent(SaleFragmentOnEvent.SelectCustomer(binding.choseCustomer.selectedItemPosition))
+                viewModel.onEvent(SaleFragmentOnEvent.Save)
+            }
+        }
+       customDialog = CustomDialog(requireContext())
+    }
+
+    private fun listener(): OnItemSelectedListener {
+        return object : OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 viewModel.onEvent(SaleFragmentOnEvent.SelectProduct(p2))
             }
@@ -54,25 +71,10 @@ class SaleFragment : Fragment() {
 
             }
         }
-        binding.choseProduct.onItemSelectedListener = spinnerListener
+    }
 
-        binding.numberText.addTextChangedListener {
-            it?.ifEmpty { 0 }.let {
-                val salesProductCount: Int = it.toString().toInt()
-                viewModel.onEvent(SaleFragmentOnEvent.CalculatePrice(salesProductCount))
-                binding.numberTextLayout.error = null
-            }
-        }
-
-        binding.saleButton.setOnClickListener {
-            if (binding.numberText.text!!.isNotEmpty()) {
-                viewModel.onEvent(SaleFragmentOnEvent.SelectCustomer(binding.choseCustomer.selectedItemPosition))
-                viewModel.onEvent(SaleFragmentOnEvent.Save)
-            } else {
-                binding.numberTextLayout.error = getString(R.string.required)
-            }
-        }
-
+    private fun fillEditTextLayout() {
+        editTextLayout.add(binding.numberTextLayout)
     }
 
     private suspend fun observeSaleFragmentState() {
@@ -91,17 +93,24 @@ class SaleFragment : Fragment() {
                         requireContext(),
                         androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
                         state.productList.map { it.name })
-                    adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
                     binding.choseProduct.adapter = adapter
                 }
 
                 is SaleFragmentState.CustomerList -> {
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                        state.customerList.map { it.name + " " + it.surName })
-                    adapter.setDropDownViewResource(androidx.appcompat.R.layout.support_simple_spinner_dropdown_item)
-                    binding.choseCustomer.adapter = adapter
+                    if (state.customerList.isEmpty()) {
+                        customDialog.warningDialogShow(getString(R.string.customer_list_null)) {
+                            val action =
+                                SaleFragmentDirections.actionSaleFragmentToCustomerFragment()
+                            Navigation.findNavController(requireView()).navigate(action)
+
+                        }
+                    } else {
+                        val adapter = ArrayAdapter(
+                            requireContext(),
+                            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                            state.customerList.map { it.name + " " + it.surName })
+                        binding.choseCustomer.adapter = adapter
+                    }
                 }
 
                 is SaleFragmentState.SelectedProduct -> {
@@ -114,7 +123,7 @@ class SaleFragment : Fragment() {
                     if (state.salesId > 0) {
                         customDialog.successDialogShow(
                             getString(R.string.save_data),
-                            5
+                            Constant.SUCCESS_TIMER
                         ) {
                             val action =
                                 SaleFragmentDirections.actionSaleFragmentToAddAmountPaidFragment(
@@ -128,10 +137,10 @@ class SaleFragment : Fragment() {
                             getString(R.string.can_not_data),
                             onConfirmClick = {
 
-                            }, onCancelClick = {
-
                             }
-                        )
+                        ) {
+
+                        }
                     }
                 }
             }

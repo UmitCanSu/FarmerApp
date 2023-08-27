@@ -5,7 +5,8 @@ import androidx.room.PrimaryKey
 import javax.inject.Inject
 
 
-data class Product
+data class
+Product
 @Inject constructor(
     var id: Int = 0,
     val name: String,

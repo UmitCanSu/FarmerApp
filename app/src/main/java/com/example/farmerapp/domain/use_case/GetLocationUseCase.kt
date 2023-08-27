@@ -7,11 +7,11 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
 import com.example.farmerapp.R
 import com.example.farmerapp.until.Resource
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -21,7 +21,7 @@ class GetLocationUseCase
     @ApplicationContext private val context: Context,
     private val application: Application
 ) {
-    fun getLocation() = flow<Resource<LatLng>> {
+    fun getLocation() = flow {
         emit(Resource.Loading())
         val locationManager: LocationManager =
             application.getSystemService(AppCompatActivity.LOCATION_SERVICE) as LocationManager
@@ -30,15 +30,17 @@ class GetLocationUseCase
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
         ) {
-            val laL = MutableLiveData<LatLng>()
+            var latLng: LatLng? = null
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f) {
-                val latLng = LatLng(it.latitude, it.longitude)
-                laL.value = latLng
+                latLng = LatLng(it.latitude, it.longitude)
             }
-       //     emit(Resource.Success(laL.value!!))
-
+            while (latLng != null){
+                emit(Resource.Success(latLng!!))
+                    break
+            }
         } else {
             emit(Resource.Error(context.getString(R.string.permission_denied)))
         }
     }.catch { emit(Resource.Error(it.message!!)) }
+
 }

@@ -12,10 +12,10 @@
         android:id="@+id/farmerInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="36dp"
         android:text="farmerInfoText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.391"
+        app:layout_constraintHorizontal_bias="0.741"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,25 +23,33 @@
         android:id="@+id/customerInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:text="customerInfo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.379"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/farmerInfoText"
+        app:layout_constraintStart_toStartOf="@+id/farmerInfoText"
         app:layout_constraintTop_toBottomOf="@+id/farmerInfoText" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/productInfoText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="292dp"
+        android:layout_marginTop="10dp"
         android:text="productInfo"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.366"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customerInfoText"
-        app:layout_constraintVertical_bias="0.781" />
+        app:layout_constraintEnd_toEndOf="@+id/farmerInfoText"
+        app:layout_constraintStart_toStartOf="@+id/farmerInfoText"
+        app:layout_constraintTop_toBottomOf="@+id/customerInfoText" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/priceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="price"
+        app:layout_constraintEnd_toEndOf="@+id/farmerInfoText"
+        app:layout_constraintHorizontal_bias="0.531"
+        app:layout_constraintStart_toStartOf="@+id/farmerInfoText"
+        app:layout_constraintTop_toBottomOf="@+id/productInfoText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

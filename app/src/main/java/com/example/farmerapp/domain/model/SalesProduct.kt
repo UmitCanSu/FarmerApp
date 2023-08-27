@@ -1,6 +1,7 @@
 package com.example.farmerapp.domain.model
 
 import com.example.farmerapp.until.UserSingleton
+import com.google.android.gms.maps.model.LatLng
 import java.time.LocalDateTime
 import javax.inject.Inject
 
@@ -15,7 +16,7 @@ data class SalesProduct
     val price: Int,
     val isDept: Boolean,
     val productNumber: Int,
-    val location: Float,
+    val location: LatLng,
     val locationDescription: String,
     val salesDate: LocalDateTime,
     var isPaid: Boolean,
@@ -27,7 +28,7 @@ data class SalesProduct
         price: Int,
         isDept: Boolean,
         productNumber: Int,
-        location: Float,
+        location: LatLng,
         locationDescription: String,
         salesDate: LocalDateTime,
         isPaid: Boolean,
@@ -54,7 +55,7 @@ data class SalesProduct
         price: Int,
         isDept: Boolean,
         productNumber: Int,
-        location: Float,
+        location: LatLng,
         locationDescription: String,
         salesDate: LocalDateTime,
         isPaid: Boolean,

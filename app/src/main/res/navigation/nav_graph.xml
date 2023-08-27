@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_saleFragment_to_addAmountPaidFragment"
             app:destination="@id/addAmountPaidFragment" />
+        <action
+            android:id="@+id/action_saleFragment_to_customerFragment"
+            app:destination="@id/customerFragment" />
     </fragment>
     <fragment
         android:id="@+id/customerFragment"
@@ -75,11 +78,33 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.farmerapp.presentation.LoginFragment"
+        android:name="com.example.farmerapp.presentation.login_fragment.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_saveCompanyFragment"
+            app:destination="@id/saveCompanyFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_singInFragment"
+            app:destination="@id/singInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAnimalFragment"
+        android:name="com.example.farmerapp.presentation.add_animal_fragment.AddAnimalFragment"
+        android:label="fragment_add_animal"
+        tools:layout="@layout/fragment_add_animal" />
+    <fragment
+        android:id="@+id/animalListFragment"
+        android:name="com.example.farmerapp.presentation.animal_list_fragment.AnimalListFragment"
+        android:label="fragment_animal_list"
+        tools:layout="@layout/fragment_animal_list" />
+    <fragment
+        android:id="@+id/singInFragment"
+        android:name="com.example.farmerapp.presentation.sing_in_fragment.SingInFragment"
+        android:label="fragment_sing_in"
+        tools:layout="@layout/fragment_sing_in" >
+        <action
+            android:id="@+id/action_singInFragment_to_saveCompanyFragment"
             app:destination="@id/saveCompanyFragment" />
     </fragment>
 </navigation>

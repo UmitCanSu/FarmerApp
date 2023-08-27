@@ -31,7 +31,6 @@ class SaleViewModel
     private val _state = MutableStateFlow<SaleFragmentState>(SaleFragmentState.Idle)
     val state: StateFlow<SaleFragmentState> = _state
     private val salesProductHolder = HolderSelectedProduct()
-    private var jop = Job()
 
     init {
         viewModelScope.launch {
@@ -93,7 +92,7 @@ class SaleViewModel
 
                 is Resource.Success -> {
                     salesProductHolder.customerList = it.data!!
-                    _state.value = SaleFragmentState.CustomerList(it.data!!)
+                    _state.value = SaleFragmentState.CustomerList(it.data)
                 }
 
                 is Resource.Error -> {
@@ -138,24 +137,25 @@ class SaleViewModel
     }
 
     private suspend fun getLocation() {
+        val jop = Job()
         getLocationUseCase.getLocation()
-          //  .onStart { jop.join() }
+            .onStart { jop.join() }
             .collect {
-            when (it) {
-                is Resource.Loading -> {
-                    _state.value = SaleFragmentState.Loading
-                }
+                when (it) {
+                    is Resource.Loading -> {
+                        _state.value = SaleFragmentState.Loading
+                    }
 
-                is Resource.Success -> {
-                    Log.e("S->", "Location= " + it.data!!)
-                  //  jop.cancel()
-                }
+                    is Resource.Success -> {
+                        salesProductHolder.location = it.data!!
+                        jop.cancel()
+                    }
 
-                is Resource.Error -> {
-                    _state.value = SaleFragmentState.Error(it.message!!)
+                    is Resource.Error -> {
+                        _state.value = SaleFragmentState.Error(it.message!!)
+                    }
                 }
             }
-        }
     }
 
     fun onEvent(onEvent: SaleFragmentOnEvent) {

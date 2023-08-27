@@ -4,6 +4,7 @@
     <string name="user_name">User Name</string>
     <string name="user_password">Password</string>
     <string name="login">Log In</string>
+    <string name="sing_in">Sing In</string>
     <string name="sale_product_count">Sale Product Count</string>
     <string name="total_price">Total Price </string>
     <string name="price">Price</string>
@@ -13,6 +14,7 @@
     <string name="customer_surname">Customer Surname</string>
     <string name="name">Name</string>
     <string name="surname">Surname</string>
+    <string name="e_mail">E mail</string>
     <string name="year">Year</string>
     <string name="phone_number">Phone Number</string>
     <string name="address">Address</string>
@@ -33,4 +35,11 @@
     <string name="give_permission">Give Permission</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="permission_needed">Permission Need!</string>
+    <string name="birthDate">Birth Date</string>
+    <string name="animalNumber">Animal Number</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
+    <string name="customer_list_null">Should you add customers first?</string>
 </resources>

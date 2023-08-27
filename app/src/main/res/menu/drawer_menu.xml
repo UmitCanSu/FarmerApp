@@ -29,7 +29,14 @@
             android:id="@+id/customerFragment"
             android:icon="@drawable/ic_launcher_background"
             android:title="Add Customer"/>
-
+        <item
+            android:id="@+id/addAnimalFragment"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Add Animal"/>
+        <item
+            android:id="@+id/animalListFragment"
+            android:icon="@drawable/ic_launcher_background"
+            android:title="Animal List"/>
     </group>
 
 </menu>

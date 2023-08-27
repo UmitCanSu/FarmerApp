@@ -2,6 +2,8 @@ package com.example.farmerapp.presentation.dialog
 
 
 import android.app.AlertDialog
+import android.app.Application
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -10,14 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.DialogCustemBinding
-import com.example.farmerapp.until.DialogType
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class CustomDialog
 @Inject constructor(
     @ApplicationContext private val context: Context,
-) : AlertDialog(context) {
+) : Dialog(context) {
     private var binding: DialogCustemBinding =
         DialogCustemBinding.inflate(LayoutInflater.from(context))
 
@@ -51,9 +52,9 @@ class CustomDialog
         successDialogShow(message, 0, onConfirmClick)
     }
 
-     fun errorDialogShow(
+    fun errorDialogShow(
         message: String,
-        onConfirmClick: () -> Unit,
+        onConfirmClick: () -> Unit?,
         onCancelClick: () -> Unit?
     ) {
         binding.image.setImageDrawable(context.getDrawable(R.drawable.baseline_error_150))
@@ -68,21 +69,24 @@ class CustomDialog
         }
     }
 
-     fun warningDialogShow(
+
+    fun warningDialogShow(
         message: String,
         onConfirmClick: () -> Unit,
-        onCancelClick: () -> Unit?
+        //   onCancelClick: () -> Unit?
     ) {
         binding.image.setImageDrawable(context.getDrawable(R.drawable.baseline_warning_150))
         binding.errorMessageText.text = message
+        binding.noButton.visibility = View.GONE
         binding.successButton.setOnClickListener {
             onConfirmClick.invoke()
             dismiss()
         }
         binding.noButton.setOnClickListener {
-            onCancelClick.invoke()
+            // onCancelClick.invoke()
             dismiss()
         }
-         show()
+
+
     }
 }

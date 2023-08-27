@@ -3,17 +3,20 @@ package com.example.farmerapp.di
 import android.content.Context
 import com.example.farmerapp.data.local.AppDatabase
 import com.example.farmerapp.data.repository.AmountPaidRepositoryImp
+import com.example.farmerapp.data.repository.AnimalRepositoryImp
 import com.example.farmerapp.data.repository.CompanyRepositoryImp
 import com.example.farmerapp.data.repository.CustomerRepositoryImp
 import com.example.farmerapp.data.repository.FarmerRepositoryImp
 import com.example.farmerapp.data.repository.ProductRepositoryImp
 import com.example.farmerapp.data.repository.SaleProductRepositoryImp
 import com.example.farmerapp.domain.repository.AmountPaidRepository
+import com.example.farmerapp.domain.repository.AnimalRepository
 import com.example.farmerapp.domain.repository.CompanyRepository
 import com.example.farmerapp.domain.repository.CustomerRepository
 import com.example.farmerapp.domain.repository.FarmerRepository
 import com.example.farmerapp.domain.repository.ProductRepository
 import com.example.farmerapp.domain.repository.SaleProductRepository
+import com.example.farmerapp.presentation.MainActivity
 import com.example.farmerapp.presentation.dialog.CustomDialog
 import dagger.Module
 import dagger.Provides
@@ -69,9 +72,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCustomDialog(@ApplicationContext applicationContext: Context): CustomDialog {
-        return CustomDialog(applicationContext)
+    fun provideAnimalRepository(dataBase: AppDatabase): AnimalRepository {
+        return AnimalRepositoryImp(dataBase.animalDao())
     }
-
 
 }

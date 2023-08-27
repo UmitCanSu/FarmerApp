@@ -12,9 +12,11 @@ import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomer
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
 import com.example.farmerapp.until.extetensions.ProductExtensions.toProduct
+import com.google.android.gms.maps.model.LatLng
 
 object SalesProductExtensions {
     fun SaleProductWitOtherClass.toSaleProduct(): SalesProduct {
+        val location = LatLng(salesProductDto.latitude, salesProductDto.longitude)
         return SalesProduct(
             salesProductDto.id,
             companyDto.toCompany()!!,
@@ -24,7 +26,7 @@ object SalesProductExtensions {
             salesProductDto.price,
             salesProductDto.isDept,
             salesProductDto.productNumber,
-            salesProductDto.location,
+            location,
             salesProductDto.locationDescription,
             salesProductDto.salesDate,
             salesProductDto.isPaid,
@@ -33,7 +35,7 @@ object SalesProductExtensions {
     }
 
     fun SalesProduct.toSalesProductDto(): SalesProductDto {
-       val salesProduct =   SalesProductDto(
+        val salesProduct = SalesProductDto(
             company.id,
             product.id,
             customer.id,
@@ -41,7 +43,8 @@ object SalesProductExtensions {
             price,
             isDept,
             productNumber,
-            location,
+            location.latitude,
+            location.longitude,
             locationDescription,
             salesDate,
             isPaid
@@ -54,6 +57,7 @@ object SalesProductExtensions {
         company: Company, product: Product, customer: Customer,
         farmer: Farmer, amountPaidList: List<AmountPaid>
     ): SalesProduct {
+        val location = LatLng(latitude, longitude)
         return SalesProduct(
             company,
             farmer,

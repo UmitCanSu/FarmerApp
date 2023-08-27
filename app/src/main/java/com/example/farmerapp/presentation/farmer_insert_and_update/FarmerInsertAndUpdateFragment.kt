@@ -6,28 +6,34 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentFarmerInsertAndUpdateBinding
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.presentation.dialog.CustomDialog
+import com.example.farmerapp.until.Constant
 import com.example.farmerapp.until.FarmerStatus
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FarmerInsertAndUpdateFragment : Fragment() {
+
     private lateinit var binding: FragmentFarmerInsertAndUpdateBinding
-    private lateinit var viewModel: FarmerInsertAndUpdateViewModel
-    private val editLayoutList = ArrayList<com.google.android.material.textfield.TextInputLayout>()
+    private val viewModel: FarmerInsertAndUpdateViewModel by viewModels()
+    private val editLayoutList = ArrayList<TextInputLayout>()
+
+    @Inject
+    lateinit var customDialog: CustomDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewModel = ViewModelProvider(requireActivity())[FarmerInsertAndUpdateViewModel::class.java]
         binding = FragmentFarmerInsertAndUpdateBinding.inflate(layoutInflater)
         return binding.root
     }
@@ -91,18 +97,21 @@ class FarmerInsertAndUpdateFragment : Fragment() {
                 }
 
                 is FarmerFragmentState.Error -> {
-                    CustomDialog(requireActivity()).errorDialogShow(
+                    customDialog.errorDialogShow(
                         getString(R.string.can_not_data),
                         onConfirmClick = {
 
-                        }, onCancelClick = {
-
                         }
-                    )
+                    ) {
+
+                    }
                 }
 
                 is FarmerFragmentState.IsInsert -> {
-                    CustomDialog(requireContext()).successDialogShow(getString(R.string.save_data),5){
+                    customDialog.successDialogShow(
+                        getString(R.string.save_data),
+                        Constant.SUCCESS_TIMER
+                    ) {
                         Navigation.findNavController(requireView()).popBackStack()
                     }
                 }

@@ -19,10 +19,10 @@ class DefaultSaveProductUseCase
 ) {
     fun saveDefaultProduct(company: Company) = flow<Resource<Boolean>> {
         val defaultProduct = ArrayList<Product>()
-        defaultProduct.add(Product("Balya Yapma", UnitType.AD.name, 30, company))
-        defaultProduct.add(Product("Süt", UnitType.AD.name, 150, company))
-        defaultProduct.add(Product("Balya", UnitType.AD.name, 100, company))
-        defaultProduct.add(Product("Fasulye", UnitType.AD.name, 30, company))
+        defaultProduct.add(Product("Balya Yapma", UnitType.AD.name, 30f, company))
+        defaultProduct.add(Product("Süt", UnitType.AD.name, 150f, company))
+        defaultProduct.add(Product("Balya", UnitType.AD.name, 100f, company))
+        defaultProduct.add(Product("Fasulye", UnitType.AD.name, 30f, company))
         for (product in defaultProduct) {
             val index = insertProduct.insertProdcut(product).collect()
             Log.e("S->", "index" + index)

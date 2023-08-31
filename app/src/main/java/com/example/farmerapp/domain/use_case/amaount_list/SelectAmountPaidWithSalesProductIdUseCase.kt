@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.amaount_list
 
 import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.repository.AmountPaidRepository
+import com.example.farmerapp.domain.repository.room.AmountPaidRepository
 import com.example.farmerapp.until.extetensions.AmountPaidExtensions.toAmountPaid
 
 import com.example.farmerapp.until.Resource

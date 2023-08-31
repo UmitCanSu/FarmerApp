@@ -2,6 +2,7 @@ package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.FarmerDto
 import com.example.farmerapp.data.local.relations.FarmerRelations
+import com.example.farmerapp.data.remote.dto.FarmerApiDto
 import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
@@ -37,6 +38,14 @@ object FarmerExtensions {
             sourName,
             years,
             FarmerStatus.values()[farmerStatus]
+        )
+    }
+
+    fun FarmerApiDto.toFarmer():Farmer{
+        return Farmer(
+            0,
+            company.toCompany(),
+            name,surname,0,FarmerStatus.valueOf(farmerStatus)
         )
     }
 }

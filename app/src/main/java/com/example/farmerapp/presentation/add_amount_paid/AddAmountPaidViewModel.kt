@@ -123,7 +123,7 @@ class AddAmountPaidViewModel
                 }
 
                 is Resource.Success -> {
-                    var remainingDept = it.data
+                    var remainingDept:Float = it.data!!
                     if (remainingDept == null) {
                         remainingDept = data.value.salesProduct!!.price
                     }
@@ -143,7 +143,7 @@ class AddAmountPaidViewModel
     }
 
     private fun checkEnterPriceEqualRemainingDept(): Boolean {
-        return (data.value.remainingDept - data.value.enterPrice) == 0
+        return (data.value.remainingDept - data.value.enterPrice) == 0f
     }
 
     fun onEvent(onEvent: AddAmountPaidFragmentOnEvent) {

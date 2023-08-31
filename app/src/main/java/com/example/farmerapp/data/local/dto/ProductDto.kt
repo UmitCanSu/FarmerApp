@@ -9,7 +9,7 @@ data class ProductDto
 @Inject constructor(
     val name: String,
     val unitType: String,
-    val price: Int,
+    val price: Float,
     val companyId: Int
 )  {
     @PrimaryKey(autoGenerate = true)

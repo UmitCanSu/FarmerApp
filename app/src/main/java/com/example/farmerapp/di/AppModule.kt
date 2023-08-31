@@ -2,27 +2,37 @@ package com.example.farmerapp.di
 
 import android.content.Context
 import com.example.farmerapp.data.local.AppDatabase
-import com.example.farmerapp.data.repository.AmountPaidRepositoryImp
-import com.example.farmerapp.data.repository.AnimalRepositoryImp
-import com.example.farmerapp.data.repository.CompanyRepositoryImp
-import com.example.farmerapp.data.repository.CustomerRepositoryImp
-import com.example.farmerapp.data.repository.FarmerRepositoryImp
-import com.example.farmerapp.data.repository.ProductRepositoryImp
-import com.example.farmerapp.data.repository.SaleProductRepositoryImp
-import com.example.farmerapp.domain.repository.AmountPaidRepository
-import com.example.farmerapp.domain.repository.AnimalRepository
-import com.example.farmerapp.domain.repository.CompanyRepository
-import com.example.farmerapp.domain.repository.CustomerRepository
-import com.example.farmerapp.domain.repository.FarmerRepository
-import com.example.farmerapp.domain.repository.ProductRepository
-import com.example.farmerapp.domain.repository.SaleProductRepository
-import com.example.farmerapp.presentation.MainActivity
-import com.example.farmerapp.presentation.dialog.CustomDialog
+import com.example.farmerapp.data.remote.CompanyApiRepositoryImp
+import com.example.farmerapp.data.remote.repository.FarmerApiRepositoryImp
+import com.example.farmerapp.domain.repository.api.CompanyApiRepository
+import com.example.farmerapp.domain.repository.api.CompanyAppApi
+import com.example.farmerapp.data.local.repository.AmountPaidRepositoryImp
+import com.example.farmerapp.data.local.repository.AnimalRepositoryImp
+import com.example.farmerapp.data.local.repository.CompanyRepositoryImp
+import com.example.farmerapp.data.local.repository.CustomerRepositoryImp
+import com.example.farmerapp.data.local.repository.FarmerRepositoryImp
+import com.example.farmerapp.data.local.repository.ProductRepositoryImp
+import com.example.farmerapp.data.local.repository.SaleProductRepositoryImp
+import com.example.farmerapp.data.remote.repository.ProductApiRepositoryImp
+import com.example.farmerapp.domain.repository.api.FarmerApiRepository
+import com.example.farmerapp.domain.repository.api.FarmerAppApi
+import com.example.farmerapp.domain.repository.api.ProductApi
+import com.example.farmerapp.domain.repository.api.ProductApiRepository
+import com.example.farmerapp.domain.repository.room.AmountPaidRepository
+import com.example.farmerapp.domain.repository.room.AnimalRepository
+import com.example.farmerapp.domain.repository.room.CompanyRepository
+import com.example.farmerapp.domain.repository.room.CustomerRepository
+import com.example.farmerapp.domain.repository.room.FarmerRepository
+import com.example.farmerapp.domain.repository.room.ProductRepository
+import com.example.farmerapp.domain.repository.room.SaleProductRepository
+import com.example.farmerapp.until.Constant
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -74,6 +84,49 @@ object AppModule {
     @Singleton
     fun provideAnimalRepository(dataBase: AppDatabase): AnimalRepository {
         return AnimalRepositoryImp(dataBase.animalDao())
+    }
+    @Provides
+    @Singleton
+    fun provideCompanyApiRepository(companyAppApi: CompanyAppApi): CompanyApiRepository {
+        return CompanyApiRepositoryImp(companyAppApi)
+    }
+    @Provides
+    @Singleton
+    fun provideFarmerApiRepository(farmerAppApi: FarmerAppApi): FarmerApiRepository {
+        return FarmerApiRepositoryImp(farmerAppApi)
+    }
+    @Provides
+    @Singleton
+    fun provideProductApiRepository(productApi: ProductApi): ProductApiRepository {
+        return ProductApiRepositoryImp(productApi)
+    }
+    @Provides
+    @Singleton
+    fun provideFarmerApi(): FarmerAppApi {
+        return Retrofit.Builder()
+            .baseUrl(Constant.API_URl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(FarmerAppApi::class.java)
+    }
+    @Provides
+    @Singleton
+    fun provideCompanyApi(): CompanyAppApi {
+        return Retrofit.Builder()
+            .baseUrl(Constant.API_URl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(CompanyAppApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductApi(): ProductApi {
+        return Retrofit.Builder()
+            .baseUrl(Constant.API_URl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ProductApi::class.java)
     }
 
 }

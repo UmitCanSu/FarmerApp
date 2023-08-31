@@ -1,12 +1,11 @@
 package com.example.farmerapp.presentation.sale_fragment
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.domain.use_case.GetLocationUseCase
 import com.example.farmerapp.domain.use_case.customer.GetAllCustomerListUseCase
-import com.example.farmerapp.domain.use_case.product.GetProductListWithCompanyIdUseCase
+import com.example.farmerapp.domain.use_case.product.GetProductListByCompanyIdUseCase
 import com.example.farmerapp.domain.use_case.sale_fragment.CalculateProductPriceUseCase
 import com.example.farmerapp.domain.use_case.sales_product.InsertSalesProductUseCase
 import com.example.farmerapp.until.Resource
@@ -22,7 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SaleViewModel
 @Inject constructor(
-    private val getProductListWithCompanyId: GetProductListWithCompanyIdUseCase,
+    private val getProductListWithCompanyId: GetProductListByCompanyIdUseCase,
     private val calculateProductPriceUseCase: CalculateProductPriceUseCase,
     private val getAllCustomerList: GetAllCustomerListUseCase,
     private val insertSalesProductUseCase: InsertSalesProductUseCase,
@@ -71,7 +70,7 @@ class SaleViewModel
                         }
 
                         is Resource.Success -> {
-                            salesProductHolder.price = it.data ?: 0
+                            salesProductHolder.price = it.data ?: 0f
                             _state.value = SaleFragmentState.Calculate((it.data ?: 0).toString())
                         }
 

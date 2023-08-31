@@ -9,7 +9,7 @@ data class HolderSelectedProduct(
     var customerList: List<Customer> = emptyList(),
     var product: Product? = null,
     var customer: Customer? = null,
-    var price: Int = 0,
+    var price: Float = 0f,
     var isDept: Boolean = false,
     var productNumber: Int = 0,
     var location: LatLng = LatLng(0.0,0.0),

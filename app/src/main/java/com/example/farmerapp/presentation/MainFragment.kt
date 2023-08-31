@@ -6,8 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
+import androidx.navigation.NavOptionsBuilder
+import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentSaleBinding
+import com.example.farmerapp.presentation.login_fragment.LoginFragmentDirections
 import com.example.farmerapp.presentation.sale_fragment.SaleViewModel
 
 class MainFragment : Fragment() {
@@ -24,5 +28,7 @@ class MainFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
 }

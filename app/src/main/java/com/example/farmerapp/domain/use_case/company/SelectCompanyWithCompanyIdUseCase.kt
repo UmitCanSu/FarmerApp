@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.company
 
 import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.repository.CompanyRepository
+import com.example.farmerapp.domain.repository.room.CompanyRepository
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.Dispatchers

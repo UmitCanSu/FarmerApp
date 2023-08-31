@@ -12,7 +12,7 @@ data class SalesProductDto
     val productId: Int,
     val customerId: Int,
     val farmerId: Int,
-    val price: Int,
+    val price: Float,
     val isDept: Boolean,
     val productNumber: Int,
     val latitude: Double,

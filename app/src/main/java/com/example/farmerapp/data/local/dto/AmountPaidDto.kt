@@ -11,7 +11,7 @@ data class AmountPaidDto
 @Inject constructor(
     val salesProductId: Int,
     val customerId: Int,
-    val price: Int,
+    val price: Float,
     val date: LocalDateTime,
     val location: Float,
 ) {

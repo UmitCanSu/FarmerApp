@@ -11,14 +11,14 @@ Product
     var id: Int = 0,
     val name: String,
     val unitType: String,
-    val price: Int,
+    val price: Float,
     val company: Company
 ) {
 
     constructor(
         name: String,
         unitType: String,
-        price: Int,
+        price: Float,
         company: Company
     ) : this(
         0,

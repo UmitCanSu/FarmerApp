@@ -52,7 +52,7 @@ class ProductInsertAndUpdateFragment : Fragment() {
 
     private fun fillProduct(): Product {
         val productName = binding.nameTextLayout.editText!!.text.toString()
-        val productPrice = binding.priceTextLayout.editText!!.text.toString().toInt()
+        val productPrice = binding.priceTextLayout.editText!!.text.toString().toFloat()
         val selectedUnitType = selectedUnitType()
         return Product(
             productName,
@@ -101,6 +101,7 @@ class ProductInsertAndUpdateFragment : Fragment() {
                 }
 
                 is ProductInsertAndUpdateState.Success -> {
+                    /*
                     if (it.isSuccessfully) {
                         customDialog.successDialogShow(
                             getString(
@@ -113,6 +114,7 @@ class ProductInsertAndUpdateFragment : Fragment() {
                             Navigation.findNavController(requireView()).navigate(action)
                         }
                     }
+                    */
                 }
 
             }

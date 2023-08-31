@@ -12,7 +12,7 @@ class CalculateProductPriceUseCase
 @Inject constructor(
 
 ) {
-    fun calculateProductPrice(product: Product, count: Int) = flow<Resource<Int>> {
+    fun calculateProductPrice(product: Product, count: Int) = flow<Resource<Float>> {
         emit(Resource.Loading())
         val price = product.price * count
         emit(Resource.Success(price))

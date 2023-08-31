@@ -1,4 +1,4 @@
-package com.example.farmerapp.domain.repository
+package com.example.farmerapp.domain.repository.room
 
 import com.example.farmerapp.data.local.dto.AmountPaidDto
 import com.example.farmerapp.data.local.relations.AmountPaidRelations
@@ -9,5 +9,5 @@ interface AmountPaidRepository {
     suspend fun updateAmountPaid(amountPaidDto: AmountPaidDto):Int
     suspend fun deleteAmountPaid(amountPaidDto: AmountPaidDto):Int
     suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations>
-    suspend fun getRemainingDept(salesProductId: Int):Int
+    suspend fun getRemainingDept(salesProductId: Int):Float
 }

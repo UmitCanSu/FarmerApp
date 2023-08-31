@@ -10,8 +10,8 @@ data class AddAmountPaidData(
     val customerList: List<Customer> = emptyList(),
     val amountPaid: List<AmountPaid> = emptyList(),
     val selectedCustomer: Customer? = null,
-    val remainingDept: Int = 0,
-    val enterPrice: Int = 0,
+    val remainingDept: Float = 0f,
+    val enterPrice: Float = 0f,
     val date: LocalDateTime? = null,
     val location: Float = 0f
 

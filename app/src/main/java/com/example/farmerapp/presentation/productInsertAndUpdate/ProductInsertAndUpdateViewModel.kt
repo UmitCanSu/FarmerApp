@@ -3,6 +3,7 @@ package com.example.farmerapp.presentation.productInsertAndUpdate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.Product
+import com.example.farmerapp.domain.use_case.product.AddProductToApiUseCase
 import com.example.farmerapp.domain.use_case.product.InsertProductUseCase
 import com.example.farmerapp.domain.use_case.product.UpdateProductUseCase
 import com.example.farmerapp.until.Resource
@@ -17,7 +18,8 @@ import javax.inject.Inject
 class ProductInsertAndUpdateViewModel
 @Inject constructor(
     private val insertProductUseCase: InsertProductUseCase,
-    private val updateProductUseCase: UpdateProductUseCase
+    private val updateProductUseCase: UpdateProductUseCase,
+    private val addProductToApiUseCase: AddProductToApiUseCase
 ) : ViewModel() {
     private val _state =
         MutableStateFlow<ProductInsertAndUpdateState>(ProductInsertAndUpdateState.Idle)
@@ -32,10 +34,12 @@ class ProductInsertAndUpdateViewModel
 
                 is Resource.Error -> {
                     _state.value = ProductInsertAndUpdateState.Error(it.message!!)
+
                 }
 
                 is Resource.Success -> {
-                    _state.value = ProductInsertAndUpdateState.Success(it.data!!)
+                   // _state.value = ProductInsertAndUpdateState.Success(it.data!!)
+                    addProductToApi(product)
                 }
             }
         }
@@ -58,6 +62,24 @@ class ProductInsertAndUpdateViewModel
             }
         }
     }
+    private suspend fun addProductToApi(product: Product){
+        addProductToApiUseCase.addProduct(product).collect{
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = ProductInsertAndUpdateState.Loading
+                }
+
+                is Resource.Error -> {
+                    _state.value = ProductInsertAndUpdateState.Error(it.message!!)
+                }
+
+                is Resource.Success -> {
+                    _state.value = ProductInsertAndUpdateState.Success(it.data!!)
+                }
+            }
+        }
+    }
+
 
     fun onEvent(onEvent: ProductInsertAndUpdateOnEvent) {
         when (onEvent) {

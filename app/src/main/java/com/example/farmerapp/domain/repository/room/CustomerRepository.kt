@@ -1,4 +1,4 @@
-package com.example.farmerapp.domain.repository
+package com.example.farmerapp.domain.repository.room
 
 import com.example.farmerapp.data.local.dto.CustomerDto
 import com.example.farmerapp.domain.model.Customer

@@ -1,9 +1,8 @@
-package com.example.farmerapp.data.repository
+package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.AmountPaidDto
 import com.example.farmerapp.data.local.relations.AmountPaidRelations
-import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.repository.AmountPaidRepository
+import com.example.farmerapp.domain.repository.room.AmountPaidRepository
 import com.example.farmerapp.domain.repository.dao.AmountPaidDao
 import javax.inject.Inject
 
@@ -27,7 +26,7 @@ class AmountPaidRepositoryImp
         return amountPaidDao.selectAmountPaidWithSalesProductId(salesProductId)
     }
 
-    override suspend fun getRemainingDept(salesProductId: Int): Int {
+    override suspend fun getRemainingDept(salesProductId: Int): Float {
         return amountPaidDao.getRemainingDept(salesProductId)
     }
 }

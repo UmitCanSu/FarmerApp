@@ -87,6 +87,9 @@
         <action
             android:id="@+id/action_loginFragment_to_singInFragment"
             app:destination="@id/singInFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/addAnimalFragment"
@@ -102,9 +105,10 @@
         android:id="@+id/singInFragment"
         android:name="com.example.farmerapp.presentation.sing_in_fragment.SingInFragment"
         android:label="fragment_sing_in"
-        tools:layout="@layout/fragment_sing_in" >
-        <action
-            android:id="@+id/action_singInFragment_to_saveCompanyFragment"
-            app:destination="@id/saveCompanyFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_sing_in" />
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.farmerapp.presentation.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" />
 </navigation>

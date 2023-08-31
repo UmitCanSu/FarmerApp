@@ -1,8 +1,7 @@
-package com.example.farmerapp.data.repository
+package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.CompanyDto
-import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.repository.CompanyRepository
+import com.example.farmerapp.domain.repository.room.CompanyRepository
 import com.example.farmerapp.domain.repository.dao.CompanyDao
 import javax.inject.Inject
 

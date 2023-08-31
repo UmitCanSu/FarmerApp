@@ -46,7 +46,7 @@ class AddAmountPaidFragment : Fragment() {
         binding.pay.setOnClickListener {
             if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
                 val selectedCustomerIndex = binding.customerSpinner.selectedItemPosition
-                val price = binding.priceInputText.text.toString().toInt()
+                val price = binding.priceInputText.text.toString().toFloat()
                 viewModel.onEvent(
                     AddAmountPaidFragmentOnEvent.SaveAmountPaid(
                         selectedCustomerIndex,

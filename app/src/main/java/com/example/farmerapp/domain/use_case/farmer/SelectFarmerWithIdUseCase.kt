@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.farmer
 
 import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.domain.repository.FarmerRepository
+import com.example.farmerapp.domain.repository.room.FarmerRepository
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch

@@ -1,4 +1,4 @@
-package com.example.farmerapp.domain.repository.api
+package com.example.farmerapp.domain.repository.api.repository
 
 import com.example.farmerapp.data.local.dto.CompanyDto
 import com.example.farmerapp.data.remote.dto.CompanyApiDto

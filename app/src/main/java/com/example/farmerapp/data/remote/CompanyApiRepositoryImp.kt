@@ -3,7 +3,7 @@ package com.example.farmerapp.data.remote
 import com.example.farmerapp.data.local.dto.CompanyDto
 import com.example.farmerapp.data.remote.dto.CompanyApiDto
 import com.example.farmerapp.domain.repository.api.CompanyAppApi
-import com.example.farmerapp.domain.repository.api.CompanyApiRepository
+import com.example.farmerapp.domain.repository.api.repository.CompanyApiRepository
 import com.example.farmerapp.domain.model.Company
 import javax.inject.Inject
 

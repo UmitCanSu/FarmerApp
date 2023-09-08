@@ -45,6 +45,7 @@ class SaveCompanyViewModel
                         company.id = 1
                         UserSingleton.getInstance().company = company
                         saveDefaultProduct(company)
+                        addCompanyApi(company)
 
                     }
 
@@ -56,9 +57,7 @@ class SaveCompanyViewModel
         }
     }
 
-    private suspend fun addCompanyApi(company: Company?) {
-        val company =
-            Company("Deneme", "Artvin/Savsat/Armutlu mah.", "05340000000")
+    private suspend fun addCompanyApi(company: Company) {
         addCompanyToApi.addCompanyToApi(company).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -66,7 +65,7 @@ class SaveCompanyViewModel
                 }
 
                 is Resource.Success -> {
-
+                    it.data
                 }
 
                 is Resource.Error -> {

@@ -2,10 +2,6 @@ package com.example.farmerapp.di
 
 import android.content.Context
 import com.example.farmerapp.data.local.AppDatabase
-import com.example.farmerapp.data.remote.CompanyApiRepositoryImp
-import com.example.farmerapp.data.remote.repository.FarmerApiRepositoryImp
-import com.example.farmerapp.domain.repository.api.repository.CompanyApiRepository
-import com.example.farmerapp.domain.repository.api.CompanyAppApi
 import com.example.farmerapp.data.local.repository.AmountPaidRepositoryImp
 import com.example.farmerapp.data.local.repository.AnimalRepositoryImp
 import com.example.farmerapp.data.local.repository.CompanyRepositoryImp
@@ -13,14 +9,24 @@ import com.example.farmerapp.data.local.repository.CustomerRepositoryImp
 import com.example.farmerapp.data.local.repository.FarmerRepositoryImp
 import com.example.farmerapp.data.local.repository.ProductRepositoryImp
 import com.example.farmerapp.data.local.repository.SaleProductRepositoryImp
+import com.example.farmerapp.data.remote.repository.CompanyApiRepositoryImp
+import com.example.farmerapp.data.remote.repository.AnimalApiRepositoryImp
 import com.example.farmerapp.data.remote.repository.CustomerApiRepositoryImp
+import com.example.farmerapp.data.remote.repository.FarmerApiRepositoryImp
 import com.example.farmerapp.data.remote.repository.ProductApiRepositoryImp
+import com.example.farmerapp.data.remote.repository.SaleApiRepositoryImp
+import com.example.farmerapp.domain.repository.api.AnimalApi
+import com.example.farmerapp.domain.repository.api.CompanyAppApi
 import com.example.farmerapp.domain.repository.api.CustomerApi
-import com.example.farmerapp.domain.repository.api.repository.FarmerApiRepository
 import com.example.farmerapp.domain.repository.api.FarmerAppApi
 import com.example.farmerapp.domain.repository.api.ProductApi
+import com.example.farmerapp.domain.repository.api.SaleApi
+import com.example.farmerapp.domain.repository.api.repository.AnimalApiRepository
+import com.example.farmerapp.domain.repository.api.repository.CompanyApiRepository
 import com.example.farmerapp.domain.repository.api.repository.CustomerApiRepository
+import com.example.farmerapp.domain.repository.api.repository.FarmerApiRepository
 import com.example.farmerapp.domain.repository.api.repository.ProductApiRepository
+import com.example.farmerapp.domain.repository.api.repository.SaleApiRepository
 import com.example.farmerapp.domain.repository.room.AmountPaidRepository
 import com.example.farmerapp.domain.repository.room.AnimalRepository
 import com.example.farmerapp.domain.repository.room.CompanyRepository
@@ -88,26 +94,43 @@ object AppModule {
     fun provideAnimalRepository(dataBase: AppDatabase): AnimalRepository {
         return AnimalRepositoryImp(dataBase.animalDao())
     }
+
     @Provides
     @Singleton
     fun provideCompanyApiRepository(companyAppApi: CompanyAppApi): CompanyApiRepository {
         return CompanyApiRepositoryImp(companyAppApi)
     }
+
     @Provides
     @Singleton
     fun provideFarmerApiRepository(farmerAppApi: FarmerAppApi): FarmerApiRepository {
         return FarmerApiRepositoryImp(farmerAppApi)
     }
+
     @Provides
     @Singleton
     fun provideProductApiRepository(productApi: ProductApi): ProductApiRepository {
         return ProductApiRepositoryImp(productApi)
     }
+
     @Provides
     @Singleton
     fun provideCustomerApiRepository(customerApi: CustomerApi): CustomerApiRepository {
         return CustomerApiRepositoryImp(customerApi)
     }
+
+    @Provides
+    @Singleton
+    fun provideAnimalApiRepository(animalApi: AnimalApi): AnimalApiRepository {
+        return AnimalApiRepositoryImp(animalApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaleApiRepository(saleApi: SaleApi): SaleApiRepository {
+        return SaleApiRepositoryImp(saleApi)
+    }
+
     @Provides
     @Singleton
     fun provideFarmerApi(): FarmerAppApi {
@@ -117,6 +140,7 @@ object AppModule {
             .build()
             .create(FarmerAppApi::class.java)
     }
+
     @Provides
     @Singleton
     fun provideCompanyApi(): CompanyAppApi {
@@ -136,6 +160,7 @@ object AppModule {
             .build()
             .create(ProductApi::class.java)
     }
+
     @Provides
     @Singleton
     fun provideCustomerApi(): CustomerApi {
@@ -144,6 +169,26 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CustomerApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAnimalApi(): AnimalApi {
+        return Retrofit.Builder()
+            .baseUrl(Constant.API_URl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(AnimalApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSaleApi(): SaleApi {
+        return Retrofit.Builder()
+            .baseUrl(Constant.API_URl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(SaleApi::class.java)
     }
 
 }

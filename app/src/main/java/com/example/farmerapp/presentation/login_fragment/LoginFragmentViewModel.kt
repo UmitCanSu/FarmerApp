@@ -27,6 +27,9 @@ class LoginFragmentViewModel
 ) : ViewModel() {
     private val _state = MutableStateFlow<LoginFragmentState>(LoginFragmentState.Idle)
     val state: StateFlow<LoginFragmentState> = _state
+    init {
+     // viewModelScope.launch {   addFarmer(null) }
+    }
     private suspend fun loginFarmer(login: Login) {
         loginToApiFarmerUseCase.login(login).collect {
             when (it) {

@@ -2,8 +2,12 @@ package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.AmountPaidDto
 import com.example.farmerapp.data.local.relations.AmountPaidRelations
+import com.example.farmerapp.data.remote.dto.AmountPaidApiDto
 import com.example.farmerapp.domain.model.AmountPaid
 import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomer
+import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomerApiDto
+import com.google.android.gms.maps.model.LatLng
+import java.time.LocalDateTime
 
 object AmountPaidExtensions {
 
@@ -13,7 +17,7 @@ object AmountPaidExtensions {
             customerDto.toCustomer(),
             amountPaidDto.price,
             amountPaidDto.date,
-            amountPaidDto.location
+            LatLng(amountPaidDto.latitude,amountPaidDto.longitude)
         )
     }
 
@@ -23,7 +27,18 @@ object AmountPaidExtensions {
             customer.id,
             price,
             date,
-            location
+            location.latitude,
+            location.longitude,
         )
+    }
+
+    fun AmountPaidApiDto.toAmountPaid(): AmountPaid {
+        return AmountPaid(
+            null, customer.toCustomer(), price, LocalDateTime.now(), location
+        )
+    }
+
+    fun AmountPaid.toAmountPaidApiDto(): AmountPaidApiDto {
+        return AmountPaidApiDto(id.toString(), customer.toCustomerApiDto(), price, date.toString(), location)
     }
 }

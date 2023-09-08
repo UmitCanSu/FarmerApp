@@ -5,6 +5,6 @@ import com.example.farmerapp.data.remote.dto.CompanyApiDto
 import com.example.farmerapp.domain.model.Company
 
 interface CompanyApiRepository {
-    suspend fun addCompany(company: Company):CompanyDto
+    suspend fun addCompany(companyJson:String):CompanyApiDto
     suspend fun getCompany(companyId: String): CompanyApiDto
 }

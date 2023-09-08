@@ -161,9 +161,11 @@ class AddAnimalFragment : Fragment() {
                 }
 
                 is AddAnimalFragmentState.Success -> {
+                    /*
                     customDialog.successDialogShow(getString(R.string.success),Constant.SUCCESS_TIMER) {
                         Navigation.findNavController(requireView()).popBackStack()
                     }
+                    */
                 }
 
                 is AddAnimalFragmentState.Error -> {

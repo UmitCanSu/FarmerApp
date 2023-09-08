@@ -3,15 +3,18 @@ package com.example.farmerapp.presentation.add_amount_paid
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.AmountPaid
+import com.example.farmerapp.domain.use_case.amaount_list.AddAmountPaidToApiUseCase
 import com.example.farmerapp.domain.use_case.amaount_list.InsertAmountPaidUseCase
 import com.example.farmerapp.domain.use_case.amaount_list.RemainingDeptUseCase
 import com.example.farmerapp.domain.use_case.customer.GetAllCustomerListUseCase
 import com.example.farmerapp.domain.use_case.sales_product.SelectSalesProductWithIdUseCase
 import com.example.farmerapp.domain.use_case.sales_product.UpdateSalesProductUseCase
 import com.example.farmerapp.until.Resource
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -24,6 +27,7 @@ class AddAmountPaidViewModel
     private val updateSalesProductUseCase: UpdateSalesProductUseCase,
     private val insertAmountPaidUseCase: InsertAmountPaidUseCase,
     private val getRemainingDeptUseCase: RemainingDeptUseCase,
+    private val addAmountPaidToApiUseCase: AddAmountPaidToApiUseCase,
 ) : ViewModel() {
     private val _state =
         MutableStateFlow<AddAmountPaidFragmentState>(AddAmountPaidFragmentState.Idle)
@@ -106,6 +110,7 @@ class AddAmountPaidViewModel
                     } else {
                         _state.value = AddAmountPaidFragmentState.IsSavedAmountPaid(it.data!!)
                     }
+                    addAmountPaidToApi(amountPaid)
                 }
 
                 is Resource.Error -> {
@@ -138,6 +143,24 @@ class AddAmountPaidViewModel
         }
     }
 
+    private suspend fun addAmountPaidToApi(amountPaid: AmountPaid){
+        addAmountPaidToApiUseCase.addAmountPaid(amountPaid).collect{
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = AddAmountPaidFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    it.data
+                }
+
+                is Resource.Error -> {
+                    _state.value = AddAmountPaidFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
     private fun checkEnterPriceBigRemainingDept(): Boolean {
         return (data.value.remainingDept - data.value.enterPrice) >= 0
     }
@@ -155,13 +178,14 @@ class AddAmountPaidViewModel
                     data.value.customerList[onEvent.selectedCustomerIndex],
                     onEvent.price,
                     LocalDateTime.now()!!,
-                    0f
+                    LatLng(0.0,0.0)
                 )
                 if (checkEnterPriceBigRemainingDept()) {
                     viewModelScope.launch { insertAmountPaid(amountPaid) }
                 } else {
                     _state.value = AddAmountPaidFragmentState.Error("")
                 }
+                viewModelScope.launch { addAmountPaidToApi(amountPaid) }
             }
 
             is AddAmountPaidFragmentOnEvent.GetSalesProduct -> {

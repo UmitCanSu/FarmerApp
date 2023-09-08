@@ -25,4 +25,10 @@ object CompanyExtensions {
     fun CompanyApiDto.toCompany(): Company {
         return Company(name, address, phoneNumber)
     }
+
+    fun Company.toCompanyApiDto(): CompanyApiDto {
+        return CompanyApiDto(
+            id.toString(), name, address, phone
+        )
+    }
 }

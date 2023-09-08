@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graf"
-    app:startDestination="@id/saveCompanyFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/saveCompanyFragment"
@@ -89,7 +89,8 @@
             app:destination="@id/singInFragment" />
         <action
             android:id="@+id/action_loginFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/addAnimalFragment"

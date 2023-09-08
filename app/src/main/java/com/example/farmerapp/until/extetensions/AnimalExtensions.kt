@@ -2,11 +2,14 @@ package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.AnimalDto
 import com.example.farmerapp.data.local.relations.AnimalRelation
+import com.example.farmerapp.data.remote.dto.AnimalApiDto
 import com.example.farmerapp.domain.model.Animal
+import com.example.farmerapp.until.UserSingleton
 import com.example.farmerapp.until.enums.AnimalType
 import com.example.farmerapp.until.enums.Gender
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
+import java.time.LocalDateTime
 
 object AnimalExtensions {
     fun Animal.toAnimalDto(): AnimalDto {
@@ -38,6 +41,31 @@ object AnimalExtensions {
             animalDto.motherType,
             animalDto.fatherType,
         )
+    }
 
+    fun Animal.toAnimalApiDto(): AnimalApiDto {
+        return AnimalApiDto(
+            "",
+            company.id.toString(),
+            addFarmer.id.toString(),
+            name,
+            birthdate.toString(),
+            null,
+            null,
+            gender.ordinal
+        )
+    }
+
+    fun AnimalApiDto.toAnimal(): Animal {
+        return Animal(
+            "",
+            name,
+            "0",
+            Gender.values()[genderIndex],
+            LocalDateTime.now(),
+            AnimalType.Cow,
+            null,
+            null
+        )
     }
 }

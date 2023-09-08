@@ -4,12 +4,16 @@ package com.example.farmerapp.presentation
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.collection.forEach
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -19,6 +23,7 @@ import com.example.farmerapp.R
 import com.example.farmerapp.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -32,14 +37,33 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.fragmentContentView)
         appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
         binding.navigationView.setupWithNavController(navController)
-        setupActionBarWithNavController(navController, appBarConfiguration)
+       // setupActionBarWithNavController(navController, appBarConfiguration)
         registerLauncher()
         requestFineLocationPermission()
+        hideDrawerMenu(navController)
+    }
+
+    private fun hideDrawerMenu(navController: NavController) {
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.loginFragment,
+                R.id.singInFragment -> {
+                    setupActionBarWithNavController(navController, null)
+                    binding.navigationView.visibility = View.GONE
+                }
+                else -> {
+                    navController.graph.setStartDestination(R.id.mainFragment)
+                    appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
+                    setupActionBarWithNavController(navController, appBarConfiguration)
+                    binding.navigationView.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.fragmentContentView)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration)  || super.onSupportNavigateUp()
     }
 
     private fun requestFineLocationPermission() {
@@ -70,9 +94,7 @@ class MainActivity : AppCompatActivity() {
     private fun registerLauncher() {
         permissionLauncher =
             registerForActivityResult(ActivityResultContracts.RequestPermission()) { result ->
-                if (result) {
-
-                } else {
+                if (!result) {
                     Toast.makeText(this, getString(R.string.permission_needed), Toast.LENGTH_SHORT)
                         .show()
                 }

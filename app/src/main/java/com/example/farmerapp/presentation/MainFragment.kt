@@ -1,20 +1,15 @@
 package com.example.farmerapp.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
-import androidx.navigation.NavOptionsBuilder
+import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.example.farmerapp.R
-import com.example.farmerapp.databinding.FragmentSaleBinding
-import com.example.farmerapp.presentation.login_fragment.LoginFragmentDirections
-import com.example.farmerapp.presentation.sale_fragment.SaleViewModel
+import com.example.farmerapp.databinding.FragmentMainBinding
 
 class MainFragment : Fragment() {
+    private lateinit var binding: FragmentMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,8 +19,8 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        binding = FragmentMainBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

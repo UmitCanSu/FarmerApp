@@ -5,8 +5,10 @@ import com.example.farmerapp.data.local.relations.FarmerRelations
 import com.example.farmerapp.data.remote.dto.FarmerApiDto
 import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.FarmerStatus
+import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
+import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompanyApiDto
+import java.time.LocalDateTime
 
 object FarmerExtensions {
     fun FarmerRelations.toFarmer(): Farmer {
@@ -41,11 +43,26 @@ object FarmerExtensions {
         )
     }
 
-    fun FarmerApiDto.toFarmer():Farmer{
+    fun FarmerApiDto.toFarmer(): Farmer {
         return Farmer(
             0,
             company.toCompany(),
-            name,surname,0,FarmerStatus.valueOf(farmerStatus)
+            name, surname, 0, FarmerStatus.valueOf(farmerStatus)
+        )
+    }
+
+    fun Farmer.toFarmerApiDto(): FarmerApiDto {
+        return FarmerApiDto(
+            id.toString(),
+            company!!.toCompanyApiDto(),
+            name,
+            sourName,
+            "",
+            LocalDateTime.now().toString(),
+            LocalDateTime.now().toString(),
+            "",
+            farmerStatus.name,
+            ""
         )
     }
 }

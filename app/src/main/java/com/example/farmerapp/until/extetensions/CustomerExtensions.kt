@@ -29,7 +29,7 @@ object CustomerExtensions {
     }
     fun Customer.toCustomerApiDto():CustomerApiDto{
         return CustomerApiDto(
-            "","",name,surName,phone,address
+            id.toString(),"",name,surName,phone,address
         )
     }
 

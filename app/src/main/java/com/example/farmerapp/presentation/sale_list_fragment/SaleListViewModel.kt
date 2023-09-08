@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.domain.use_case.sales_list_fragment.SalesListFilterUseCase
+import com.example.farmerapp.domain.use_case.sales_product.GetSaleListToApiUseCase
 import com.example.farmerapp.domain.use_case.sales_product.SelectSalesProductWithCompanyIdUseCase
 import com.example.farmerapp.until.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +17,8 @@ import javax.inject.Inject
 class SaleListViewModel
 @Inject constructor(
     private val selectSalesProductWithCompanyIdUseCase: SelectSalesProductWithCompanyIdUseCase,
-    private val salesProductListFilter: SalesListFilterUseCase
+    private val salesProductListFilter: SalesListFilterUseCase,
+    private val getSaleListToApiUseCase: GetSaleListToApiUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow<SaleListState>(SaleListState.Idle)
     val state: StateFlow<SaleListState> = _state
@@ -25,6 +27,7 @@ class SaleListViewModel
     init {
         viewModelScope.launch {
             selectWithCompanyId(1)
+            getSaleListToApi("1")
             getFilter(1, 1, false)
         }
     }
@@ -39,6 +42,7 @@ class SaleListViewModel
 
                 is Resource.Success -> {
                     salesProductList = it.data!!
+                   // getSaleListToApi(companyId.toString())
                     _state.value = SaleListState.SaleList(it.data!!)
                 }
 
@@ -54,6 +58,25 @@ class SaleListViewModel
             it.customer.id == customerId && it.product.id == productId && it.isPaid == isPaid
         }
         _state.value = SaleListState.SaleList(salesProductList)
+    }
+
+    private suspend fun getSaleListToApi(companyId: String) {
+        getSaleListToApiUseCase.getSaleListToApi(companyId).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = SaleListState.Loading
+                }
+
+                is Resource.Success -> {
+                    salesProductList = it.data!!
+                    _state.value = SaleListState.SaleList(it.data)
+                }
+
+                is Resource.Error -> {
+                    _state.value = SaleListState.Error(it.message!!)
+                }
+            }
+        }
     }
 
     private fun isPaidFilter(isPaid: Boolean) {

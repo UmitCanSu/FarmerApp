@@ -11,6 +11,7 @@ import androidx.navigation.Navigation
 import com.example.farmerapp.data.Login
 import com.example.farmerapp.databinding.FragmentLoginBinding
 import com.example.farmerapp.presentation.dialog.CustomDialog
+import com.example.farmerapp.until.extetensions.Extensions
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -41,14 +42,25 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fillEditText()
         binding.singInButton.setOnClickListener {
-            /*
-               val action = LoginFragmentDirections.()
-                 Navigation.findNavController(requireView()).navigate(action)
-            */
+            val action = LoginFragmentDirections.actionLoginFragmentToMainFragment()
+            Navigation.findNavController(requireView()).navigate(action)
+
+            //var loginFarmer = Login("Farmer", "1")
+            val loginFarmer = filLoginToView()
+            if (loginFarmer != null) {
+                viewModel.onEvent(LoginFragmentOnEvent.OnLogin(loginFarmer))
+            }
         }
-        val loginFarmer = Login("Farmer", "1")
-        viewModel.onEvent(LoginFragmentOnEvent.OnLogin(loginFarmer))
         lifecycleScope.launch { observableState() }
+    }
+
+    private fun filLoginToView(): Login? {
+        if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
+            val nickName = binding.nickNameLayout.editText!!.text.toString()
+            val password = binding.passwordTextLayout.editText!!.text.toString()
+            return Login(nickName, password)
+        }
+        return null
     }
 
     private fun fillEditText() {
@@ -70,7 +82,7 @@ class LoginFragment : Fragment() {
                 is LoginFragmentState.Success -> {
                     val action = LoginFragmentDirections.actionLoginFragmentToMainFragment()
                     Navigation.findNavController(requireView()).navigate(action)
-                 //   requireActivity().supportFragmentManager.popBackStack()
+                    //   requireActivity().supportFragmentManager.popBackStack()
                 }
 
                 is LoginFragmentState.Error -> {

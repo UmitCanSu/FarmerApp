@@ -2,6 +2,7 @@ package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.SalesProductDto
 import com.example.farmerapp.data.local.relations.SaleProductWitOtherClass
+import com.example.farmerapp.data.remote.dto.SaleApiDto
 import com.example.farmerapp.domain.model.AmountPaid
 import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Customer
@@ -9,10 +10,15 @@ import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
+import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompanyApiDto
 import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomer
+import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomerApiDto
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
+import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmerApiDto
 import com.example.farmerapp.until.extetensions.ProductExtensions.toProduct
+import com.example.farmerapp.until.extetensions.ProductExtensions.toProductApiDto
 import com.google.android.gms.maps.model.LatLng
+import java.time.LocalDateTime
 
 object SalesProductExtensions {
     fun SaleProductWitOtherClass.toSaleProduct(): SalesProduct {
@@ -73,6 +79,38 @@ object SalesProductExtensions {
             amountPaidList
         )
 
+    }
+
+    fun SalesProduct.toSaleApiDto(): SaleApiDto {
+        return SaleApiDto(
+            "",
+            company.toCompanyApiDto(),
+            product.toProductApiDto(),
+            customer.toCustomerApiDto(),
+            farmer.toFarmerApiDto(),
+            price,
+            location,
+            productNumber,
+            salesDate.toString(),
+            locationDescription,
+            isPaid,
+            amountPaint
+        )
+    }
+
+    fun SaleApiDto.toSalesProduct(): SalesProduct {
+        return SalesProduct(
+            product.toProduct(),
+            customer.toCustomer(),
+            price,
+            isPaid,
+            productCount,
+            location,
+            locationDescription,
+            LocalDateTime.now(),//LocalDateTime.parse(saleDate),
+            isPaid,
+            amountPaids
+        )
     }
 
 

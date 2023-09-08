@@ -7,6 +7,8 @@ import com.example.farmerapp.domain.use_case.GetLocationUseCase
 import com.example.farmerapp.domain.use_case.customer.GetAllCustomerListUseCase
 import com.example.farmerapp.domain.use_case.product.GetProductListByCompanyIdUseCase
 import com.example.farmerapp.domain.use_case.sale_fragment.CalculateProductPriceUseCase
+import com.example.farmerapp.domain.use_case.sales_product.AddSaleToApiUseCase
+import com.example.farmerapp.domain.use_case.sales_product.GetSaleBySaleIdToApiUseCase
 import com.example.farmerapp.domain.use_case.sales_product.InsertSalesProductUseCase
 import com.example.farmerapp.until.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +28,7 @@ class SaleViewModel
     private val getAllCustomerList: GetAllCustomerListUseCase,
     private val insertSalesProductUseCase: InsertSalesProductUseCase,
     private val getLocationUseCase: GetLocationUseCase,
+    private val addSaleToApiUseCase: AddSaleToApiUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow<SaleFragmentState>(SaleFragmentState.Idle)
     val state: StateFlow<SaleFragmentState> = _state
@@ -101,6 +104,8 @@ class SaleViewModel
         }
     }
 
+
+
     private suspend fun insertSalesProduct() {
         val localDateTime = LocalDateTime.now()
         val salesProduct = with(salesProductHolder) {
@@ -125,7 +130,26 @@ class SaleViewModel
                 }
 
                 is Resource.Success -> {
-                    _state.value = SaleFragmentState.IsSavesSalesProduct(it.data!!.toInt())
+                    //_state.value = SaleFragmentState.IsSavesSalesProduct(it.data!!.toInt())
+                    addSaleToApi(salesProduct)
+                }
+
+                is Resource.Error -> {
+                    _state.value = SaleFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun addSaleToApi(salesProduct: SalesProduct) {
+        addSaleToApiUseCase.addSale(salesProduct).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = SaleFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    _state.value = SaleFragmentState.IsSavesSalesProduct(1)
                 }
 
                 is Resource.Error -> {

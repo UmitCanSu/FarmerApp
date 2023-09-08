@@ -1,6 +1,6 @@
 package com.example.farmerapp.data
 
 data class Login(
-    var nickNane:String,
+    var nickName:String,
     var password:String
 )

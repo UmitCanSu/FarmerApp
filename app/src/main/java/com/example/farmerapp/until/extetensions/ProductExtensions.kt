@@ -43,7 +43,7 @@ object ProductExtensions {
 
     fun Product.toProductApiDto(): ProductApiDto {
         return ProductApiDto(
-            "", name, "", price,unitType, LocalDateTime.now().toString(), company.id.toString()
+            id.toString(), name, "", price,unitType, LocalDateTime.now().toString(), company.id.toString()
         )
     }
 

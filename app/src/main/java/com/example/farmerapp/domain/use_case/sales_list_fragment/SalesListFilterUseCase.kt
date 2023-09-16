@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.sales_list_fragment
 
 import com.example.farmerapp.domain.model.SalesProduct
-import com.example.farmerapp.domain.repository.room.SaleProductRepository
+import com.example.farmerapp.domain.repository.local.SaleProductRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.UserSingleton
 import com.example.farmerapp.until.extetensions.SalesProductExtensions.toSaleProduct

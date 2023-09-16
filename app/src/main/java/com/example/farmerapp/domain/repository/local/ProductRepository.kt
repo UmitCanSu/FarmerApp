@@ -1,9 +1,7 @@
-package com.example.farmerapp.domain.repository.room
+package com.example.farmerapp.domain.repository.local
 
 import com.example.farmerapp.data.local.dto.ProductDto
 import com.example.farmerapp.data.local.relations.ProductRelations
-import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.domain.model.Product
 
 
 interface ProductRepository {

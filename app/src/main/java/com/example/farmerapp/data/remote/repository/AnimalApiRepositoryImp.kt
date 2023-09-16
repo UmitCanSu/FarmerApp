@@ -1,8 +1,8 @@
 package com.example.farmerapp.data.remote.repository
 
 import com.example.farmerapp.data.remote.dto.AnimalApiDto
-import com.example.farmerapp.domain.repository.api.AnimalApi
-import com.example.farmerapp.domain.repository.api.repository.AnimalApiRepository
+import com.example.farmerapp.data.remote.api.AnimalApi
+import com.example.farmerapp.domain.repository.remote.AnimalApiRepository
 import javax.inject.Inject
 
 class AnimalApiRepositoryImp

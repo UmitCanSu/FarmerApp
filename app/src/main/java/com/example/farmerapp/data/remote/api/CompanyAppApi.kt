@@ -1,6 +1,5 @@
-package com.example.farmerapp.domain.repository.api
+package com.example.farmerapp.data.remote.api
 
-import com.example.farmerapp.data.local.dto.CompanyDto
 import com.example.farmerapp.data.remote.dto.CompanyApiDto
 import retrofit2.http.POST
 import retrofit2.http.Query

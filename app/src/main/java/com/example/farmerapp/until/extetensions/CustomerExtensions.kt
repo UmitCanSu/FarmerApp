@@ -3,7 +3,6 @@ package com.example.farmerapp.until.extetensions
 import com.example.farmerapp.data.local.dto.CustomerDto
 import com.example.farmerapp.data.remote.dto.CustomerApiDto
 import com.example.farmerapp.domain.model.Customer
-import com.example.farmerapp.domain.repository.api.CustomerApi
 
 object CustomerExtensions {
     fun CustomerDto.toCustomer(): Customer {

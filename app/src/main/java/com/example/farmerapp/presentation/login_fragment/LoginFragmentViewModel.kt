@@ -2,15 +2,19 @@ package com.example.farmerapp.presentation.login_fragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.farmerapp.data.Login
 import com.example.farmerapp.data.remote.dto.CompanyApiDto
 import com.example.farmerapp.data.remote.dto.FarmerApiDto
+import com.example.farmerapp.data.remote.dto.LoginApiDto
 import com.example.farmerapp.domain.model.Farmer
+import com.example.farmerapp.domain.model.Login
+import com.example.farmerapp.domain.use_case.IsInternetUseCase
 import com.example.farmerapp.domain.use_case.farmer.AddFarmerToApiUseCase
 import com.example.farmerapp.domain.use_case.farmer.LoginToApiFarmerUseCase
+import com.example.farmerapp.domain.use_case.login_fragment.GetLocalLoginUseCase
 import com.example.farmerapp.until.FarmerStatus
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.extetensions.LoginExtensions.toLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,14 +27,41 @@ import javax.inject.Inject
 class LoginFragmentViewModel
 @Inject constructor(
     private val addFarmerToApiUseCase: AddFarmerToApiUseCase,
-    private val loginToApiFarmerUseCase: LoginToApiFarmerUseCase
+    private val loginToApiFarmerUseCase: LoginToApiFarmerUseCase,
+    private val isInternetUseCase: IsInternetUseCase,
+    private val getLocalLoginUseCase: GetLocalLoginUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<LoginFragmentState>(LoginFragmentState.Idle)
     val state: StateFlow<LoginFragmentState> = _state
+
     init {
-     // viewModelScope.launch {   addFarmer(null) }
+        // viewModelScope.launch {   addFarmer(null) }
     }
-    private suspend fun loginFarmer(login: Login) {
+
+    private suspend fun loginFarmer(loginApiDto: LoginApiDto) {
+        isInternetUseCase.isInternet().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = LoginFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    val isInternet = it.data!!
+                    if (isInternet)
+                        loginApiFarmer(loginApiDto)
+                    else
+                        loginLocalFarmer(loginApiDto.toLogin())
+
+                }
+
+                is Resource.Error -> {
+                    _state.value = LoginFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun loginApiFarmer(login: LoginApiDto) {
         loginToApiFarmerUseCase.login(login).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -38,8 +69,27 @@ class LoginFragmentViewModel
                 }
 
                 is Resource.Success -> {
-                    UserSingleton.getInstance().farmer = it.data
-                    UserSingleton.getInstance().company = it.data!!.company
+                    setCompanyAndFarmerSingleton(it.data!!)
+                    _state.value = LoginFragmentState.Success
+                    timerToState()
+                }
+
+                is Resource.Error -> {
+                    _state.value = LoginFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun loginLocalFarmer(login: Login) {
+        getLocalLoginUseCase.getLogin(login).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = LoginFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    setCompanyAndFarmerSingleton(it.data!!)
                     _state.value = LoginFragmentState.Success
                     timerToState()
                 }
@@ -85,6 +135,11 @@ class LoginFragmentViewModel
                 }
             }
         }
+    }
+
+    private fun setCompanyAndFarmerSingleton(farmer: Farmer) {
+        UserSingleton.getInstance().farmer = farmer
+        UserSingleton.getInstance().company = farmer.company
     }
 
     private suspend fun timerToState() {

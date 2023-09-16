@@ -1,6 +1,6 @@
 package com.example.farmerapp.domain.use_case.amaount_list
 
-import com.example.farmerapp.domain.repository.room.AmountPaidRepository
+import com.example.farmerapp.domain.repository.local.AmountPaidRepository
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch

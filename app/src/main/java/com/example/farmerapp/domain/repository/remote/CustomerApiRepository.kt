@@ -1,7 +1,6 @@
-package com.example.farmerapp.domain.repository.api.repository
+package com.example.farmerapp.domain.repository.remote
 
 import com.example.farmerapp.data.remote.dto.CustomerApiDto
-import retrofit2.http.POST
 
 interface CustomerApiRepository {
     suspend fun addCustomer(customerJson:String): CustomerApiDto

@@ -1,4 +1,4 @@
-package com.example.farmerapp.presentation
+package com.example.farmerapp.presentation.main_fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,5 +25,8 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+    }
+    private fun observableStatus(){
+
     }
 }

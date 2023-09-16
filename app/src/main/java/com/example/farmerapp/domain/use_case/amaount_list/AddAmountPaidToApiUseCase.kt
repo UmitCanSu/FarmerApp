@@ -2,7 +2,7 @@ package com.example.farmerapp.domain.use_case.amaount_list
 
 import com.example.farmerapp.data.remote.dto.SaleApiDto
 import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.repository.api.repository.SaleApiRepository
+import com.example.farmerapp.domain.repository.remote.SaleApiRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.AmountPaidExtensions.toAmountPaidApiDto
 import com.google.gson.Gson

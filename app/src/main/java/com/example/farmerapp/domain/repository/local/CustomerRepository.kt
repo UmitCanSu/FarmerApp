@@ -1,7 +1,6 @@
-package com.example.farmerapp.domain.repository.room
+package com.example.farmerapp.domain.repository.local
 
 import com.example.farmerapp.data.local.dto.CustomerDto
-import com.example.farmerapp.domain.model.Customer
 
 interface CustomerRepository {
     suspend fun insertCustomer(customer: CustomerDto): Long

@@ -2,7 +2,7 @@ package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.SalesProductDto
 import com.example.farmerapp.data.local.relations.SaleProductWitOtherClass
-import com.example.farmerapp.domain.repository.room.SaleProductRepository
+import com.example.farmerapp.domain.repository.local.SaleProductRepository
 import com.example.farmerapp.domain.repository.dao.SaleProductDao
 import java.time.LocalDate
 import javax.inject.Inject

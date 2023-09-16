@@ -1,7 +1,6 @@
-package com.example.farmerapp.domain.repository.api.repository
+package com.example.farmerapp.domain.repository.remote
 
 import com.example.farmerapp.data.remote.dto.SaleApiDto
-import retrofit2.http.Query
 
 interface SaleApiRepository {
     suspend fun addSale(saleJson: String): SaleApiDto

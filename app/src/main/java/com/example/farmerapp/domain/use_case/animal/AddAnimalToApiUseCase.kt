@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.animal
 
 import com.example.farmerapp.domain.model.Animal
-import com.example.farmerapp.domain.repository.api.repository.AnimalApiRepository
+import com.example.farmerapp.domain.repository.remote.AnimalApiRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.AnimalExtensions.toAnimal
 import com.example.farmerapp.until.extetensions.AnimalExtensions.toAnimalApiDto

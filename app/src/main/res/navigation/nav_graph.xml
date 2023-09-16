@@ -109,7 +109,7 @@
         tools:layout="@layout/fragment_sing_in" />
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.farmerapp.presentation.MainFragment"
+        android:name="com.example.farmerapp.presentation.main_fragment.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main" />
 </navigation>

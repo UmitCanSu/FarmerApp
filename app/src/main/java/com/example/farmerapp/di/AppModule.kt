@@ -7,6 +7,7 @@ import com.example.farmerapp.data.local.repository.AnimalRepositoryImp
 import com.example.farmerapp.data.local.repository.CompanyRepositoryImp
 import com.example.farmerapp.data.local.repository.CustomerRepositoryImp
 import com.example.farmerapp.data.local.repository.FarmerRepositoryImp
+import com.example.farmerapp.data.local.repository.LoginRepositoryImp
 import com.example.farmerapp.data.local.repository.ProductRepositoryImp
 import com.example.farmerapp.data.local.repository.SaleProductRepositoryImp
 import com.example.farmerapp.data.remote.repository.CompanyApiRepositoryImp
@@ -15,25 +16,27 @@ import com.example.farmerapp.data.remote.repository.CustomerApiRepositoryImp
 import com.example.farmerapp.data.remote.repository.FarmerApiRepositoryImp
 import com.example.farmerapp.data.remote.repository.ProductApiRepositoryImp
 import com.example.farmerapp.data.remote.repository.SaleApiRepositoryImp
-import com.example.farmerapp.domain.repository.api.AnimalApi
-import com.example.farmerapp.domain.repository.api.CompanyAppApi
-import com.example.farmerapp.domain.repository.api.CustomerApi
-import com.example.farmerapp.domain.repository.api.FarmerAppApi
-import com.example.farmerapp.domain.repository.api.ProductApi
-import com.example.farmerapp.domain.repository.api.SaleApi
-import com.example.farmerapp.domain.repository.api.repository.AnimalApiRepository
-import com.example.farmerapp.domain.repository.api.repository.CompanyApiRepository
-import com.example.farmerapp.domain.repository.api.repository.CustomerApiRepository
-import com.example.farmerapp.domain.repository.api.repository.FarmerApiRepository
-import com.example.farmerapp.domain.repository.api.repository.ProductApiRepository
-import com.example.farmerapp.domain.repository.api.repository.SaleApiRepository
-import com.example.farmerapp.domain.repository.room.AmountPaidRepository
-import com.example.farmerapp.domain.repository.room.AnimalRepository
-import com.example.farmerapp.domain.repository.room.CompanyRepository
-import com.example.farmerapp.domain.repository.room.CustomerRepository
-import com.example.farmerapp.domain.repository.room.FarmerRepository
-import com.example.farmerapp.domain.repository.room.ProductRepository
-import com.example.farmerapp.domain.repository.room.SaleProductRepository
+import com.example.farmerapp.data.remote.api.AnimalApi
+import com.example.farmerapp.data.remote.api.CompanyAppApi
+import com.example.farmerapp.data.remote.api.CustomerApi
+import com.example.farmerapp.data.remote.api.FarmerAppApi
+import com.example.farmerapp.data.remote.api.ProductApi
+import com.example.farmerapp.data.remote.api.SaleApi
+import com.example.farmerapp.domain.repository.remote.AnimalApiRepository
+import com.example.farmerapp.domain.repository.remote.CompanyApiRepository
+import com.example.farmerapp.domain.repository.remote.CustomerApiRepository
+import com.example.farmerapp.domain.repository.remote.FarmerApiRepository
+import com.example.farmerapp.domain.repository.remote.ProductApiRepository
+import com.example.farmerapp.domain.repository.remote.SaleApiRepository
+import com.example.farmerapp.domain.repository.local.AmountPaidRepository
+import com.example.farmerapp.domain.repository.local.AnimalRepository
+import com.example.farmerapp.domain.repository.local.CompanyRepository
+import com.example.farmerapp.domain.repository.local.CustomerRepository
+import com.example.farmerapp.domain.repository.local.FarmerRepository
+import com.example.farmerapp.domain.repository.local.LoginRepository
+import com.example.farmerapp.domain.repository.local.ProductRepository
+import com.example.farmerapp.domain.repository.local.SaleProductRepository
+import com.example.farmerapp.domain.use_case.IsInternetUseCase
 import com.example.farmerapp.until.Constant
 import dagger.Module
 import dagger.Provides
@@ -82,6 +85,11 @@ object AppModule {
     fun provideProductRepository(dataBase: AppDatabase): ProductRepository {
         return ProductRepositoryImp(dataBase.productDao())
     }
+    @Provides
+    @Singleton
+    fun provideLoginRepository(dataBase: AppDatabase): LoginRepository {
+        return LoginRepositoryImp(dataBase.loginDao())
+    }
 
     @Provides
     @Singleton
@@ -124,6 +132,7 @@ object AppModule {
     fun provideAnimalApiRepository(animalApi: AnimalApi): AnimalApiRepository {
         return AnimalApiRepositoryImp(animalApi)
     }
+
 
     @Provides
     @Singleton
@@ -189,6 +198,12 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(SaleApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideIsInternetUseCase(@ApplicationContext applicationContext: Context):IsInternetUseCase{
+        return IsInternetUseCase(applicationContext)
     }
 
 }

@@ -1,8 +1,7 @@
-package com.example.farmerapp.domain.repository.room
+package com.example.farmerapp.domain.repository.local
 
 import com.example.farmerapp.data.local.dto.AmountPaidDto
 import com.example.farmerapp.data.local.relations.AmountPaidRelations
-import com.example.farmerapp.domain.model.AmountPaid
 
 interface AmountPaidRepository {
     suspend fun insertAmountPaid(amountPaidDto: AmountPaidDto):Long

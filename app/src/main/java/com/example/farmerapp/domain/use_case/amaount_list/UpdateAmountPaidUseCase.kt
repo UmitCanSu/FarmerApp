@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.amaount_list
 
 import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.repository.room.AmountPaidRepository
+import com.example.farmerapp.domain.repository.local.AmountPaidRepository
 import com.example.farmerapp.until.extetensions.AmountPaidExtensions.toAmountPaidDto
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch

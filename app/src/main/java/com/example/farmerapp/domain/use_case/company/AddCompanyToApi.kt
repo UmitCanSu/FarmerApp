@@ -1,8 +1,7 @@
 package com.example.farmerapp.domain.use_case.company
 
-import android.util.Log
 import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.repository.api.repository.CompanyApiRepository
+import com.example.farmerapp.domain.repository.remote.CompanyApiRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompanyApiDto
 import com.google.gson.Gson

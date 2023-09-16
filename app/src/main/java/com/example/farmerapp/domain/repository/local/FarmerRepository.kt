@@ -1,8 +1,7 @@
-package com.example.farmerapp.domain.repository.room
+package com.example.farmerapp.domain.repository.local
 
 import com.example.farmerapp.data.local.dto.FarmerDto
 import com.example.farmerapp.data.local.relations.FarmerRelations
-import com.example.farmerapp.domain.model.Farmer
 
 interface FarmerRepository {
     suspend fun insertFarmer(farmerDto: FarmerDto): Long

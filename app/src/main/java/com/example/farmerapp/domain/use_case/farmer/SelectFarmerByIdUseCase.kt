@@ -1,14 +1,14 @@
 package com.example.farmerapp.domain.use_case.farmer
 
 import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.domain.repository.room.FarmerRepository
+import com.example.farmerapp.domain.repository.local.FarmerRepository
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SelectFarmerWithIdUseCase
+class SelectFarmerByIdUseCase
 @Inject constructor(
     private val farmerRepository: FarmerRepository
 ) {

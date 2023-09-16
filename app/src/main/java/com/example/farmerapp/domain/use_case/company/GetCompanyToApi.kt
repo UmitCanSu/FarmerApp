@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.company
 
 import com.example.farmerapp.data.remote.dto.CompanyApiDto
-import com.example.farmerapp.domain.repository.api.CompanyAppApi
+import com.example.farmerapp.data.remote.api.CompanyAppApi
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow

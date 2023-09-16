@@ -2,7 +2,7 @@ package com.example.farmerapp.domain.use_case.farmer
 
 import android.util.Log
 import com.example.farmerapp.data.remote.dto.FarmerApiDto
-import com.example.farmerapp.domain.repository.api.repository.FarmerApiRepository
+import com.example.farmerapp.domain.repository.remote.FarmerApiRepository
 import com.example.farmerapp.until.Resource
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.catch

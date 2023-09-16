@@ -1,4 +1,4 @@
-package com.example.farmerapp.domain.repository.api
+package com.example.farmerapp.data.remote.api
 
 import com.example.farmerapp.data.remote.dto.FarmerApiDto
 import retrofit2.http.POST

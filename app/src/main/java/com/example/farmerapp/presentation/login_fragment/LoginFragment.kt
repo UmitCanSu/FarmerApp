@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import com.example.farmerapp.data.Login
+import com.example.farmerapp.data.remote.dto.LoginApiDto
 import com.example.farmerapp.databinding.FragmentLoginBinding
 import com.example.farmerapp.presentation.dialog.CustomDialog
 import com.example.farmerapp.until.extetensions.Extensions
@@ -44,8 +44,6 @@ class LoginFragment : Fragment() {
         binding.singInButton.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToMainFragment()
             Navigation.findNavController(requireView()).navigate(action)
-
-            //var loginFarmer = Login("Farmer", "1")
             val loginFarmer = filLoginToView()
             if (loginFarmer != null) {
                 viewModel.onEvent(LoginFragmentOnEvent.OnLogin(loginFarmer))
@@ -54,11 +52,11 @@ class LoginFragment : Fragment() {
         lifecycleScope.launch { observableState() }
     }
 
-    private fun filLoginToView(): Login? {
+    private fun filLoginToView(): LoginApiDto? {
         if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
             val nickName = binding.nickNameLayout.editText!!.text.toString()
             val password = binding.passwordTextLayout.editText!!.text.toString()
-            return Login(nickName, password)
+            return LoginApiDto(nickName, password)
         }
         return null
     }

@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.sales_product
 
 import com.example.farmerapp.domain.model.SalesProduct
-import com.example.farmerapp.domain.repository.api.repository.SaleApiRepository
+import com.example.farmerapp.domain.repository.remote.SaleApiRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.SalesProductExtensions.toSalesProduct
 import kotlinx.coroutines.flow.catch

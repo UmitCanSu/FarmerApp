@@ -1,7 +1,7 @@
 package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.CustomerDto
-import com.example.farmerapp.domain.repository.room.CustomerRepository
+import com.example.farmerapp.domain.repository.local.CustomerRepository
 import com.example.farmerapp.domain.repository.dao.CustomerDao
 import javax.inject.Inject
 

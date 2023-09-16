@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.animal
 
 import com.example.farmerapp.domain.model.Animal
-import com.example.farmerapp.domain.repository.room.AnimalRepository
+import com.example.farmerapp.domain.repository.local.AnimalRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.AnimalExtensions.toAnimal
 import kotlinx.coroutines.Dispatchers

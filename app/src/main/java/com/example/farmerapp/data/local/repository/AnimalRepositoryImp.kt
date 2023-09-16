@@ -2,7 +2,7 @@ package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.AnimalDto
 import com.example.farmerapp.data.local.relations.AnimalRelation
-import com.example.farmerapp.domain.repository.room.AnimalRepository
+import com.example.farmerapp.domain.repository.local.AnimalRepository
 import com.example.farmerapp.domain.repository.dao.AnimalDao
 import javax.inject.Inject
 

@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.use_case.product
 
 import com.example.farmerapp.domain.model.Product
-import com.example.farmerapp.domain.repository.api.repository.ProductApiRepository
+import com.example.farmerapp.domain.repository.remote.ProductApiRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.ProductExtensions.toProductApiDto
 import com.google.gson.Gson

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class InsertCompanyUseCase
+class InsertCompanyToLocalUseCase
 @Inject constructor(
     private val companyRepository: CompanyRepository,
 ) {

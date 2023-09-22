@@ -8,13 +8,13 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class InsertFarmerUseCase
+class InsertFarmerToLocalUseCase
 @Inject constructor(
     private val farmerRepository: FarmerRepository
 ) {
-    fun insertFarmer(farmer: Farmer) = flow<Resource<Boolean>> {
+    fun insertFarmer(farmer: Farmer) = flow<Resource<Long>> {
         emit(Resource.Loading())
-        val insertSize = farmerRepository.insertFarmer(farmer.toFarmerDto())
-        emit(Resource.Success(insertSize > 0))
+        val index = farmerRepository.insertFarmer(farmer.toFarmerDto())
+        emit(Resource.Success(index))
     }.catch { emit(Resource.Error(it.message!!)) }
 }

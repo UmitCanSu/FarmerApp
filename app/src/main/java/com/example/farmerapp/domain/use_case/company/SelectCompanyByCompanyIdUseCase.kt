@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class SelectCompanyWithCompanyIdUseCase
+class SelectCompanyByCompanyIdUseCase
 @Inject constructor(
     private val companyRepository: CompanyRepository
 ) {
-    fun selectCompanyWithCompanyId(companyId: Int) = flow<Resource<Company?>> {
+    fun selectCompanyByCompanyId(companyId: Int) = flow<Resource<Company?>> {
         emit(Resource.Loading())
-        val company = companyRepository.selectCompanyWithCompanyId(companyId)
+        val company = companyRepository.selectCompanyByCompanyId(companyId)
         if (company == null){
             emit(Resource.Success(null))
         }else{

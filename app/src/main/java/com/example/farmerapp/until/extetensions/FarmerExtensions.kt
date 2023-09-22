@@ -46,7 +46,7 @@ object FarmerExtensions {
     fun FarmerApiDto.toFarmer(): Farmer {
         return Farmer(
             0,
-            company.toCompany(),
+            company?.toCompany(),
             name, surname, 0, FarmerStatus.valueOf(farmerStatus)
         )
     }
@@ -54,7 +54,7 @@ object FarmerExtensions {
     fun Farmer.toFarmerApiDto(): FarmerApiDto {
         return FarmerApiDto(
             id.toString(),
-            company!!.toCompanyApiDto(),
+            company?.toCompanyApiDto(),
             name,
             sourName,
             "",

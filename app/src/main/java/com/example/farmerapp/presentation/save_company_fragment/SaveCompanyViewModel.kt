@@ -7,8 +7,8 @@ import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.use_case.company.AddCompanyToApi
 import com.example.farmerapp.domain.use_case.company.GetCompanyToApi
-import com.example.farmerapp.domain.use_case.company.InsertCompanyUseCase
-import com.example.farmerapp.domain.use_case.company.SelectCompanyWithCompanyIdUseCase
+import com.example.farmerapp.domain.use_case.company.InsertCompanyToLocalUseCase
+import com.example.farmerapp.domain.use_case.company.SelectCompanyByCompanyIdUseCase
 import com.example.farmerapp.domain.use_case.default_data.DefaultSaveProductUseCase
 import com.example.farmerapp.until.FarmerStatus
 import com.example.farmerapp.until.Resource
@@ -17,16 +17,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SaveCompanyViewModel
 @Inject constructor(
-    private val insertCopanyUseCase: InsertCompanyUseCase,
+    private val insertCopanyUseCase: InsertCompanyToLocalUseCase,
     private val saveDefaultProductUseCase: DefaultSaveProductUseCase,
-    private val selectCompanyWithCompanyIdUseCase: SelectCompanyWithCompanyIdUseCase,
+    private val selectCompanyWithCompanyIdUseCase: SelectCompanyByCompanyIdUseCase,
     private val addCompanyToApi: AddCompanyToApi,
     private val getCompanyToApi: GetCompanyToApi,
 ) : ViewModel() {
@@ -112,7 +111,7 @@ class SaveCompanyViewModel
     }
 
     private suspend fun checkSavedCompany(companyId: Int) {
-        selectCompanyWithCompanyIdUseCase.selectCompanyWithCompanyId(companyId)
+        selectCompanyWithCompanyIdUseCase.selectCompanyByCompanyId(companyId)
             .collect {
                 when (it) {
                     is Resource.Loading -> {

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class SelectFarmersWithCompanyIdUseCase
+class SelectFarmersByCompanyIdToLocalUseCase
 @Inject constructor(
     private val farmerRepository: FarmerRepository
 ) {

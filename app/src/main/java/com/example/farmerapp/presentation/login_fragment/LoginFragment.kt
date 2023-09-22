@@ -42,8 +42,10 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         fillEditText()
         binding.singInButton.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToMainFragment()
+            val action = LoginFragmentDirections.actionLoginFragmentToSingInFragment()
             Navigation.findNavController(requireView()).navigate(action)
+        }
+        binding.loginButton.setOnClickListener {
             val loginFarmer = filLoginToView()
             if (loginFarmer != null) {
                 viewModel.onEvent(LoginFragmentOnEvent.OnLogin(loginFarmer))

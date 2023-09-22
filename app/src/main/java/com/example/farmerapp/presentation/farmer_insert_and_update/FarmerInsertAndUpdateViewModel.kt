@@ -3,7 +3,7 @@ package com.example.farmerapp.presentation.farmer_insert_and_update
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.domain.use_case.farmer.InsertFarmerUseCase
+import com.example.farmerapp.domain.use_case.farmer.InsertFarmerToLocalUseCase
 import com.example.farmerapp.domain.use_case.farmer.UpdateFarmerUseCase
 import com.example.farmerapp.until.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FarmerInsertAndUpdateViewModel
 @Inject constructor(
-    private val insertFarmerUseCase: InsertFarmerUseCase,
+    private val insertFarmerUseCase: InsertFarmerToLocalUseCase,
     private val updadeUseCase: UpdateFarmerUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<FarmerFragmentState>(FarmerFragmentState.Idle)
@@ -29,7 +29,7 @@ class FarmerInsertAndUpdateViewModel
                 }
 
                 is Resource.Success -> {
-                    _state.value = FarmerFragmentState.IsInsert(it.data!!)
+                    _state.value = FarmerFragmentState.IsInsert(it.data!!>0)
                 }
 
                 is Resource.Error -> {

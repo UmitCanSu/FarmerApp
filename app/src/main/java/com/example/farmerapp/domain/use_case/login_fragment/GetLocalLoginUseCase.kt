@@ -3,7 +3,7 @@ package com.example.farmerapp.domain.use_case.login_fragment
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Login
 import com.example.farmerapp.domain.repository.local.LoginRepository
-import com.example.farmerapp.domain.use_case.farmer.SelectFarmerByIdUseCase
+import com.example.farmerapp.domain.use_case.farmer.SelectFarmerByIdToLocalUseCase
 import com.example.farmerapp.until.Resource
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class GetLocalLoginUseCase
 @Inject constructor(
     private val loginRepository: LoginRepository,
-    private val selectFarmerByIdUseCase: SelectFarmerByIdUseCase
+    private val selectFarmerByIdUseCase: SelectFarmerByIdToLocalUseCase
 ) {
     fun getLogin(login: Login) = flow<Resource<Farmer>> {
         emit(Resource.Loading())

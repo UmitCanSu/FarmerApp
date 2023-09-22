@@ -5,17 +5,19 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import com.example.farmerapp.data.local.dto.CompanyDto
-import com.example.farmerapp.domain.model.Company
 
 @Dao
 interface CompanyDao {
     @Insert
-    fun insertCompany(company: CompanyDto):Long
+    fun insertCompany(company: CompanyDto): Long
 
     @Update
-    fun updateCompany(company: CompanyDto):Int
+    fun updateCompany(company: CompanyDto): Int
 
     @Query("Select * from Company where id=:companyId")
-    fun selectCompanyWithCompanyId(companyId: Int): CompanyDto
+    fun selectCompanyByCompanyId(companyId: Int): CompanyDto?
+
+    @Query("Select * from Company where phone like '%' || :phoneNumber and name like '%'|| :name")
+    fun selectCompanyByPhoneNumberAndName(phoneNumber: String, name: String): CompanyDto?
 
 }

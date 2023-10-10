@@ -1,9 +1,7 @@
 package com.example.farmerapp.data.remote.dto
 
 import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.model.Customer
 import com.google.android.gms.maps.model.LatLng
-import java.time.LocalDateTime
 
 data class SaleApiDto(
     var id: String,

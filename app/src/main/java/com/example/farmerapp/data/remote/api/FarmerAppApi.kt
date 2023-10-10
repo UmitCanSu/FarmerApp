@@ -9,8 +9,12 @@ interface FarmerAppApi {
     suspend fun addFarmerToApi(
         @Query("farmerJson") farmerJson: String
     ): FarmerApiDto
-    @POST("Login/loginJson")
+    @POST("Login/FarmerLogin")
     suspend fun login(
-        @Query("farmerLoginJson") loginJson: String,
+        @Query("loginJson") loginJson: String,
+    ): FarmerApiDto
+    @POST("Farmer/GetFarmerByPhoneNumber")
+    suspend fun getFarmerByPhoneNumber(
+        @Query("phoneNumber") phoneNumber: String,
     ): FarmerApiDto
 }

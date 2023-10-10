@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.farmerapp.databinding.FragmentSaleListBinding
 import com.example.farmerapp.presentation.dialog.CustomDialog
 import com.example.farmerapp.presentation.sale_list_fragment.adapter.SaleListAdapter
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,7 +34,7 @@ class SaleListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        var companyId = UserSingleton.getInstance().company!!.id
+        var companyId = Sesion.getInstance().company!!.id
         viewModel.onEvent(SaleListOnEvent.SaleList(companyId))
         binding.isPaidCheckbox.setOnCheckedChangeListener { _, isPaid ->
             viewModel.onEvent(SaleListOnEvent.IsPaid(isPaid))

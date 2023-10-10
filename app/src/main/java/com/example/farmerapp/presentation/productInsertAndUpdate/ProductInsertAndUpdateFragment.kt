@@ -7,13 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentProductInsertAndUpdateBinding
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.presentation.dialog.CustomDialog
-import com.example.farmerapp.until.Constant
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import com.example.farmerapp.until.enums.UnitType
 import com.example.farmerapp.until.extetensions.Extensions
 import com.google.android.material.textfield.TextInputLayout
@@ -58,7 +56,7 @@ class ProductInsertAndUpdateFragment : Fragment() {
             productName,
             selectedUnitType.toString(),
             productPrice,
-            UserSingleton.getInstance().company!!
+            Sesion.getInstance().company!!
         )
     }
 

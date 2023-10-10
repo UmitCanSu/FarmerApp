@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class AmountPaidApiDto(
     val id: String,
-    val customer: CustomerApiDto,
+    val customer: FarmerApiDto,
     val price: Float,
     val paidDate: String,
     val location: LatLng,

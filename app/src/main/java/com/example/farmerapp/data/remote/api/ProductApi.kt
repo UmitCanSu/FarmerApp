@@ -14,4 +14,9 @@ interface ProductApi {
     suspend fun getProductListByCompanyId(
         @Query("companyId") companyId: String
     ): List<ProductApiDto>
+
+    @POST("Product/GetProductByFarmerId")
+    suspend fun getProductListByFarmerId(
+        @Query("farmerID") farmerId: String
+    ): List<ProductApiDto>
 }

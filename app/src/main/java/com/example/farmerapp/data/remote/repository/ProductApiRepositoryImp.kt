@@ -16,4 +16,8 @@ class ProductApiRepositoryImp
     override suspend fun getProductListByCompanyId(companyId: String): List<ProductApiDto> {
         return productApi.getProductListByCompanyId(companyId)
     }
+
+    override suspend fun getProductListByFarmerId(farmerId: String): List<ProductApiDto> {
+        return productApi.getProductListByFarmerId(farmerId)
+    }
 }

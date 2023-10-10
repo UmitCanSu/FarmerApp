@@ -12,7 +12,7 @@ import com.example.farmerapp.domain.use_case.company.SelectCompanyByCompanyIdUse
 import com.example.farmerapp.domain.use_case.default_data.DefaultSaveProductUseCase
 import com.example.farmerapp.until.FarmerStatus
 import com.example.farmerapp.until.Resource
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,7 +42,7 @@ class SaveCompanyViewModel
 
                     is Resource.Success -> {
                         company.id = 1
-                        UserSingleton.getInstance().company = company
+                        Sesion.getInstance().company = company
                         saveDefaultProduct(company)
                         addCompanyApi(company)
 
@@ -120,10 +120,10 @@ class SaveCompanyViewModel
 
                     is Resource.Success -> {
                         if (it.data != null) {
-                            UserSingleton.getInstance().company = it.data
+                            Sesion.getInstance().company = it.data
                             val farmer = Farmer(it.data, "Farmer ", "- 1", 18, FarmerStatus.Farmer)
                             farmer.id = 1
-                            UserSingleton.getInstance().farmer = farmer
+                            Sesion.getInstance().farmer = farmer
                             _state.value = SaveCompanyState.SavedCompany
                         } else {
                             val company =

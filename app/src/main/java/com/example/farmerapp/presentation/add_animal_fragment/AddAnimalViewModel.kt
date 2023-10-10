@@ -6,6 +6,7 @@ import com.example.farmerapp.domain.model.Animal
 import com.example.farmerapp.domain.use_case.animal.AddAnimalToApiUseCase
 import com.example.farmerapp.domain.use_case.animal.InsertAnimalUseCase
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,7 +21,15 @@ class AddAnimalViewModel
 ) : ViewModel() {
     private val _state = MutableStateFlow<AddAnimalFragmentState>(AddAnimalFragmentState.Idle)
     val state: StateFlow<AddAnimalFragmentState> = _state
-    private suspend fun insertAnimal(animal: Animal) {
+    private suspend fun checkInternet(animal: Animal) {
+        if (Sesion.getInstance().isInternet)
+            insertAnimalToLocal(animal)
+        else
+            addAnimalToApi(animal)
+
+    }
+
+    private suspend fun insertAnimalToLocal(animal: Animal) {
         insertAnimalUseCase.insertAnimalUseCase(animal).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -28,8 +37,8 @@ class AddAnimalViewModel
                 }
 
                 is Resource.Success -> {
-                   // _state.value = AddAnimalFragmentState.Success
-                    addAnimalToApi(animal)
+                     _state.value = AddAnimalFragmentState.Success
+                   // addAnimalToApi(animal)
                 }
 
                 is Resource.Error -> {
@@ -47,7 +56,8 @@ class AddAnimalViewModel
                 }
 
                 is Resource.Success -> {
-                    _state.value = AddAnimalFragmentState.Success
+                   // _state.value = AddAnimalFragmentState.Success
+                    insertAnimalToLocal(animal)
                 }
 
                 is Resource.Error -> {
@@ -60,7 +70,7 @@ class AddAnimalViewModel
     fun onEvent(onEvent: AddAnimalFragmentOnEvent) {
         when (onEvent) {
             is AddAnimalFragmentOnEvent.AddAnimal -> {
-                viewModelScope.launch { insertAnimal(onEvent.animal) }
+                viewModelScope.launch { checkInternet(onEvent.animal) }
             }
         }
     }

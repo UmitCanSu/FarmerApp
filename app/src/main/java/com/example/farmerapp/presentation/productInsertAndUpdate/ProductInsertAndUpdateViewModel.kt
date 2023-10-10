@@ -3,20 +3,22 @@ package com.example.farmerapp.presentation.productInsertAndUpdate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.Product
+import com.example.farmerapp.domain.use_case.IsInternetUseCase
 import com.example.farmerapp.domain.use_case.product.AddProductToApiUseCase
 import com.example.farmerapp.domain.use_case.product.InsertProductUseCase
 import com.example.farmerapp.domain.use_case.product.UpdateProductUseCase
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductInsertAndUpdateViewModel
 @Inject constructor(
+    private val getInternetUseCase: IsInternetUseCase,
     private val insertProductUseCase: InsertProductUseCase,
     private val updateProductUseCase: UpdateProductUseCase,
     private val addProductToApiUseCase: AddProductToApiUseCase
@@ -25,7 +27,15 @@ class ProductInsertAndUpdateViewModel
         MutableStateFlow<ProductInsertAndUpdateState>(ProductInsertAndUpdateState.Idle)
     val state: StateFlow<ProductInsertAndUpdateState> = _state
 
-    private suspend fun insertProduct(product: Product) {
+    private suspend fun checkInternet(product: Product) {
+        if (Sesion.getInstance().isInternet) {
+            addProductToApi(product)
+        } else {
+            insertProductToLocal(product)
+        }
+    }
+
+    private suspend fun insertProductToLocal(product: Product) {
         insertProductUseCase.insertProdcut(product).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -38,8 +48,7 @@ class ProductInsertAndUpdateViewModel
                 }
 
                 is Resource.Success -> {
-                   // _state.value = ProductInsertAndUpdateState.Success(it.data!!)
-                    addProductToApi(product)
+                     _state.value = ProductInsertAndUpdateState.Success(it.data!!)
                 }
             }
         }
@@ -62,8 +71,9 @@ class ProductInsertAndUpdateViewModel
             }
         }
     }
-    private suspend fun addProductToApi(product: Product){
-        addProductToApiUseCase.addProduct(product).collect{
+
+    private suspend fun addProductToApi(product: Product) {
+        addProductToApiUseCase.addProduct(product).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = ProductInsertAndUpdateState.Loading
@@ -74,7 +84,8 @@ class ProductInsertAndUpdateViewModel
                 }
 
                 is Resource.Success -> {
-                    _state.value = ProductInsertAndUpdateState.Success(it.data!!)
+                    // _state.value = ProductInsertAndUpdateState.Success(it.data!!)
+                    insertProductToLocal(it.data!!)
                 }
             }
         }
@@ -84,7 +95,9 @@ class ProductInsertAndUpdateViewModel
     fun onEvent(onEvent: ProductInsertAndUpdateOnEvent) {
         when (onEvent) {
             is ProductInsertAndUpdateOnEvent.insertProduct -> {
-                viewModelScope.launch { insertProduct(onEvent.product) }
+                viewModelScope.launch {
+                    checkInternet(onEvent.product)
+                }
             }
 
             is ProductInsertAndUpdateOnEvent.updateProduct -> {

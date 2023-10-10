@@ -8,9 +8,11 @@ import com.example.farmerapp.domain.use_case.customer.GetAllCustomerListUseCase
 import com.example.farmerapp.domain.use_case.product.GetProductListByCompanyIdUseCase
 import com.example.farmerapp.domain.use_case.sale_fragment.CalculateProductPriceUseCase
 import com.example.farmerapp.domain.use_case.sales_product.AddSaleToApiUseCase
-import com.example.farmerapp.domain.use_case.sales_product.GetSaleBySaleIdToApiUseCase
+import com.example.farmerapp.domain.use_case.sales_product.GetProductListByFarmerIdToApiUseCase
 import com.example.farmerapp.domain.use_case.sales_product.InsertSalesProductUseCase
+import com.example.farmerapp.until.Constant
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SaleViewModel
 @Inject constructor(
-    private val getProductListWithCompanyId: GetProductListByCompanyIdUseCase,
+    private val getProductListByCompanyId: GetProductListByCompanyIdUseCase,
+    private val getProductListByFarmerIdToApiUseCase: GetProductListByFarmerIdToApiUseCase,
     private val calculateProductPriceUseCase: CalculateProductPriceUseCase,
     private val getAllCustomerList: GetAllCustomerListUseCase,
     private val insertSalesProductUseCase: InsertSalesProductUseCase,
@@ -43,7 +46,16 @@ class SaleViewModel
     }
 
     private suspend fun getProductList() {
-        getProductListWithCompanyId.getProductListWithCompanyId(1)
+        val companyId = Sesion.getInstance().company!!.id
+        val farmerApiId = Sesion.getInstance().farmer!!.farmerApiId
+        if (companyId == Constant.DEFAULT_COMPANY_ID)
+            getProductListByFarmerIdToApi(farmerApiId)
+        else
+            getProductListByCompanyId()
+    }
+
+    private suspend fun getProductListByCompanyId() {
+        getProductListByCompanyId.getProductListWithCompanyId(Constant.DEFAULT_COMPANY_ID)
             .collect {
                 when (it) {
                     is Resource.Loading -> {
@@ -104,8 +116,6 @@ class SaleViewModel
         }
     }
 
-
-
     private suspend fun insertSalesProduct() {
         val localDateTime = LocalDateTime.now()
         val salesProduct = with(salesProductHolder) {
@@ -140,6 +150,27 @@ class SaleViewModel
             }
         }
     }
+
+    private suspend fun getProductListByFarmerIdToApi(farmerId: String) {
+        getProductListByFarmerIdToApiUseCase.getProductListByFarmerIdToApiUseCase(farmerId)
+            .collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        _state.value = SaleFragmentState.Loading
+                    }
+
+                    is Resource.Success -> {
+                        salesProductHolder.productList = it.data ?: emptyList()
+                        _state.value = SaleFragmentState.ProdcutList(it.data!!)
+                    }
+
+                    is Resource.Error -> {
+                        _state.value = SaleFragmentState.Error(it.message!!)
+                    }
+                }
+            }
+    }
+
 
     private suspend fun addSaleToApi(salesProduct: SalesProduct) {
         addSaleToApiUseCase.addSale(salesProduct).collect {
@@ -181,6 +212,7 @@ class SaleViewModel
             }
     }
 
+
     fun onEvent(onEvent: SaleFragmentOnEvent) {
         when (onEvent) {
             is SaleFragmentOnEvent.CalculatePrice -> {
@@ -201,7 +233,13 @@ class SaleViewModel
             }
 
             is SaleFragmentOnEvent.Save -> {
-                viewModelScope.launch { insertSalesProduct() }
+                viewModelScope.launch {
+                    if (Sesion.getInstance().isInternet) {
+                        // addSaleToApi()
+                    } else {
+                        insertSalesProduct()
+                    }
+                }
             }
 
             is SaleFragmentOnEvent.isDept -> {

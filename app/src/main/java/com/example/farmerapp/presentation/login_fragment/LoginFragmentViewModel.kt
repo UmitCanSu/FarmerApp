@@ -2,6 +2,7 @@ package com.example.farmerapp.presentation.login_fragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.farmerapp.data.remote.dto.CompanyApiDto
 import com.example.farmerapp.data.remote.dto.LoginApiDto
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Login
@@ -9,7 +10,8 @@ import com.example.farmerapp.domain.use_case.IsInternetUseCase
 import com.example.farmerapp.domain.use_case.farmer.LoginToApiFarmerUseCase
 import com.example.farmerapp.domain.use_case.login_fragment.GetLocalLoginUseCase
 import com.example.farmerapp.until.Resource
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
+import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.extetensions.LoginExtensions.toLogin
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -36,11 +38,11 @@ class LoginFragmentViewModel
 
                 is Resource.Success -> {
                     val isInternet = it.data!!
+                    Sesion.getInstance().isInternet = isInternet
                     if (isInternet)
                         loginApiFarmer(loginApiDto)
                     else
                         loginLocalFarmer(loginApiDto.toLogin())
-
                 }
 
                 is Resource.Error -> {
@@ -80,7 +82,7 @@ class LoginFragmentViewModel
                 is Resource.Success -> {
                     setCompanyAndFarmerSingleton(it.data!!)
                     _state.value = LoginFragmentState.Success
-                    timerToState()
+                    //timerToState()
                 }
 
                 is Resource.Error -> {
@@ -91,10 +93,17 @@ class LoginFragmentViewModel
     }
 
 
-
     private fun setCompanyAndFarmerSingleton(farmer: Farmer) {
-        UserSingleton.getInstance().farmer = farmer
-        UserSingleton.getInstance().company = farmer.company
+        val companyApiDto = CompanyApiDto(
+            "64ebe9d5de261bd507f7a56d",
+            "Deneme",
+            "Artvin/Savsat/Armutlu mah.",
+            "05340000000"
+        )
+        Sesion.getInstance().apply {
+            this.farmer = farmer
+            this.company = companyApiDto.toCompany()
+        }
     }
 
     private suspend fun timerToState() {

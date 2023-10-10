@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.use_case.animal.GetAnimalListToApiUseCase
 import com.example.farmerapp.domain.use_case.animal.SelectedAnimalWithCompanyIdUseCase
 import com.example.farmerapp.until.Resource
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,7 +23,7 @@ class AnimalListViewModel
     val state: StateFlow<AnimalListState> = _state
 
     private suspend fun getAnimalListWithCompanyId() {
-        val companyId = UserSingleton.getInstance().company!!.id
+        val companyId = Sesion.getInstance().company!!.id
         getAnimalWithCompanyIdUseCase.selectedAnimalWithCompanyIdUseCase(companyId).collect {
             when (it) {
                 is Resource.Loading -> {

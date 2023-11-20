@@ -1,8 +1,6 @@
 package com.example.farmerapp.presentation.dialog
 
 
-import android.app.AlertDialog
-import android.app.Application
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -19,12 +17,15 @@ class CustomDialog
 @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : Dialog(context) {
+
+    private lateinit var handler: Handler
     private var binding: DialogCustemBinding =
         DialogCustemBinding.inflate(LayoutInflater.from(context))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        handler = Handler(Looper.getMainLooper())
     }
 
     fun successDialogShow(message: String, timer: Int, onConfirmClick: () -> Unit) {
@@ -34,6 +35,7 @@ class CustomDialog
         binding.successButton.setOnClickListener {
             onConfirmClick.invoke()
             dismiss()
+            handler.removeCallbacksAndMessages(null)
         }
         show()
         setTimer(timer, onConfirmClick)
@@ -41,7 +43,7 @@ class CustomDialog
 
     private fun setTimer(timer: Int, onConfirmClick: () -> Unit) {
         val timer: Long = (timer * 1000).toLong()
-        Handler(Looper.getMainLooper()).postDelayed({
+        handler.postDelayed({
             onConfirmClick()
             dismiss()
         }, timer)
@@ -81,6 +83,7 @@ class CustomDialog
         binding.successButton.setOnClickListener {
             onConfirmClick.invoke()
             dismiss()
+            handler.removeCallbacksAndMessages(null)
         }
         binding.noButton.setOnClickListener {
             // onCancelClick.invoke()

@@ -30,4 +30,10 @@ interface ProductDao {
 
     @Query("SELECT * FROM Product")
     suspend fun getAllProductList(): List<ProductRelations>
+
+    @Query("Select * from  Product where apiId=:apiId ")
+    suspend fun selectProductByApiId(apiId: String): ProductRelations
+    @Query("Select * from Product where apiId =''")
+    suspend fun selectFarmerEmptyApiIdProduct():List<ProductRelations>
+
 }

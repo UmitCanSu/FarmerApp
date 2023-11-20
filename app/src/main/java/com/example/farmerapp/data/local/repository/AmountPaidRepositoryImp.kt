@@ -26,7 +26,7 @@ class AmountPaidRepositoryImp
         return amountPaidDao.selectAmountPaidWithSalesProductId(salesProductId)
     }
 
-    override suspend fun getRemainingDept(salesProductId: Int): Float {
+    override suspend fun getRemainingDept(salesProductId: Int): Float? {
         return amountPaidDao.getRemainingDept(salesProductId)
     }
 }

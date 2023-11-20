@@ -2,8 +2,8 @@ package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.ProductDto
 import com.example.farmerapp.data.local.relations.ProductRelations
-import com.example.farmerapp.domain.repository.local.ProductRepository
 import com.example.farmerapp.domain.repository.dao.ProductDao
+import com.example.farmerapp.domain.repository.local.ProductRepository
 import javax.inject.Inject
 
 class ProductRepositoryImp
@@ -32,6 +32,14 @@ class ProductRepositoryImp
 
     override suspend fun getAllProductList(): List<ProductRelations> {
         return productDao.getAllProductList()
+    }
+
+    override suspend fun selectProductByApiId(apiId: String): ProductRelations {
+        return productDao.selectProductByApiId(apiId)
+    }
+
+    override suspend fun selectFarmerEmptyApiIdProduct():List<ProductRelations> {
+        return productDao.selectFarmerEmptyApiIdProduct()
     }
 
 }

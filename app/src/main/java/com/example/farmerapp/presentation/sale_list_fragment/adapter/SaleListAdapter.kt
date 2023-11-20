@@ -7,6 +7,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.farmerapp.databinding.AdapterSalesProductListBinding
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.presentation.sale_list_fragment.SaleListFragmentDirections
@@ -34,11 +35,14 @@ class SaleListAdapter
                 binding.salesProductCard.strokeColor = if (isPaid) Color.RED else Color.GREEN
                 binding.customerText.text = customerDataToString(customer)
                 binding.productText.text = productDataToString(product)
+                binding.price.text  = price.toString()
             }
             binding.salesProductCard.setOnClickListener {
                 val salesProductId = salesProductList[position].id
+                val saleApiId = salesProductList[position].apiId
                 val action = SaleListFragmentDirections.actionSaleListFragmentToSaleDetailFragment(
-                    salesProductId
+                    salesProductId,
+                    saleApiId
                 )
                 Navigation.findNavController(it).navigate(action)
             }
@@ -47,7 +51,7 @@ class SaleListAdapter
     }
 
     private fun customerDataToString(customer: Customer): String {
-        return customer.name + " " + customer.surName + " " + customer.phone
+        return customer.name + " " + customer.sourName + " "
     }
 
     private fun productDataToString(product: Product): String {

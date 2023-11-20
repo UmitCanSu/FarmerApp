@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.model
 
 import com.example.farmerapp.until.FarmerStatus
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import javax.inject.Inject
 
 data class Farmer
@@ -11,7 +11,8 @@ data class Farmer
     var name: String,
     var sourName: String,
     var years: Int,
-    var farmerStatus: FarmerStatus
+    var farmerStatus: FarmerStatus,
+    var farmerApiId: String,
 ) {
     constructor(
         company: Company?,
@@ -19,12 +20,13 @@ data class Farmer
         sourName: String,
         years: Int,
         farmerStatus: FarmerStatus
-    ) : this(0, company, name, sourName, years, farmerStatus)
+    ) : this(0, company, name, sourName, years, farmerStatus,"")
 
     constructor(
         name: String,
         sourName: String,
         years: Int,
         farmerStatus: FarmerStatus
-    ) : this(0, UserSingleton.getInstance().company, name, sourName, years, farmerStatus)
+    ) : this(0, Sesion.getInstance().company, name, sourName, years, farmerStatus,"")
+
 }

@@ -3,28 +3,69 @@ package com.example.farmerapp.presentation.customer_fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.Customer
-import com.example.farmerapp.domain.use_case.customer.AddCustomerToApiUseCase
-import com.example.farmerapp.domain.use_case.customer.InsertCustomerUseCase
-import com.example.farmerapp.domain.use_case.customer.SelectCustomerWithPhoneNumber
+import com.example.farmerapp.domain.model.Farmer
+import com.example.farmerapp.domain.use_case.customer.local.InsertCustomerToLocalUseCase
+import com.example.farmerapp.domain.use_case.customer.remote.UpsetCustomerListToApiUseCase
+import com.example.farmerapp.domain.use_case.farmer.GetFarmerByNickNameOrPhoneNumberToApiUseCase
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.extetensions.FarmerExtensions.toCustomer
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CustomerViewModel
 @Inject constructor(
-    private val insertCustomerUseCase: InsertCustomerUseCase,
-    private val selectCustomerWithPhoneNumber: SelectCustomerWithPhoneNumber,
-    private val addCustomerToApiUseCase: AddCustomerToApiUseCase,
+    private val insertCustomerUseCase: InsertCustomerToLocalUseCase,
+    private val upsetCustomerListToApiUseCase: UpsetCustomerListToApiUseCase,
+    private val getFarmerByNickNameOrPhoneNumberToApiUseCase: GetFarmerByNickNameOrPhoneNumberToApiUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<CustomerFragmentState>(CustomerFragmentState.Idle)
     val state: StateFlow<CustomerFragmentState> = _state
 
-    private suspend fun saveCustomer(customer: Customer) {
+    private suspend fun getCustomerPhoneOrNickName(phoneNumberOrNickName: String) {
+        getFarmerByNickNameOrPhoneNumberToApiUseCase.getFarmerByNickNameOrPhoneNumber(
+            phoneNumberOrNickName
+        ).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = CustomerFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    upsetCustomerListToApi(it.data!!, LatLng(0.0, 0.0))
+                }
+
+                is Resource.Error -> {
+                    _state.value = CustomerFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun upsetCustomerListToApi(farmer: Farmer, location: LatLng) {
+        upsetCustomerListToApiUseCase.upsetCustomerList(farmer, location).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = CustomerFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    val farmerApiDto = it.data!!
+                    insertCustomerToLocal(farmerApiDto.toCustomer())
+                }
+
+                is Resource.Error -> {
+                    _state.value = CustomerFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun insertCustomerToLocal(customer: Customer) {
         insertCustomerUseCase.insertCustomer(customer).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -32,74 +73,7 @@ class CustomerViewModel
                 }
 
                 is Resource.Success -> {
-                   // _state.value = CustomerFragmentState.SaveCustomer(it.data!!)
-                    addCustomer(customer)
-                }
-
-                is Resource.Error -> {
-                    _state.value = CustomerFragmentState.Error(it.message!!)
-                }
-            }
-        }
-    }
-
-    private suspend fun checkedSavedUser(customer: Customer) {
-        selectCustomerWithPhoneNumber.selectCustomerWithPhoneNumber(customer.phone).collect {
-            when (it) {
-                is Resource.Loading -> {
-                    _state.value = CustomerFragmentState.Loading
-                }
-
-                is Resource.Success -> {
-                    if (it.data != null) {
-                        _state.value = CustomerFragmentState.Error("Find User")
-                    } else {
-                        saveCustomer(customer)
-                    }
-                }
-
-                is Resource.Error -> {
-                    _state.value = CustomerFragmentState.Error(it.message!!)
-                }
-            }
-        }
-    }
-
-    private suspend fun findCustomerWithPhoneNumber(phoneNumber: String) {
-        selectCustomerWithPhoneNumber.selectCustomerWithPhoneNumber(phoneNumber).collect {
-            when (it) {
-                is Resource.Loading -> {
-                    _state.value = CustomerFragmentState.Loading
-                }
-
-                is Resource.Success -> {
-                    if (it.data != null) {
-                        _state.value = CustomerFragmentState.FindCustomer(it.data)
-                    } else {
-                        _state.value = CustomerFragmentState.Error("Can not find user")
-                    }
-                }
-
-                is Resource.Error -> {
-                    _state.value = CustomerFragmentState.Error(it.message!!)
-                }
-            }
-        }
-    }
-
-    private suspend fun addCustomer(customer: Customer){
-        addCustomerToApiUseCase.addCustomer(customer).collect{
-            when(it){
-                is Resource.Loading -> {
-                    _state.value = CustomerFragmentState.Loading
-                }
-
-                is Resource.Success -> {
-                    if (it.data != null) {
-                        _state.value = CustomerFragmentState.FindCustomer(it.data)
-                    } else {
-                        _state.value = CustomerFragmentState.Error("Can not find user")
-                    }
+                    _state.value = CustomerFragmentState.FindCustomer(customer)
                 }
 
                 is Resource.Error -> {
@@ -112,11 +86,15 @@ class CustomerViewModel
     fun onEvent(onEvent: CustomerFragmentOnEvent) {
         when (onEvent) {
             is CustomerFragmentOnEvent.SavedCustomer -> {
-                viewModelScope.launch { checkedSavedUser(onEvent.customer) }
+                //  viewModelScope.launch { checkedSavedUser(onEvent.customer) }
             }
 
-            is CustomerFragmentOnEvent.FindCustomerWithPhoneNumber -> {
-                viewModelScope.launch { findCustomerWithPhoneNumber(onEvent.phoneNumber) }
+            is CustomerFragmentOnEvent.FindCustomerByPhoneNumber -> {
+                // viewModelScope.launch { findCustomerWithPhoneNumber(onEvent.phoneNumber) }
+            }
+
+            is CustomerFragmentOnEvent.FindCustomerByFarmerId -> {
+                viewModelScope.launch { getCustomerPhoneOrNickName(onEvent.phoneOrCustomerNumber) }
             }
         }
 

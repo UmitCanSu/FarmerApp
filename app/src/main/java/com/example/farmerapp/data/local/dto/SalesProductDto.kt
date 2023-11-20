@@ -8,6 +8,7 @@ import javax.inject.Inject
 @Entity(tableName = "SalesProduct")
 data class SalesProductDto
 @Inject constructor(
+    val apiId:String,
     val companyId: Int,
     val productId: Int,
     val customerId: Int,

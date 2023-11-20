@@ -52,6 +52,11 @@ class LoginFragment : Fragment() {
             }
         }
         lifecycleScope.launch { observableState() }
+        automaticLoginFarmer()
+    }
+    private fun automaticLoginFarmer(){
+        val loginFarmer = LoginApiDto("s","s")
+        viewModel.onEvent(LoginFragmentOnEvent.OnLogin(loginFarmer))
     }
 
     private fun filLoginToView(): LoginApiDto? {

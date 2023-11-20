@@ -3,18 +3,22 @@ package com.example.farmerapp.presentation.add_amount_paid
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.AmountPaid
+import com.example.farmerapp.domain.model.SalesProduct
+import com.example.farmerapp.domain.use_case.IsInternetUseCase
 import com.example.farmerapp.domain.use_case.amaount_list.AddAmountPaidToApiUseCase
 import com.example.farmerapp.domain.use_case.amaount_list.InsertAmountPaidUseCase
 import com.example.farmerapp.domain.use_case.amaount_list.RemainingDeptUseCase
-import com.example.farmerapp.domain.use_case.customer.GetAllCustomerListUseCase
+import com.example.farmerapp.domain.use_case.customer.local.GetAllCustomerListUseCase
+import com.example.farmerapp.domain.use_case.customer.remote.GetCustomerByCompanyIdToApiUseCase
+import com.example.farmerapp.domain.use_case.sales_product.GetSaleBySaleIdToApiUseCase
 import com.example.farmerapp.domain.use_case.sales_product.SelectSalesProductWithIdUseCase
 import com.example.farmerapp.domain.use_case.sales_product.UpdateSalesProductUseCase
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.Sesion
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -28,6 +32,10 @@ class AddAmountPaidViewModel
     private val insertAmountPaidUseCase: InsertAmountPaidUseCase,
     private val getRemainingDeptUseCase: RemainingDeptUseCase,
     private val addAmountPaidToApiUseCase: AddAmountPaidToApiUseCase,
+    private val getCustomerByCompanyIdToApiUseCase: GetCustomerByCompanyIdToApiUseCase,
+    private val isInternetUseCase: IsInternetUseCase,
+    private val getSaleBySaleIdToApiUseCase: GetSaleBySaleIdToApiUseCase,
+    productUseCase: UpdateSalesProductUseCase
 ) : ViewModel() {
     private val _state =
         MutableStateFlow<AddAmountPaidFragmentState>(AddAmountPaidFragmentState.Idle)
@@ -35,11 +43,72 @@ class AddAmountPaidViewModel
     private val data = MutableStateFlow(AddAmountPaidData())
 
     init {
-        viewModelScope.launch { getAllCustomerList() }
+        viewModelScope.launch {
+            checkInternet()
+        }
+    }
+
+    private suspend fun checkInternet() {
+        isInternetUseCase.isInternet().collect {
+            when (it) {
+                is Resource.Loading -> {
+
+                }
+
+                is Resource.Success -> {
+                    val isInternet = it.data!!
+                    if (isInternet)
+                        getCustomerListToApi(Sesion.getInstance().company!!.apiId)
+                    else
+                        getAllCustomerList()
+
+                }
+
+                is Resource.Error -> {}
+            }
+        }
+    }
+
+    private suspend fun getSaleToApi(saleApiId: String) {
+        getSaleBySaleIdToApiUseCase.getSalesBySaleId(saleApiId).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = AddAmountPaidFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    data.value = data.value.copy(salesProduct = it.data)
+                    getRemainingTotal(it.data!!)
+                }
+
+                is Resource.Error -> {
+                    _state.value = AddAmountPaidFragmentState.Error(it.message!!)
+                }
+            }
+        }
     }
 
     private suspend fun getAllCustomerList() {
         getAllCustomerListUseCase.getAllCustomersList().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = AddAmountPaidFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                     data.value = data.value.copy(customerList = it.data!!)
+                     _state.value = AddAmountPaidFragmentState.CustomerList(it.data!!)
+                }
+
+                is Resource.Error -> {
+                    _state.value = AddAmountPaidFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun getCustomerListToApi(companyId: String) {
+        getCustomerByCompanyIdToApiUseCase.getCustomerByCompanyIdToApi(companyId).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = AddAmountPaidFragmentState.Loading
@@ -75,7 +144,7 @@ class AddAmountPaidViewModel
         }
     }
 
-    private suspend fun getSalesProduct(salesProductId: Int) {
+    private suspend fun getSalesProductToLocal(salesProductId: Int) {
         getSalesProductWithIdUseCase.selectSalesProductWithId(salesProductId).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -84,7 +153,7 @@ class AddAmountPaidViewModel
 
                 is Resource.Success -> {
                     data.value = data.value.copy(salesProduct = it.data)
-                    getRemainingDept(salesProductId)
+                    getRemainingDeptToLocal(salesProductId)
                 }
 
                 is Resource.Error -> {
@@ -92,6 +161,16 @@ class AddAmountPaidViewModel
                 }
             }
         }
+    }
+
+    private fun getRemainingTotal(salesProduct: SalesProduct) {
+        var price = 0f
+        for (amountPaint in salesProduct.amountPaint) {
+            price += amountPaint.price
+        }
+        val remainingTotal = salesProduct.price - price
+        data.value = data.value.copy(remainingDept = remainingTotal)
+        _state.value = AddAmountPaidFragmentState.RemainingDept(remainingTotal)
     }
 
     private suspend fun insertAmountPaid(amountPaid: AmountPaid) {
@@ -120,7 +199,7 @@ class AddAmountPaidViewModel
         }
     }
 
-    private suspend fun getRemainingDept(salesProductId: Int) {
+    private suspend fun getRemainingDeptToLocal(salesProductId: Int) {
         getRemainingDeptUseCase.calculateRemainingDept(salesProductId).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -128,7 +207,7 @@ class AddAmountPaidViewModel
                 }
 
                 is Resource.Success -> {
-                    var remainingDept:Float = it.data!!
+                    var remainingDept: Float? = it.data
                     if (remainingDept == null) {
                         remainingDept = data.value.salesProduct!!.price
                     }
@@ -143,15 +222,16 @@ class AddAmountPaidViewModel
         }
     }
 
-    private suspend fun addAmountPaidToApi(amountPaid: AmountPaid){
-        addAmountPaidToApiUseCase.addAmountPaid(amountPaid).collect{
+    private suspend fun addAmountPaidToApi(amountPaid: AmountPaid) {
+        val isPaid = !checkEnterPriceEqualRemainingDept();
+        addAmountPaidToApiUseCase.addAmountPaid(amountPaid, isPaid).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = AddAmountPaidFragmentState.Loading
                 }
 
                 is Resource.Success -> {
-                    it.data
+                    _state.value = AddAmountPaidFragmentState.IsSavedAmountPaid(true)
                 }
 
                 is Resource.Error -> {
@@ -174,26 +254,38 @@ class AddAmountPaidViewModel
             is AddAmountPaidFragmentOnEvent.SaveAmountPaid -> {
                 data.value = data.value.copy(enterPrice = onEvent.price)
                 val amountPaid = AmountPaid(
+                    "",
                     data.value.salesProduct,
                     data.value.customerList[onEvent.selectedCustomerIndex],
                     onEvent.price,
                     LocalDateTime.now()!!,
-                    LatLng(0.0,0.0)
+                    LatLng(0.0, 0.0)
                 )
                 if (checkEnterPriceBigRemainingDept()) {
-                    viewModelScope.launch { insertAmountPaid(amountPaid) }
+                    viewModelScope.launch {
+                        if (Sesion.getInstance().isInternet)
+                            addAmountPaidToApi(amountPaid)
+                        else
+                            insertAmountPaid(amountPaid)
+                    }
                 } else {
                     _state.value = AddAmountPaidFragmentState.Error("")
                 }
-                viewModelScope.launch { addAmountPaidToApi(amountPaid) }
+
             }
 
             is AddAmountPaidFragmentOnEvent.GetSalesProduct -> {
-                viewModelScope.launch { getSalesProduct(onEvent.salesProductId) }
+                viewModelScope.launch {
+                    if (Sesion.getInstance().isInternet)
+                         getSaleToApi(onEvent.saleApiId)
+                    else
+                        getSalesProductToLocal(onEvent.salesProductId)
+                }
+
             }
 
             is AddAmountPaidFragmentOnEvent.CalculateAmountPaid -> {
-                //   viewModelScope.launch { getRemainingDept(onEvent.salesProductId) }
+                //   viewModelScope.launch { getRemainingDeptToLocal(onEvent.salesProductId) }
             }
         }
 

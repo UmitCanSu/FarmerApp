@@ -58,7 +58,7 @@ class SaleFragment : Fragment() {
                 viewModel.onEvent(SaleFragmentOnEvent.Save)
             }
         }
-       customDialog = CustomDialog(requireContext())
+        customDialog = CustomDialog(requireContext())
     }
 
     private fun listener(): OnItemSelectedListener {
@@ -108,7 +108,7 @@ class SaleFragment : Fragment() {
                         val adapter = ArrayAdapter(
                             requireContext(),
                             androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                            state.customerList.map { it.name + " " + it.surName })
+                            state.customerList.map { it.name + " " })
                         binding.choseCustomer.adapter = adapter
                     }
                 }
@@ -126,11 +126,11 @@ class SaleFragment : Fragment() {
                             Constant.SUCCESS_TIMER
                         ) {
                             val action =
-                                SaleFragmentDirections.actionSaleFragmentToAddAmountPaidFragment(
-                                    state.salesId
+                                SaleFragmentDirections.actionSaleFragmentToSaleDetailFragment(
+                                    state.salesId,
+                                    state.saleApiId
                                 )
                             Navigation.findNavController(requireView()).navigate(action)
-
                         }
                     } else {
                         customDialog.errorDialogShow(

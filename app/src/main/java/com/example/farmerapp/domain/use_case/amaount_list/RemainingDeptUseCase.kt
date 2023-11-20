@@ -12,9 +12,9 @@ class RemainingDeptUseCase
 @Inject constructor(
     private val amountPaidRepository: AmountPaidRepository
 ) {
-    fun calculateRemainingDept(salesId: Int) = flow<Resource<Float>> {
+    fun calculateRemainingDept(salesId: Int) = flow<Resource<Float?>> {
         emit(Resource.Loading())
-        emit(Resource.Success(amountPaidRepository.getRemainingDept(salesId)))
-
+        var remaningDept = amountPaidRepository.getRemainingDept(salesId)
+        emit(Resource.Success(remaningDept))
     }.catch { emit(Resource.Error(it.message!!)) }.flowOn(Dispatchers.IO)
 }

@@ -1,6 +1,6 @@
 package com.example.farmerapp.domain.model
 
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import com.google.android.gms.maps.model.LatLng
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -8,7 +8,8 @@ import javax.inject.Inject
 
 data class SalesProduct
 @Inject constructor(
-    val id: Int,
+    var id: Int,
+    var apiId:String,
     val company: Company,
     val farmer: Farmer,
     val product: Product,
@@ -20,7 +21,7 @@ data class SalesProduct
     val locationDescription: String,
     val salesDate: LocalDateTime,
     var isPaid: Boolean,
-    val amountPaint: List<AmountPaid>
+    var amountPaint: List<AmountPaid>
 ) {
     constructor(
         product: Product,
@@ -34,8 +35,8 @@ data class SalesProduct
         isPaid: Boolean,
         amountPaint: List<AmountPaid>
     ) : this(
-        UserSingleton.getInstance().company!!,
-        UserSingleton.getInstance().farmer!!,
+        Sesion.getInstance().company!!,
+        Sesion.getInstance().farmer!!,
         product,
         customer,
         price,
@@ -62,6 +63,7 @@ data class SalesProduct
         amountPaint: List<AmountPaid>
     ) : this(
         0,
+        "",
         company,
         farmer,
         product,

@@ -2,26 +2,22 @@ package com.example.farmerapp.presentation.sing_in_fragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.farmerapp.data.remote.dto.CompanyApiDto
-import com.example.farmerapp.data.remote.dto.FarmerApiDto
 import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Login
 import com.example.farmerapp.domain.use_case.IsInternetUseCase
+import com.example.farmerapp.domain.use_case.company.AddCompanyToApi
 import com.example.farmerapp.domain.use_case.company.InsertCompanyToLocalUseCase
-import com.example.farmerapp.domain.use_case.company.SelectCompanyByCompanyIdUseCase
+import com.example.farmerapp.domain.use_case.company.SelectCompanyByCompanyApiIdUseCase
 import com.example.farmerapp.domain.use_case.farmer.AddFarmerToApiUseCase
 import com.example.farmerapp.domain.use_case.farmer.InsertFarmerToLocalUseCase
 import com.example.farmerapp.domain.use_case.login_fragment.AddLoginToLocalUseCase
-import com.example.farmerapp.until.FarmerStatus
 import com.example.farmerapp.until.Resource
-import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
-import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
+import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmerApiDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,8 +27,9 @@ class SingInViewModel
     private val addFarmerToLocalUseCase: InsertFarmerToLocalUseCase,
     private val addLoginToLocalUseCase: AddLoginToLocalUseCase,
     private val isInternetUseCase: IsInternetUseCase,
-    private val insertCompanyUseCase: InsertCompanyToLocalUseCase,
-    private val checkCompanyByCompanyId: SelectCompanyByCompanyIdUseCase
+    private val insertCompanyToLocalUseCase: InsertCompanyToLocalUseCase,
+    private val addCompanyToApiUseCase: AddCompanyToApi,
+    private val checkCompanyByCompanyId: SelectCompanyByCompanyApiIdUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<SingInFragmentState>(SingInFragmentState.Idle)
     val state: StateFlow<SingInFragmentState> = _state
@@ -59,20 +56,19 @@ class SingInViewModel
         }
     }
 
-    private suspend fun addDefaultCompanyToLocalDatabase(
-        defaultCompany: Company,
+    private suspend fun addCompanyToApi(
+        company: Company,
         farmer: Farmer,
         login: Login
     ) {
-        insertCompanyUseCase.insertCompany(defaultCompany).collect {
+        addCompanyToApiUseCase.addCompanyToApi(company).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = SingInFragmentState.Loading
                 }
 
                 is Resource.Success -> {
-                    farmer.company = defaultCompany
-                    addFarmerToLocal(farmer, login)
+                    addCompanyToLocalDatabase(it.data!!, farmer, login)
                 }
 
                 is Resource.Error -> {
@@ -82,25 +78,20 @@ class SingInViewModel
         }
     }
 
-    private suspend fun checkSavedDefaultCompany(
-        defaultCompany: Company,
+    private suspend fun addCompanyToLocalDatabase(
+        company: Company,
         farmer: Farmer,
         login: Login
     ) {
-        val companyId = 1
-        farmer.company = defaultCompany
-        checkCompanyByCompanyId.selectCompanyByCompanyId(companyId).collect {
+        insertCompanyToLocalUseCase.insertCompany(company).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = SingInFragmentState.Loading
                 }
 
                 is Resource.Success -> {
-                    if (it.data == null)
-                        addDefaultCompanyToLocalDatabase(defaultCompany,farmer,login)
-                    else
-                        addFarmerToLocal(farmer, login)
-
+                    farmer.company = company
+                    addFarmerToApi(farmer, login)
                 }
 
                 is Resource.Error -> {
@@ -111,38 +102,15 @@ class SingInViewModel
     }
 
     private suspend fun addFarmerToApi(farmer: Farmer, login: Login) {
-
-        val companyApiDto = CompanyApiDto(
-            "64ebe9d5de261bd507f7a56d",
-            "Deneme",
-            "Artvin/Savsat/Armutlu mah.",
-            "05340000000"
-        )
-        val farmerApiDto = FarmerApiDto(
-            "",
-            companyApiDto,
-            farmer.name,
-            farmer.sourName,
-            "",
-            LocalDateTime.now().toString(),
-            LocalDateTime.now().toString(),
-            "",
-            FarmerStatus.Farmer.name,
-            login.passwordHash
-        )
-
-        addFarmerToApiUseCase.addFarmer(farmerApiDto).collect {
+        addFarmerToApiUseCase.addFarmer(farmer.toFarmerApiDto()).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = SingInFragmentState.Loading
                 }
 
                 is Resource.Success -> {
-                    val farmer = it.data!!.toFarmer()
-                    val company = companyApiDto.toCompany()
-                    company.id = 1
-                    farmer.company = company
-                    checkSavedDefaultCompany(company, farmer, login)
+                    farmer.farmerApiId = it.data!!.id
+                    addFarmerToLocal(farmer, login)
                 }
 
                 is Resource.Error -> {
@@ -192,7 +160,7 @@ class SingInViewModel
         when (onEvent) {
             is SingInFragmentOnEvent.Save -> {
                 viewModelScope.launch {
-                    addFarmerToApi(onEvent.farmer, onEvent.login)
+                    addCompanyToApi(onEvent.company, onEvent.farmer, onEvent.login)
                 }
             }
         }

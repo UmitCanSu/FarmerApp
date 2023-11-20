@@ -2,6 +2,7 @@ package com.example.farmerapp.presentation.add_amount_paid
 
 import com.example.farmerapp.domain.model.AmountPaid
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.SalesProduct
 import java.time.LocalDateTime
 

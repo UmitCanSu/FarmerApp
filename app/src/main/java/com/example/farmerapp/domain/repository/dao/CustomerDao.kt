@@ -6,7 +6,6 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.farmerapp.data.local.dto.CustomerDto
-import com.example.farmerapp.domain.model.Customer
 
 @Dao
 interface CustomerDao {
@@ -19,12 +18,13 @@ interface CustomerDao {
     @Query("Select * from Customer where id=:customerId")
     suspend fun selectCustomerWithCustomerID(customerId: Int): CustomerDto
 
-    @Query("SELECT * FROM Customer WHERE phone like  :phoneNumber ")
-    @Transaction
-    suspend fun selectCustomerWithPhoneNumber(phoneNumber: String): CustomerDto
+
     @Query("SELECT * FROM Customer")
     @Transaction
-    suspend fun getAllCustomer():List<CustomerDto>
+    suspend fun getAllCustomer(): List<CustomerDto>
+
+    @Query("SELECT * FROM Customer where customerApiId =:apiId")
+    suspend fun getCustomerByApiId(apiId: String): CustomerDto
 
 
 }

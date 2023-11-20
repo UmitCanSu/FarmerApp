@@ -19,7 +19,6 @@ import com.example.farmerapp.until.extetensions.Extensions
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AddAmountPaidFragment : Fragment() {
@@ -27,15 +26,17 @@ class AddAmountPaidFragment : Fragment() {
     private lateinit var binding: FragmentAddAmountPaidBinding
     private val editTextLayout = ArrayList<TextInputLayout>()
     private val args: AddAmountPaidFragmentArgs by navArgs()
-
-    @Inject
-    lateinit var customDialog: CustomDialog
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentAddAmountPaidBinding.inflate(layoutInflater)
-        viewModel.onEvent(AddAmountPaidFragmentOnEvent.GetSalesProduct(args.salesProductID))
+        viewModel.onEvent(
+            AddAmountPaidFragmentOnEvent.GetSalesProduct(
+                args.salesProductID,
+                args.salesApiId
+            )
+        );
         return binding.root
     }
 
@@ -43,6 +44,7 @@ class AddAmountPaidFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch { observableState() }
         fillEditTextLayout()
+        binding.remainingDeptText.text = args.remainingDept.toString()
         binding.pay.setOnClickListener {
             if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
                 val selectedCustomerIndex = binding.customerSpinner.selectedItemPosition
@@ -76,13 +78,13 @@ class AddAmountPaidFragment : Fragment() {
                     val adapter = ArrayAdapter(
                         requireContext(),
                         support_simple_spinner_dropdown_item,
-                        state.customerList.map { it.name + " " + it.surName })
+                        state.customerList.map { it.name + " " + it.sourName })
                     adapter.setDropDownViewResource(support_simple_spinner_dropdown_item)
                     binding.customerSpinner.adapter = adapter
                 }
 
                 is AddAmountPaidFragmentState.IsSavedAmountPaid -> {
-
+                    val customDialog = CustomDialog(requireContext())
                     if (state.isSave) {
                         customDialog.successDialogShow(
                             getString(R.string.save_data),
@@ -102,7 +104,7 @@ class AddAmountPaidFragment : Fragment() {
                 }
 
                 is AddAmountPaidFragmentState.Error -> {
-                    customDialog.errorDialogShow(
+                    CustomDialog(requireContext()).errorDialogShow(
                         state.errorMessage,
                         onConfirmClick = {
 

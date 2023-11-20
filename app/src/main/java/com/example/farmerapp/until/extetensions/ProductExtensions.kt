@@ -5,7 +5,7 @@ import com.example.farmerapp.data.local.relations.ProductRelations
 import com.example.farmerapp.data.remote.dto.ProductApiDto
 import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Product
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import java.time.LocalDateTime
 
@@ -15,7 +15,8 @@ object ProductExtensions {
             name,
             unitType,
             price,
-            company.id
+            company.id,
+            apiId,
         )
     }
 
@@ -25,7 +26,8 @@ object ProductExtensions {
             name,
             unitType,
             price,
-            company
+            company,
+            apiId
         )
     }
 
@@ -35,7 +37,8 @@ object ProductExtensions {
             productDto.name,
             productDto.unitType,
             productDto.price,
-            company.toCompany()!!
+            company.toCompany()!!,
+            productDto.apiId
         )
         product.id = product.id
         return product
@@ -43,16 +46,25 @@ object ProductExtensions {
 
     fun Product.toProductApiDto(): ProductApiDto {
         return ProductApiDto(
-            id.toString(), name, "", price,unitType, LocalDateTime.now().toString(), company.id.toString()
+            apiId,
+            name,
+            "",
+            price,
+            unitType,
+            LocalDateTime.now().toString(),
+            company.apiId,
+            Sesion.getInstance().farmer!!.farmerApiId
         )
     }
 
     fun ProductApiDto.toProduct(): Product {
         return Product(
+            0,
             name,
             unitType,
             price,
-            UserSingleton.getInstance().company!!
+            Sesion.getInstance().company!!,
+            id!!
         )
     }
 

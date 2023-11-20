@@ -3,6 +3,7 @@ package com.example.farmerapp.domain.use_case.company
 import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.repository.remote.CompanyApiRepository
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompanyApiDto
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,6 @@ class AddCompanyToApi
         val companyApiDto = company.toCompanyApiDto()
         val companyApiDtoToJson = Gson().toJson(companyApiDto)
         val companyDto = companyApiRepository.addCompany(companyApiDtoToJson)
-        emit(Resource.Success(companyDto!=null))
+        emit(Resource.Success(companyDto.toCompany()))
     }.catch { emit(Resource.Error(it.message!!)) }.flowOn(Dispatchers.IO)
 }

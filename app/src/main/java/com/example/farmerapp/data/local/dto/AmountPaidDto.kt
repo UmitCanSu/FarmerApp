@@ -10,6 +10,7 @@ import javax.inject.Inject
 @Entity(tableName = "AmountPaid")
 data class AmountPaidDto
 @Inject constructor(
+    val apiId:String,
     val salesProductId: Int,
     val customerId: Int,
     val price: Float,

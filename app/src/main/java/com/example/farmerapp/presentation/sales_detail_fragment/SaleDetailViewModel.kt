@@ -6,6 +6,7 @@ import com.example.farmerapp.domain.use_case.amaount_list.SelectAmountPaidWithSa
 import com.example.farmerapp.domain.use_case.sales_product.GetSaleBySaleIdToApiUseCase
 import com.example.farmerapp.domain.use_case.sales_product.SelectSalesProductWithIdUseCase
 import com.example.farmerapp.until.Resource
+import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -15,14 +16,14 @@ import javax.inject.Inject
 @HiltViewModel
 class SaleDetailViewModel
 @Inject constructor(
-    private val selectSalesProductWithIdUseCase: SelectSalesProductWithIdUseCase,
-    private val selectAmountPaidWithSalesProductIdUseCase: SelectAmountPaidWithSalesProductIdUseCase,
+    private val selectSalesProductByIdToLocalUseCase: SelectSalesProductWithIdUseCase,
+    private val selectAmountPaidWithSalesProductIdToLocalUseCase: SelectAmountPaidWithSalesProductIdUseCase,
     private val getSaleBySaleIdToApiUseCase: GetSaleBySaleIdToApiUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<SaleDetailState>(SaleDetailState.Idle)
     val state: SharedFlow<SaleDetailState> = _state
     private suspend fun getSalesProductById(salesProductId: Int) {
-        selectSalesProductWithIdUseCase.selectSalesProductWithId(salesProductId).collect {
+        selectSalesProductByIdToLocalUseCase.selectSalesProductWithId(salesProductId).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = SaleDetailState.Loading
@@ -41,7 +42,7 @@ class SaleDetailViewModel
     }
 
     private suspend fun getAmountPaidListWithSalesProductID(salesProductId: Int) {
-        selectAmountPaidWithSalesProductIdUseCase.selectAmountPaidWithSalesProductId(salesProductId)
+        selectAmountPaidWithSalesProductIdToLocalUseCase.selectAmountPaidWithSalesProductId(salesProductId)
             .collect {
                 when (it) {
                     is Resource.Loading -> {
@@ -82,8 +83,10 @@ class SaleDetailViewModel
         when (onEvent) {
             is SaleDetailOnEvent.SelectProduct -> {
                 viewModelScope.launch {
-                    //getSalesProductById(onEvent.salesProductID)
-                    getSaleToAPi("64f22b83704607f6c428aa0b")
+                    if(Sesion.getInstance().isInternet)
+                        getSaleToAPi(onEvent.salesProductApiId)
+                    else
+                        getSalesProductById(onEvent.salesProductID)
                 }
             }
         }

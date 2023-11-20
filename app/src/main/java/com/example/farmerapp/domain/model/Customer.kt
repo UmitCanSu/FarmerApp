@@ -1,24 +1,23 @@
 package com.example.farmerapp.domain.model
 
+import com.example.farmerapp.until.FarmerStatus
 import javax.inject.Inject
 
-/*
-Karar verilmesi gereken konular;
-    Kullanıcılar şirkete ait mi olamlı yani bir kullanıcı iki farklı şirkete çalıştığı zaman oraya nasıl giriş yapılmalı
-    bir kullanıcı iki çifçi için tekrar kayıt olmak zorunda mı
- */
 data class Customer
 @Inject constructor(
-    val id: Int = 0,
-    val name: String,
-    val surName: String,
-    val phone: String,
-    val address: String,
+    var id: Int = 0,
+    var company: Company,
+    var name: String,
+    var sourName: String,
+    var years: Int,
+    var farmerStatus: FarmerStatus,
+    var apiId: String,
 ) {
     constructor(
+        company: Company,
         name: String,
-        surName: String,
-        phone: String,
-        address: String,
-    ) : this(0, name, surName, phone, address)
+        sourName: String,
+        years: Int,
+        farmerStatus: FarmerStatus,
+    ) : this(0, company,name, sourName,years ,farmerStatus , "")
 }

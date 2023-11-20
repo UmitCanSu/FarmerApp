@@ -10,11 +10,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.farmerapp.R
 import com.example.farmerapp.databinding.FragmentCustomerBinding
-import com.example.farmerapp.domain.model.Customer
 import com.example.farmerapp.presentation.dialog.CustomDialog
 import com.example.farmerapp.until.Constant
 import com.example.farmerapp.until.extetensions.Extensions
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,36 +41,48 @@ class CustomerFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch { observableState() }
         binding.findCustomer.setOnClickListener {
-            val phoneNumber = binding.phoneText.text.toString()
-            viewModel.onEvent(CustomerFragmentOnEvent.FindCustomerWithPhoneNumber(phoneNumber = phoneNumber))
-        }
-        fillEditTextList()
-        binding.saveCustomer.setOnClickListener {
             if (Extensions.checkEditTextNullAndSetErrorStatus(editTextList)) {
-                val customer = Customer(
-                    binding.nameText.text.toString(),
-                    binding.surnameText.text.toString(),
-                    binding.phoneText.text.toString(),
-                    binding.addressText.text.toString(),
-                )
-                viewModel.onEvent(CustomerFragmentOnEvent.SavedCustomer(customer))
+                val farmerId = binding.customerNickNameLayout.editText!!.text.toString()
+                viewModel.onEvent(CustomerFragmentOnEvent.FindCustomerByFarmerId(farmerId))
             }
         }
-
+        /*
+            binding.findCustomer.setOnClickListener {
+                val phoneNumber = binding.phoneText.text.toString()
+                viewModel.onEvent(CustomerFragmentOnEvent.FindCustomerByPhoneNumber(phoneNumber = phoneNumber))
+            }
+            fillEditTextList()
+            binding.saveCustomer.setOnClickListener {
+                if (Extensions.checkEditTextNullAndSetErrorStatus(editTextList)) {
+                    val customer = Customer(
+                        binding.nameText.text.toString(),
+                        binding.surnameText.text.toString(),
+                        binding.phoneText.text.toString(),
+                        binding.addressText.text.toString(),
+                    )
+                    viewModel.onEvent(CustomerFragmentOnEvent.SavedCustomer(customer))
+                }
+            }
+    */
     }
+    /*
+        private fun fillEditTextList() {
+            editTextList.add(binding.nameTextLayout)
+            editTextList.add(binding.surnameTextLayout)
+            editTextList.add(binding.addressTextLayout)
+            editTextList.add(binding.phoneTextLayout)
+        }
+
+        private fun setCustomerVoView(customer: Customer) {
+            binding.nameText.setText(customer.name)
+            binding.surnameText.setText(customer.surName)
+            binding.addressText.setText(customer.address)
+            binding.phoneText.setText(customer.phone)
+        }
+    */
 
     private fun fillEditTextList() {
-        editTextList.add(binding.nameTextLayout)
-        editTextList.add(binding.surnameTextLayout)
-        editTextList.add(binding.addressTextLayout)
-        editTextList.add(binding.phoneTextLayout)
-    }
-
-    private fun setCustomerVoView(customer: Customer) {
-        binding.nameText.setText(customer.name)
-        binding.surnameText.setText(customer.surName)
-        binding.addressText.setText(customer.address)
-        binding.phoneText.setText(customer.phone)
+        editTextList.add(binding.customerNickNameLayout)
     }
 
     private suspend fun observableState() {
@@ -96,8 +108,7 @@ class CustomerFragment : Fragment() {
                 }
 
                 is CustomerFragmentState.FindCustomer -> {
-                    setCustomerVoView(it.customer)
-
+                    binding.customerText.text = Gson().toJson(it.customer)
                 }
 
                 is CustomerFragmentState.SaveCustomer -> {

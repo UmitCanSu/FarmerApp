@@ -26,7 +26,7 @@ interface AmountPaidDao {
     suspend fun selectAmountPaidWithSalesProductId(salesProductId: Int): List<AmountPaidRelations>
 
     @Query("select (Select price from SalesProduct where id = :salesProductId) -(Select sum(price) from AmountPaid where salesProductId = :salesProductId) as enterPrice")
-    suspend fun getRemainingDept(salesProductId: Int): Float
+    suspend fun getRemainingDept(salesProductId: Int): Float?
 
 
 }

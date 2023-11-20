@@ -14,8 +14,8 @@ interface CompanyDao {
     @Update
     fun updateCompany(company: CompanyDto): Int
 
-    @Query("Select * from Company where id=:companyId")
-    fun selectCompanyByCompanyId(companyId: Int): CompanyDto?
+    @Query("Select * from Company where apiId=:companyApiId")
+    fun selectCompanyByCompanyApiId(companyApiId: String): CompanyDto?
 
     @Query("Select * from Company where phone like '%' || :phoneNumber and name like '%'|| :name")
     fun selectCompanyByPhoneNumberAndName(phoneNumber: String, name: String): CompanyDto?

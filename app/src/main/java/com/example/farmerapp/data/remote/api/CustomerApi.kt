@@ -15,8 +15,15 @@ interface CustomerApi {
     suspend fun getAllCustomer(): List<CustomerApiDto>
 
     @POST("Customer/GetCustomerWithCustomerNoOrPhoneNumber")
-    suspend fun getCustomerWithCustomerNoOrPhoneNumber(phoneOrCustomerId: String): CustomerApiDto
+    suspend fun getCustomerWithCustomerNoOrPhoneNumber(@Query("phoneOrCustomerId") phoneOrCustomerId: String): CustomerApiDto
 
     @POST("CustomerListControllers/UpsetCustomer")
-    suspend fun upsetCustomer(customerList: String): CustomerListApiDto
+    suspend fun upsetCustomer(
+        @Query("updateFarmerJson") customerJson: String,
+        @Query("savedJson") savedJson: String,
+        @Query("companyId") companyId: String
+    ): CustomerListApiDto
+
+    @POST("CustomerListControllers/GetCustomerList")
+    suspend fun getCustomerList(@Query("companyId") companyId: String): CustomerListApiDto
 }

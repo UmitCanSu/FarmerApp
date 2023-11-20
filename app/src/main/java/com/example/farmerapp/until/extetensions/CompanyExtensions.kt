@@ -10,7 +10,9 @@ object CompanyExtensions {
             id,
             name,
             address,
-            phone
+            phone,
+            apiId
+
         )
     }
 
@@ -18,17 +20,19 @@ object CompanyExtensions {
         return CompanyDto(
             name,
             address,
-            phone
+            phone,
+            apiId
         )
     }
 
     fun CompanyApiDto.toCompany(): Company {
-        return Company(name, address, phoneNumber)
+        return Company(name, address, phoneNumber,id)
     }
 
     fun Company.toCompanyApiDto(): CompanyApiDto {
         return CompanyApiDto(
-            id.toString(), name, address, phone
+            apiId, name, address, phone
         )
     }
+
 }

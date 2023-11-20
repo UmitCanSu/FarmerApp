@@ -1,6 +1,7 @@
 package com.example.farmerapp.presentation.sale_fragment
 
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 import com.google.android.gms.maps.model.LatLng
 

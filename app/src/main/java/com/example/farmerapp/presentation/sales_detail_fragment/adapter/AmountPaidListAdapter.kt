@@ -28,7 +28,7 @@ class AmountPaidListAdapter
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         with(amountPaidList[position]) {
-            binding.customerText.text = customer.name + " " + customer.surName
+            binding.customerText.text = customer.name + " " + customer.sourName
             binding.priceText.text = "${binding.root.context.getString(R.string.price)}:  $price"
             binding.dateText.text = date.format(DateTimeFormatter.ISO_LOCAL_DATE)
         }

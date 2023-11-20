@@ -12,6 +12,7 @@ interface ProductRepository {
     suspend fun selectProductWithId(productId: Int):ProductRelations
     suspend fun selectFarmersWithCompanyId(companyId: Int): List<ProductRelations>
     suspend fun getAllProductList(): List<ProductRelations>
-
+    suspend fun selectProductByApiId(apiId: String): ProductRelations
+    suspend fun selectFarmerEmptyApiIdProduct():List<ProductRelations>
 
 }

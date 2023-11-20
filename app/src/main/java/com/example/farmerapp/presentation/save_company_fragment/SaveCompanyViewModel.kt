@@ -4,13 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.use_case.company.AddCompanyToApi
 import com.example.farmerapp.domain.use_case.company.GetCompanyToApi
 import com.example.farmerapp.domain.use_case.company.InsertCompanyToLocalUseCase
-import com.example.farmerapp.domain.use_case.company.SelectCompanyByCompanyIdUseCase
-import com.example.farmerapp.domain.use_case.default_data.DefaultSaveProductUseCase
-import com.example.farmerapp.until.FarmerStatus
+import com.example.farmerapp.domain.use_case.company.SelectCompanyByCompanyApiIdUseCase
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,8 +21,7 @@ import javax.inject.Inject
 class SaveCompanyViewModel
 @Inject constructor(
     private val insertCopanyUseCase: InsertCompanyToLocalUseCase,
-    private val saveDefaultProductUseCase: DefaultSaveProductUseCase,
-    private val selectCompanyWithCompanyIdUseCase: SelectCompanyByCompanyIdUseCase,
+    private val selectCompanyWithCompanyIdUseCase: SelectCompanyByCompanyApiIdUseCase,
     private val addCompanyToApi: AddCompanyToApi,
     private val getCompanyToApi: GetCompanyToApi,
 ) : ViewModel() {
@@ -43,7 +39,7 @@ class SaveCompanyViewModel
                     is Resource.Success -> {
                         company.id = 1
                         Sesion.getInstance().company = company
-                        saveDefaultProduct(company)
+
                         addCompanyApi(company)
 
                     }
@@ -74,23 +70,6 @@ class SaveCompanyViewModel
         }
     }
 
-    private suspend fun saveDefaultProduct(company: Company) {
-        saveDefaultProductUseCase.saveDefaultProduct(company).collect {
-            when (it) {
-                is Resource.Loading -> {
-                    _state.value = SaveCompanyState.Loading
-                }
-
-                is Resource.Success -> {
-                    _state.value = SaveCompanyState.SavedCompany
-                }
-
-                is Resource.Error -> {
-                    _state.value = SaveCompanyState.Error(it.message!!)
-                }
-            }
-        }
-    }
     private suspend fun getCompanyToApi(companyId:String){
         getCompanyToApi.getCompanyToApi(companyId).collect{
             when (it) {
@@ -110,42 +89,13 @@ class SaveCompanyViewModel
         }
     }
 
-    private suspend fun checkSavedCompany(companyId: Int) {
-        selectCompanyWithCompanyIdUseCase.selectCompanyByCompanyId(companyId)
-            .collect {
-                when (it) {
-                    is Resource.Loading -> {
-                        _state.value = SaveCompanyState.Loading
-                    }
 
-                    is Resource.Success -> {
-                        if (it.data != null) {
-                            Sesion.getInstance().company = it.data
-                            val farmer = Farmer(it.data, "Farmer ", "- 1", 18, FarmerStatus.Farmer)
-                            farmer.id = 1
-                            Sesion.getInstance().farmer = farmer
-                            _state.value = SaveCompanyState.SavedCompany
-                        } else {
-                            val company =
-                                Company("Deneme", "Artvin/Savsat/Armutlu mah.", "05340000000")
-                            company.id = 1
-                            insertCompany(company)
-                            getCompanyToApi("64ebe9d5de261bd507f7a56d")
-                        }
-                    }
-
-                    is Resource.Error -> {
-                        _state.value = SaveCompanyState.Error(it.message!!)
-                    }
-                }
-            }
-    }
 
     fun onEvent(onEvent: SaveCompanyOnEvent) {
         when (onEvent) {
             is SaveCompanyOnEvent.SaveCompany -> {
                 viewModelScope.launch {
-                    checkSavedCompany(1)
+
                 }
             }
         }

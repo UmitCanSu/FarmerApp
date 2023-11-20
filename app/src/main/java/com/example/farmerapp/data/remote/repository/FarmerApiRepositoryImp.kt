@@ -17,8 +17,9 @@ class FarmerApiRepositoryImp
         return farmerApi.login(farmerLoginJson)
     }
 
-    override suspend fun getFarmerByPhoneNumber(phoneNumber: String): FarmerApiDto {
-        return farmerApi.getFarmerByPhoneNumber(phoneNumber)
+    override suspend fun getFarmerByNickNameOrPhoneNumber(phoneNumberOrNickName: String): FarmerApiDto {
+        return farmerApi.getFarmerByNickNameOrPhoneNumber(phoneNumberOrNickName)
     }
+
 
 }

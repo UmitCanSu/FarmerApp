@@ -20,4 +20,6 @@ interface SaleProductRepository {
         startDate: LocalDate,
         endDate: LocalDate
     ): List<SaleProductWitOtherClass>
+    suspend fun selectSaleProductByApiId(salesProductApiId: String): SaleProductWitOtherClass
+    suspend fun getSalesProductEmptyApiIdProduct():List<SaleProductWitOtherClass>
 }

@@ -27,6 +27,14 @@ class SaleProductRepositoryImp
         return salesProductDao.selectSaleProductWithId(saleProductId)
     }
 
+    override suspend fun selectSaleProductByApiId(salesProductApiId: String): SaleProductWitOtherClass {
+        return salesProductDao.selectSaleProductByApiId(salesProductApiId)
+    }
+
+    override suspend fun getSalesProductEmptyApiIdProduct(): List<SaleProductWitOtherClass> {
+        return salesProductDao.getSalesProductEmptyApiIdProduct()
+    }
+
     override suspend fun selectSaleProductWithSaleDate(saleDate: String): List<SaleProductWitOtherClass> {
         return salesProductDao.selectSaleProductWithSaleDate(saleDate)
     }

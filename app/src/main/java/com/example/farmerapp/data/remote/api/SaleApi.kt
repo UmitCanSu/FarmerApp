@@ -18,7 +18,8 @@ interface SaleApi {
     @POST("Sale/AddAmountPaid")
     suspend fun addAmountPaid(
         @Query("saleId") saleId: String,
-        @Query("amountPaidJson") amountPaidJson: String
+        @Query("amountPaidJson") amountPaidJson: String,
+        @Query("isPaid") isPaid: Boolean
     ): SaleApiDto
 
     @POST("Sale/GetSale")

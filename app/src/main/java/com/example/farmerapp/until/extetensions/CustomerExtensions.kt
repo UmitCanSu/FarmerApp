@@ -1,35 +1,45 @@
 package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.CustomerDto
-import com.example.farmerapp.data.remote.dto.CustomerApiDto
+import com.example.farmerapp.data.remote.dto.FarmerApiDto
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
+import com.example.farmerapp.until.Sesion
+import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmerApiDto
 
 object CustomerExtensions {
     fun CustomerDto.toCustomer(): Customer {
         return Customer(
             id,
+            Sesion.getInstance().company!!,
             name,
             sourName,
-            phone,
-            address
+            years,
+            farmerStatus,
+            customerApiId
         )
     }
 
     fun Customer.toCustomerDto(): CustomerDto {
         return CustomerDto(
             name,
-            surName,
-            phone,
-            address
+            sourName,
+            years,
+            farmerStatus,
+            apiId
         )
     }
-    fun CustomerApiDto.toCustomer():Customer{
-        return Customer(name,surName,phoneNumber,address)
-    }
-    fun Customer.toCustomerApiDto():CustomerApiDto{
-        return CustomerApiDto(
-            id.toString(),"",name,surName,phone,address
-        )
+
+    fun Customer.toFarmerApiDto(): FarmerApiDto {
+        return Farmer(
+            id,
+            Sesion.getInstance().company,
+            name,
+            sourName,
+            years,
+            farmerStatus,
+            apiId
+        ).toFarmerApiDto()
     }
 
 

@@ -1,6 +1,7 @@
 package com.example.farmerapp.presentation.add_amount_paid
 
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
 
 sealed class AddAmountPaidFragmentState {
     object Idle : AddAmountPaidFragmentState()

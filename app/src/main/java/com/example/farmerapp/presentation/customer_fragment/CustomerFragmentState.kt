@@ -1,6 +1,7 @@
 package com.example.farmerapp.presentation.customer_fragment
 
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.until.Resource
 import javax.inject.Inject
 

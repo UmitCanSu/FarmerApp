@@ -1,8 +1,8 @@
 package com.example.farmerapp.data.local.repository
 
 import com.example.farmerapp.data.local.dto.CustomerDto
-import com.example.farmerapp.domain.repository.local.CustomerRepository
 import com.example.farmerapp.domain.repository.dao.CustomerDao
+import com.example.farmerapp.domain.repository.local.CustomerRepository
 import javax.inject.Inject
 
 class CustomerRepositoryImp
@@ -21,11 +21,11 @@ class CustomerRepositoryImp
         return customerDao.selectCustomerWithCustomerID(customerId)
     }
 
-    override suspend fun selectCustomerWithPhoneNumber(phoneNumber: String): CustomerDto {
-        return customerDao.selectCustomerWithPhoneNumber(phoneNumber)
-    }
-
     override suspend fun getAllCustomer(): List<CustomerDto> {
         return customerDao.getAllCustomer()
+    }
+
+    override suspend fun getCustomerByApiId(apiId: String): CustomerDto {
+        return customerDao.getCustomerByApiId(apiId)
     }
 }

@@ -14,7 +14,7 @@ class SelectFarmerByIdToLocalUseCase
 ) {
     fun selectFarmerWithId(farmerId:Int) = flow<Resource<Farmer>> {
         emit(Resource.Loading())
-        val farmerRelations = farmerRepository.selectFarmerWithId(farmerId)
+        val farmerRelations = farmerRepository.selectFarmerById(farmerId)
         emit(Resource.Success(farmerRelations.toFarmer()))
     }.catch { emit(Resource.Error(it.message!!)) }
 }

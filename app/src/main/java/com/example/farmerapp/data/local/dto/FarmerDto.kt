@@ -11,7 +11,7 @@ data class FarmerDto
     val sourName: String,
     val years: Int,
     val farmerStatus: Int,
-    val farmerApiId:String
+    val farmerApiId:String,
 ) {
     @PrimaryKey(autoGenerate = true)
     var id = 0

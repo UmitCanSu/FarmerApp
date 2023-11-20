@@ -1,7 +1,7 @@
 package com.example.farmerapp.domain.model
 
 import com.example.farmerapp.until.enums.AnimalType
-import com.example.farmerapp.until.UserSingleton
+import com.example.farmerapp.until.Sesion
 import com.example.farmerapp.until.enums.Gender
 import java.time.LocalDateTime
 import javax.inject.Inject
@@ -31,8 +31,8 @@ data class Animal
         fatherType: String?,
     ) : this(
         0,
-        UserSingleton.getInstance().company!!,
-        UserSingleton.getInstance().farmer!!,
+        Sesion.getInstance().company!!,
+        Sesion.getInstance().farmer!!,
         animalNumber, name, years, gender, birthdate, animalType, motherType, fatherType
     )
 
@@ -49,8 +49,8 @@ data class Animal
         fatherType: String?,
     ) : this(
         id,
-        UserSingleton.getInstance().company!!,
-        UserSingleton.getInstance().farmer!!,
+        Sesion.getInstance().company!!,
+        Sesion.getInstance().farmer!!,
         animalNumber, name, years, gender, birthdate, animalType, motherType, fatherType
     )
 }

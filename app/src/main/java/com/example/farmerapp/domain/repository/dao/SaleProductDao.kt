@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.example.farmerapp.data.local.dto.SalesProductDto
+import com.example.farmerapp.data.local.relations.ProductRelations
 import com.example.farmerapp.data.local.relations.SaleProductWitOtherClass
 
 
@@ -57,5 +58,11 @@ interface SaleProductDao {
         productId: Int,
         isPaid: Boolean
     ): List<SaleProductWitOtherClass>
+
+    @Query("SELECT * FROM SALESPRODUCT WHERE apiId = :salesProductApiId")
+    suspend fun selectSaleProductByApiId(salesProductApiId: String): SaleProductWitOtherClass
+    @Query("select * from salesproduct where apiId =''")
+    suspend fun getSalesProductEmptyApiIdProduct():List<SaleProductWitOtherClass>
+
 
 }

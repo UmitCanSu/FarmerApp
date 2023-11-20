@@ -7,7 +7,7 @@ data class SaleApiDto(
     var id: String,
     var company: CompanyApiDto,
     var product: ProductApiDto,
-    var customer: CustomerApiDto,
+    var customer: CustomerApiDto?,
     var farmer: FarmerApiDto,
     var price: Float,
     var location: LatLng,
@@ -15,5 +15,5 @@ data class SaleApiDto(
     var saleDate: String,
     var locationDescription: String,
     var isPaid: Boolean,
-    var amountPaids: List<AmountPaid>
+    var amountPaids: List<AmountPaidApiDto>
         )

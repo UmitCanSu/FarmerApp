@@ -2,17 +2,16 @@ package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.SalesProductDto
 import com.example.farmerapp.data.local.relations.SaleProductWitOtherClass
+import com.example.farmerapp.data.remote.dto.CustomerApiDto
 import com.example.farmerapp.data.remote.dto.SaleApiDto
-import com.example.farmerapp.domain.model.AmountPaid
-import com.example.farmerapp.domain.model.Company
-import com.example.farmerapp.domain.model.Customer
-import com.example.farmerapp.domain.model.Farmer
-import com.example.farmerapp.domain.model.Product
 import com.example.farmerapp.domain.model.SalesProduct
+import com.example.farmerapp.until.extetensions.AmountPaidExtensions.toAmountPaid
+import com.example.farmerapp.until.extetensions.AmountPaidExtensions.toAmountPaidApiDto
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompanyApiDto
 import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomer
-import com.example.farmerapp.until.extetensions.CustomerExtensions.toCustomerApiDto
+import com.example.farmerapp.until.extetensions.CustomerExtensions.toFarmerApiDto
+import com.example.farmerapp.until.extetensions.FarmerExtensions.toCustomer
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmer
 import com.example.farmerapp.until.extetensions.FarmerExtensions.toFarmerApiDto
 import com.example.farmerapp.until.extetensions.ProductExtensions.toProduct
@@ -25,6 +24,7 @@ object SalesProductExtensions {
         val location = LatLng(salesProductDto.latitude, salesProductDto.longitude)
         return SalesProduct(
             salesProductDto.id,
+            salesProductDto.apiId,
             companyDto.toCompany()!!,
             farmerDto.toFarmer(companyDto.toCompany()!!),
             productDto.toProduct(companyDto.toCompany()!!),
@@ -42,9 +42,10 @@ object SalesProductExtensions {
 
     fun SalesProduct.toSalesProductDto(): SalesProductDto {
         val salesProduct = SalesProductDto(
+            apiId,
             company.id,
             product.id,
-            customer.id,
+            customer!!.id,
             farmer.id,
             price,
             isDept,
@@ -59,34 +60,13 @@ object SalesProductExtensions {
         return salesProduct
     }
 
-    fun SalesProductDto.toSalesProduct(
-        company: Company, product: Product, customer: Customer,
-        farmer: Farmer, amountPaidList: List<AmountPaid>
-    ): SalesProduct {
-        val location = LatLng(latitude, longitude)
-        return SalesProduct(
-            company,
-            farmer,
-            product,
-            customer,
-            price,
-            isDept,
-            productNumber,
-            location,
-            locationDescription,
-            salesDate,
-            isPaid,
-            amountPaidList
-        )
-
-    }
 
     fun SalesProduct.toSaleApiDto(): SaleApiDto {
         return SaleApiDto(
-            "",
+            apiId,
             company.toCompanyApiDto(),
             product.toProductApiDto(),
-            customer.toCustomerApiDto(),
+            CustomerApiDto(customer.toFarmerApiDto(), null),
             farmer.toFarmerApiDto(),
             price,
             location,
@@ -94,22 +74,26 @@ object SalesProductExtensions {
             salesDate.toString(),
             locationDescription,
             isPaid,
-            amountPaint
+            amountPaint.map { it.toAmountPaidApiDto() }
         )
     }
 
     fun SaleApiDto.toSalesProduct(): SalesProduct {
         return SalesProduct(
+            id = 0,
+            id,
+            company.toCompany(),
+            farmer.toFarmer(),
             product.toProduct(),
-            customer.toCustomer(),
+            customer!!.farmer.toCustomer(),
             price,
             isPaid,
             productCount,
             location,
             locationDescription,
-            LocalDateTime.now(),//LocalDateTime.parse(saleDate),
+            LocalDateTime.now(),
             isPaid,
-            amountPaids
+            amountPaids.map { it.toAmountPaid() }
         )
     }
 

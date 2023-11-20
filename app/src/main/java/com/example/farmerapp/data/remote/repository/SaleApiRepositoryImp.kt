@@ -1,7 +1,7 @@
 package com.example.farmerapp.data.remote.repository
 
-import com.example.farmerapp.data.remote.dto.SaleApiDto
 import com.example.farmerapp.data.remote.api.SaleApi
+import com.example.farmerapp.data.remote.dto.SaleApiDto
 import com.example.farmerapp.domain.repository.remote.SaleApiRepository
 import javax.inject.Inject
 
@@ -17,8 +17,12 @@ class SaleApiRepositoryImp
         return saleApi.getSaleListByCompanyId(companyId)
     }
 
-    override suspend fun addAmountPaid(saleId: String, amountPaidJson: String): SaleApiDto {
-        return saleApi.addAmountPaid(saleId,amountPaidJson)
+    override suspend fun addAmountPaid(
+        saleId: String,
+        amountPaidJson: String,
+        isPaid: Boolean
+    ): SaleApiDto {
+        return saleApi.addAmountPaid(saleId, amountPaidJson, isPaid)
     }
 
     override suspend fun getSale(saleId: String): SaleApiDto {

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.example.farmerapp.databinding.FragmentSingInBinding
+import com.example.farmerapp.domain.model.Company
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Login
 import com.example.farmerapp.presentation.dialog.CustomDialog
@@ -41,10 +42,10 @@ class SingInFragment : Fragment() {
         fillEditTextLayout()
         binding.singInButton.setOnClickListener {
             if (Extensions.checkEditTextNullAndSetErrorStatus(editTextLayout)) {
-
                 val login = fillLogin()
                 val farmer = fillFarmer()
-                viewModel.onEvent(SingInFragmentOnEvent.Save(farmer, login))
+                val company = fillCompany()
+                viewModel.onEvent(SingInFragmentOnEvent.Save(farmer, login, company))
 
             }
         }
@@ -53,6 +54,17 @@ class SingInFragment : Fragment() {
         }
         lifecycleScope.launch { onservableState() }
     }
+
+    private fun fillCompany(): Company {
+        return with(binding) {
+            Company(
+                nickNameLayout.editText!!.text.toString(),
+                "",
+                phoneTextLayout.editText!!.text.toString(),
+            )
+        }
+    }
+
 
     private fun fillLogin(): Login {
         return with(binding) {

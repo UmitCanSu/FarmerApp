@@ -22,12 +22,16 @@ class FarmerRepositoryImp
         return farmerDao.deleteFarmer(farmerDto)
     }
 
-    override suspend fun selectFarmerWithId(farmerId: Int): FarmerRelations {
+    override suspend fun selectFarmerById(farmerId: Int): FarmerRelations {
         return farmerDao.selectFarmerWithId(farmerId)
     }
 
     override suspend fun selectFarmersWithCompanyId(companyId: Int): List<FarmerRelations> {
         return farmerDao.selectFarmersWithCompanyId(companyId)
+    }
+
+    override suspend fun selectFarmerByApiId(farmerApiId: String): FarmerRelations {
+        return farmerDao.selectFarmerByCompanyId(farmerApiId)
     }
 
 }

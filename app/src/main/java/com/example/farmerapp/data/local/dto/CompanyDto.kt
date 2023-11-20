@@ -13,17 +13,10 @@ data class CompanyDto
     @SerializedName("phoneNumber")
     val phone: String,
     @SerializedName("id")
-    val mongoDbId:String
+    val apiId:String
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0
-    /*
-    * {
-        "id": "64ebe9d5de261bd507f7a56d",
-        "name": "Deneme",
-        "address": "Artvin/Savsat/Armutlu mah.",
-        "phoneNumber": "05340000000"
-    }*/
     constructor(
         name: String,
         address: String,

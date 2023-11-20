@@ -14,7 +14,7 @@ class GetFarmerByPhoneNumberUseCase
 ){
     public fun getFarmerByPhoneNumberUseCase(phoneNumber:String)=flow<Resource<Farmer>>{
         emit(Resource.Loading())
-        val farmer =farmerAppApi.getFarmerByPhoneNumber(phoneNumber).toFarmer()
+        val farmer =farmerAppApi.getFarmerByNickNameOrPhoneNumber(phoneNumber).toFarmer()
         emit(Resource.Success(farmer))
     }.catch { emit(Resource.Error(it.message!!)) }
 }

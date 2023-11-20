@@ -17,8 +17,8 @@ class CompanyRepositoryImp
         return companyDao.updateCompany(company)
     }
 
-    override suspend fun selectCompanyByCompanyId(companyId: Int): CompanyDto? {
-        return companyDao.selectCompanyByCompanyId(companyId)
+    override suspend fun selectCompanyByCompanyApiId(companyApiId: String): CompanyDto? {
+        return companyDao.selectCompanyByCompanyApiId(companyApiId)
     }
 
     override fun selectCompanyByPhoneNumberAndName(phoneNumber: String, name: String): CompanyDto? {

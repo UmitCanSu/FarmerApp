@@ -2,8 +2,10 @@ package com.example.farmerapp.until.extetensions
 
 import com.example.farmerapp.data.local.dto.FarmerDto
 import com.example.farmerapp.data.local.relations.FarmerRelations
+import com.example.farmerapp.data.remote.dto.CompanyApiDto
 import com.example.farmerapp.data.remote.dto.FarmerApiDto
 import com.example.farmerapp.domain.model.Company
+import com.example.farmerapp.domain.model.Customer
 import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.until.FarmerStatus
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany
@@ -18,7 +20,8 @@ object FarmerExtensions {
             this.farmerDto.name,
             this.farmerDto.sourName,
             this.farmerDto.years,
-            FarmerStatus.values()[farmerDto.farmerStatus]
+            FarmerStatus.values()[farmerDto.farmerStatus],
+            farmerDto.farmerApiId
         )
     }
 
@@ -28,7 +31,8 @@ object FarmerExtensions {
             name,
             sourName,
             years,
-            farmerStatus.ordinal
+            farmerStatus.ordinal,
+            farmerApiId
         )
     }
 
@@ -39,22 +43,33 @@ object FarmerExtensions {
             name,
             sourName,
             years,
-            FarmerStatus.values()[farmerStatus]
+            FarmerStatus.values()[farmerStatus],
+            farmerApiId
         )
     }
 
     fun FarmerApiDto.toFarmer(): Farmer {
         return Farmer(
             0,
-            company?.toCompany(),
-            name, surname, 0, FarmerStatus.valueOf(farmerStatus)
+            toLastCompany().toCompany(),
+            name, surname, 0, FarmerStatus.valueOf(farmerStatus),
+            id
+        )
+    }
+    fun FarmerApiDto.toCustomer(): Customer {
+        return Customer(
+            0,
+            toLastCompany().toCompany(),
+            name, surname, 0, FarmerStatus.valueOf(farmerStatus),
+            id
         )
     }
 
+
     fun Farmer.toFarmerApiDto(): FarmerApiDto {
         return FarmerApiDto(
-            id.toString(),
-            company?.toCompanyApiDto(),
+            farmerApiId.toString(),
+            listOf(company!!.toCompanyApiDto()),
             name,
             sourName,
             "",
@@ -62,6 +77,18 @@ object FarmerExtensions {
             LocalDateTime.now().toString(),
             "",
             farmerStatus.name,
+            ""
+        )
+    }
+
+    fun FarmerApiDto.toLastCompany(): CompanyApiDto {
+        return companies!!.reversed().first()
+    }
+
+    fun Farmer.toFirstCompany(): Company {
+        return Company(
+            name,
+            "",
             ""
         )
     }

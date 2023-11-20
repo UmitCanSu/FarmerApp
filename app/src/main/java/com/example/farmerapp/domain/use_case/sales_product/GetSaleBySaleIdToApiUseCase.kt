@@ -1,6 +1,5 @@
 package com.example.farmerapp.domain.use_case.sales_product
 
-import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.domain.repository.remote.SaleApiRepository
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.extetensions.SalesProductExtensions.toSalesProduct
@@ -12,10 +11,9 @@ class GetSaleBySaleIdToApiUseCase
 @Inject constructor(
     private val saleApiRepository: SaleApiRepository
 ) {
-    fun getSalesBySaleId(saleId: String) =
-        flow<Resource<SalesProduct>> {
-            emit(Resource.Loading())
-            val salesProduct = saleApiRepository.getSale(saleId).toSalesProduct()
-            emit(Resource.Success(salesProduct))
-        }.catch { emit(Resource.Error(it.message!!)) }
+    fun getSalesBySaleId(saleId: String) = flow {
+        emit(Resource.Loading())
+        val salesProduct = saleApiRepository.getSale(saleId).toSalesProduct()
+        emit(Resource.Success(salesProduct))
+    }.catch { emit(Resource.Error(it.message!!)) }
 }

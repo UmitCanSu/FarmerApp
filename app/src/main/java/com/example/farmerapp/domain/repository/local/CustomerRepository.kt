@@ -6,8 +6,7 @@ interface CustomerRepository {
     suspend fun insertCustomer(customer: CustomerDto): Long
     suspend fun updateCustomer(customer: CustomerDto): Int
     suspend fun selectCustomerWithCustomerID(customerId: Int): CustomerDto
-    suspend fun selectCustomerWithPhoneNumber(phoneNumber: String): CustomerDto
     suspend fun getAllCustomer():List<CustomerDto>
-
+    suspend fun getCustomerByApiId(apiId: String): CustomerDto
 
 }

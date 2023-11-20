@@ -4,13 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.farmerapp.domain.model.SalesProduct
 import com.example.farmerapp.domain.use_case.GetLocationUseCase
-import com.example.farmerapp.domain.use_case.customer.GetAllCustomerListUseCase
-import com.example.farmerapp.domain.use_case.product.GetProductListByCompanyIdUseCase
+import com.example.farmerapp.domain.use_case.IsInternetUseCase
+import com.example.farmerapp.domain.use_case.customer.local.GetAllCustomerListUseCase
+import com.example.farmerapp.domain.use_case.customer.remote.GetCustomerListToApiAndSavedCustomerListUseCase
+import com.example.farmerapp.domain.use_case.product.remote.GetProductListByCompanyIdToApiAndSavedProductListToLocalUseCase
+import com.example.farmerapp.domain.use_case.product.local.GetProductListByCompanyIdToLocalUseCase
 import com.example.farmerapp.domain.use_case.sale_fragment.CalculateProductPriceUseCase
-import com.example.farmerapp.domain.use_case.sales_product.AddSaleToApiUseCase
-import com.example.farmerapp.domain.use_case.sales_product.GetProductListByFarmerIdToApiUseCase
-import com.example.farmerapp.domain.use_case.sales_product.InsertSalesProductUseCase
-import com.example.farmerapp.until.Constant
+import com.example.farmerapp.domain.use_case.sales_product.InsertSalesProductToLocalUseCase
+import com.example.farmerapp.domain.use_case.sales_product.view.SaveApiAfterLocalUseCase
 import com.example.farmerapp.until.Resource
 import com.example.farmerapp.until.Sesion
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,13 +26,16 @@ import javax.inject.Inject
 @HiltViewModel
 class SaleViewModel
 @Inject constructor(
-    private val getProductListByCompanyId: GetProductListByCompanyIdUseCase,
-    private val getProductListByFarmerIdToApiUseCase: GetProductListByFarmerIdToApiUseCase,
+    private val getProductListByCompanyId: GetProductListByCompanyIdToLocalUseCase,
     private val calculateProductPriceUseCase: CalculateProductPriceUseCase,
-    private val getAllCustomerList: GetAllCustomerListUseCase,
-    private val insertSalesProductUseCase: InsertSalesProductUseCase,
+    private val insertSalesProductUseCase: InsertSalesProductToLocalUseCase,
     private val getLocationUseCase: GetLocationUseCase,
-    private val addSaleToApiUseCase: AddSaleToApiUseCase,
+    private val isInternetUseCase: IsInternetUseCase,
+    //
+    private val getCustomerListToApiAndSavedCustomerListUseCase: GetCustomerListToApiAndSavedCustomerListUseCase,
+    private val getProductListByCompanyIdToApiAndSavedProductListToLocalUseCase: GetProductListByCompanyIdToApiAndSavedProductListToLocalUseCase,
+    private val saveApiAfterLocalUseCase: SaveApiAfterLocalUseCase,
+    private val getAllCustomerListUseCase: GetAllCustomerListUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<SaleFragmentState>(SaleFragmentState.Idle)
     val state: StateFlow<SaleFragmentState> = _state
@@ -39,23 +43,37 @@ class SaleViewModel
 
     init {
         viewModelScope.launch {
-            getProductList()
-            getCustomerList()
-            getLocation()
+            isInternet()
         }
     }
 
-    private suspend fun getProductList() {
-        val companyId = Sesion.getInstance().company!!.id
-        val farmerApiId = Sesion.getInstance().farmer!!.farmerApiId
-        if (companyId == Constant.DEFAULT_COMPANY_ID)
-            getProductListByFarmerIdToApi(farmerApiId)
-        else
-            getProductListByCompanyId()
+    private suspend fun isInternet() {
+        isInternetUseCase.isInternet().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = SaleFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    val company = Sesion.getInstance().company!!
+                    if (it.data!!) {
+                        getProductList(company.apiId, company.id)
+                        getCustomerList(company.apiId, company.id)
+                    } else {
+                        getProductListByCompanyIdToLocal(company.id)
+                        getCustomerListToLocal()
+                    }
+                }
+
+                is Resource.Error -> {
+                    _state.value = SaleFragmentState.Error(it.message!!)
+                }
+            }
+        }
     }
 
-    private suspend fun getProductListByCompanyId() {
-        getProductListByCompanyId.getProductListWithCompanyId(Constant.DEFAULT_COMPANY_ID)
+    private suspend fun getProductListByCompanyIdToLocal(companyId: Int) {
+        getProductListByCompanyId.getProductListWithCompanyId(companyId)
             .collect {
                 when (it) {
                     is Resource.Loading -> {
@@ -73,6 +91,48 @@ class SaleViewModel
                     }
                 }
             }
+    }
+
+    private suspend fun getCustomerListToLocal() {
+        getAllCustomerListUseCase.getAllCustomersList().collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = SaleFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    salesProductHolder.customerList = it.data!!
+                    _state.value = SaleFragmentState.CustomerList(it.data)
+                }
+
+                is Resource.Error -> {
+                    _state.value = SaleFragmentState.Error(it.message!!)
+                }
+            }
+        }
+    }
+
+    private suspend fun getProductList(companyApiId: String, companyLocalId: Int) {
+        getProductListByCompanyIdToApiAndSavedProductListToLocalUseCase.getProductList(
+            companyApiId,
+            companyLocalId
+        ).collect {
+            when (it) {
+                is Resource.Loading -> {
+                    _state.value = SaleFragmentState.Loading
+                }
+
+                is Resource.Success -> {
+                    salesProductHolder.productList = it.data ?: emptyList()
+                    _state.value =
+                        SaleFragmentState.ProdcutList(productList = it.data ?: emptyList())
+                }
+
+                is Resource.Error -> {
+                    _state.value = SaleFragmentState.Error(it.message!!)
+                }
+            }
+        }
     }
 
     private fun calculateProductPrice(count: Int) {
@@ -97,42 +157,7 @@ class SaleViewModel
         }
     }
 
-    private suspend fun getCustomerList() {
-        getAllCustomerList.getAllCustomersList().collect {
-            when (it) {
-                is Resource.Loading -> {
-                    _state.value = SaleFragmentState.Loading
-                }
-
-                is Resource.Success -> {
-                    salesProductHolder.customerList = it.data!!
-                    _state.value = SaleFragmentState.CustomerList(it.data)
-                }
-
-                is Resource.Error -> {
-                    _state.value = SaleFragmentState.Error(it.message!!)
-                }
-            }
-        }
-    }
-
-    private suspend fun insertSalesProduct() {
-        val localDateTime = LocalDateTime.now()
-        val salesProduct = with(salesProductHolder) {
-            SalesProduct(
-                product!!,
-                customer!!,
-                price,
-                isDept,
-                productNumber,
-                location,
-                locationDescription,
-                localDateTime,
-                true,
-                emptyList()
-            )
-        }
-
+    private suspend fun insertSalesProduct(salesProduct: SalesProduct) {
         insertSalesProductUseCase.insertSaleProduct(salesProduct).collect {
             when (it) {
                 is Resource.Loading -> {
@@ -140,8 +165,10 @@ class SaleViewModel
                 }
 
                 is Resource.Success -> {
-                    //_state.value = SaleFragmentState.IsSavesSalesProduct(it.data!!.toInt())
-                    addSaleToApi(salesProduct)
+                    _state.value = SaleFragmentState.IsSavesSalesProduct(
+                        it.data!!.id,
+                        it.data.apiId
+                    )
                 }
 
                 is Resource.Error -> {
@@ -151,43 +178,27 @@ class SaleViewModel
         }
     }
 
-    private suspend fun getProductListByFarmerIdToApi(farmerId: String) {
-        getProductListByFarmerIdToApiUseCase.getProductListByFarmerIdToApiUseCase(farmerId)
-            .collect {
-                when (it) {
-                    is Resource.Loading -> {
-                        _state.value = SaleFragmentState.Loading
-                    }
-
-                    is Resource.Success -> {
-                        salesProductHolder.productList = it.data ?: emptyList()
-                        _state.value = SaleFragmentState.ProdcutList(it.data!!)
-                    }
-
-                    is Resource.Error -> {
-                        _state.value = SaleFragmentState.Error(it.message!!)
-                    }
-                }
-            }
-    }
-
-
-    private suspend fun addSaleToApi(salesProduct: SalesProduct) {
-        addSaleToApiUseCase.addSale(salesProduct).collect {
+    private suspend fun addSaleToApiAfterLocal(salesProduct: SalesProduct) {
+        saveApiAfterLocalUseCase.saveApiAfterLocal(salesProduct).collect {
             when (it) {
                 is Resource.Loading -> {
                     _state.value = SaleFragmentState.Loading
                 }
 
                 is Resource.Success -> {
-                    _state.value = SaleFragmentState.IsSavesSalesProduct(1)
+                    _state.value = SaleFragmentState.IsSavesSalesProduct(
+                        it.data!!.id,
+                        it.data.apiId
+                    )
                 }
 
                 is Resource.Error -> {
                     _state.value = SaleFragmentState.Error(it.message!!)
                 }
             }
+
         }
+
     }
 
     private suspend fun getLocation() {
@@ -203,6 +214,44 @@ class SaleViewModel
                     is Resource.Success -> {
                         salesProductHolder.location = it.data!!
                         jop.cancel()
+                    }
+
+                    is Resource.Error -> {
+                        _state.value = SaleFragmentState.Error(it.message!!)
+                    }
+                }
+            }
+    }
+
+    private fun getSalesProduct(): SalesProduct {
+        val localDateTime = LocalDateTime.now()
+        return with(salesProductHolder) {
+            SalesProduct(
+                product!!,
+                customer!!,
+                price,
+                isDept,
+                productNumber,
+                location,
+                locationDescription,
+                localDateTime,
+                true,
+                emptyList()
+            )
+        }
+    }
+
+    private suspend fun getCustomerList(companyId: String, companyLocalId: Int) {
+        getCustomerListToApiAndSavedCustomerListUseCase.getCustomer(companyId, companyLocalId)
+            .collect {
+                when (it) {
+                    is Resource.Loading -> {
+                        _state.value = SaleFragmentState.Loading
+                    }
+
+                    is Resource.Success -> {
+                        salesProductHolder.customerList = it.data!!
+                        _state.value = SaleFragmentState.CustomerList(it.data)
                     }
 
                     is Resource.Error -> {
@@ -234,10 +283,11 @@ class SaleViewModel
 
             is SaleFragmentOnEvent.Save -> {
                 viewModelScope.launch {
+                    val salesProduct = getSalesProduct()
                     if (Sesion.getInstance().isInternet) {
-                        // addSaleToApi()
+                        addSaleToApiAfterLocal(salesProduct)
                     } else {
-                        insertSalesProduct()
+                        insertSalesProduct(salesProduct)
                     }
                 }
             }

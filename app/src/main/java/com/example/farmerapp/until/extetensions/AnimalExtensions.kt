@@ -4,7 +4,6 @@ import com.example.farmerapp.data.local.dto.AnimalDto
 import com.example.farmerapp.data.local.relations.AnimalRelation
 import com.example.farmerapp.data.remote.dto.AnimalApiDto
 import com.example.farmerapp.domain.model.Animal
-import com.example.farmerapp.until.UserSingleton
 import com.example.farmerapp.until.enums.AnimalType
 import com.example.farmerapp.until.enums.Gender
 import com.example.farmerapp.until.extetensions.CompanyExtensions.toCompany

@@ -10,7 +10,8 @@ import javax.inject.Inject
 
 data class AmountPaid
 @Inject constructor(
-    val salesProduct: SalesProduct?,
+    val apiId:String,
+    var salesProduct: SalesProduct?,
     val customer: Customer,
     val price: Float,
     val date: LocalDateTime,

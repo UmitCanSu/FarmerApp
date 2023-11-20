@@ -39,10 +39,10 @@ class SaleDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch { observableState() }
-        viewModel.onEvent(SaleDetailOnEvent.SelectProduct(args.salesProductId))
+        viewModel.onEvent(SaleDetailOnEvent.SelectProduct(args.salesProductId,args.saleApiId))
         binding.addAmountPaid.setOnClickListener {
             val action =
-                SaleDetailFragmentDirections.actionSaleDetailFragmentToAddAmountPaidFragment(args.salesProductId)
+                SaleDetailFragmentDirections.actionSaleDetailFragmentToAddAmountPaidFragment(args.saleApiId,args.salesProductId)
             Navigation.findNavController(it).navigate(action)
         }
     }
@@ -80,7 +80,7 @@ class SaleDetailFragment : Fragment() {
                 is SaleDetailState.ShowSalesProduct -> {
                     val salesProduct = it.salesProduct
                     binding.customerInfoText.text =
-                        salesProduct.customer.name + " " + salesProduct.customer.surName
+                        salesProduct.customer!!.name + " " + salesProduct.customer!!.sourName
                     binding.farmerInfoText.text =
                         salesProduct.farmer.name + " " + salesProduct.farmer.sourName
                     binding.productInfoText.text = salesProduct.product.name

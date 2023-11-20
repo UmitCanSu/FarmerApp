@@ -1,6 +1,7 @@
 package com.example.farmerapp.presentation.sale_fragment
 
 import com.example.farmerapp.domain.model.Customer
+import com.example.farmerapp.domain.model.Farmer
 import com.example.farmerapp.domain.model.Product
 
 /*
@@ -19,7 +20,11 @@ sealed class SaleFragmentState {
     data class ProdcutList(val productList: List<Product>) : SaleFragmentState()
     data class CustomerList(val customerList: List<Customer>) : SaleFragmentState()
     data class SelectedProduct(val selectedProduct: Product) : SaleFragmentState()
-    data class IsSavesSalesProduct(val salesId: Int) : SaleFragmentState()
+    data class IsSavesSalesProduct(
+        val salesId: Int, val saleApiId
+        : String
+    ) : SaleFragmentState()
+
     data class Calculate(val amountPrice: String) : SaleFragmentState()
     data class Error(val errorMessage: String) : SaleFragmentState()
 }
